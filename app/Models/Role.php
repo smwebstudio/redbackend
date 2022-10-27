@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Role extends Model
 {
+    use \Backpack\CRUD\app\Models\Traits\CrudTrait;
 	protected $table = 'roles';
 
 	protected $fillable = [

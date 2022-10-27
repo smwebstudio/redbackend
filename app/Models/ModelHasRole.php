@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ModelHasRole extends Model
 {
+    use \Backpack\CRUD\app\Models\Traits\CrudTrait;
 	protected $table = 'model_has_roles';
 	public $incrementing = false;
 	public $timestamps = false;
