@@ -1,43 +1,78 @@
 <?php
 
+/**
+ * Created by Reliese Model.
+ */
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class CBuildingType
+ * 
+ * @property int $id
+ * @property bool|null $is_deleted
+ * @property Carbon|null $last_modified_on
+ * @property int|null $version
+ * @property string|null $sort_id
+ * @property string|null $name_arm
+ * @property string|null $name_eng
+ * @property string|null $name_ru
+ * @property string|null $name_ar
+ * @property int|null $last_modified_by
+ * @property string|null $comment
+ * @property int|null $created_by
+ * @property Carbon|null $created_on
+ * 
+ * @property Collection|Announcement[] $announcements
+ * @property Collection|Estate[] $estates
+ *
+ * @package App\Models
+ */
 class CBuildingType extends Model
 {
-    use \Backpack\CRUD\app\Models\Traits\CrudTrait;
-    use HasFactory;
+	protected $table = 'c_building_types';
+	public $incrementing = false;
+	public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'is_deleted',
-        'last_modified_on',
-        'version',
-        'sort_id',
-        'name_arm',
-        'name_eng',
-        'name_ru',
-        'name_ar',
-        'last_modified_by',
-        'comment',
-        'created_by',
-    ];
+	protected $casts = [
+		'id' => 'int',
+		'is_deleted' => 'bool',
+		'version' => 'int',
+		'last_modified_by' => 'int',
+		'created_by' => 'int'
+	];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'id' => 'integer',
-        'is_deleted' => 'integer',
-        'last_modified_on' => 'timestamp',
-        'deleted_at' => 'timestamp',
-    ];
+	protected $dates = [
+		'last_modified_on',
+		'created_on'
+	];
+
+	protected $fillable = [
+		'is_deleted',
+		'last_modified_on',
+		'version',
+		'sort_id',
+		'name_arm',
+		'name_eng',
+		'name_ru',
+		'name_ar',
+		'last_modified_by',
+		'comment',
+		'created_by',
+		'created_on'
+	];
+
+	public function announcements()
+	{
+		return $this->hasMany(Announcement::class, 'building_type_id');
+	}
+
+	public function estates()
+	{
+		return $this->hasMany(Estate::class, 'building_type_id');
+	}
 }

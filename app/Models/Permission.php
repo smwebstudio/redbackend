@@ -26,7 +26,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Permission extends Model
 {
-    use \Backpack\CRUD\app\Models\Traits\CrudTrait;
 	protected $table = 'permissions';
 
 	protected $fillable = [

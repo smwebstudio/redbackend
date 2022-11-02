@@ -10,3 +10,5 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('permission') }}"><i class="nav-icon la la-question"></i> Permissions</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('role') }}"><i class="nav-icon la la-question"></i> Roles</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('role-has-permission') }}"><i class="nav-icon la la-question"></i> Role has permissions</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-building-project-type') }}"><i class="nav-icon la la-question"></i> C building project types</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('estate') }}"><i class="nav-icon la la-question"></i> Estates</a></li>
