@@ -732,4 +732,72 @@ class Estate extends Model
     {
         return $this->belongsTo(CContractType::class, 'contract_type_id');
     }
+
+    /*Methods*/
+
+    public function getFullAddressAttribute(): ?string
+    {
+        return $this->getProvince().', '.$this->getCommunity().', '.$this->getStreet().', '.$this->address_building.', '.$this->address_apartment;
+    }
+
+    public function getFullPriceAttribute(): ?string
+    {
+        return $this->getFormattedPrice().' '.$this->c_currency->name_arm;
+    }
+
+    public function getFormattedPrice(): ?float
+    {
+        return $this->price ?? 0;
+    }
+
+    public function getPricePerSquareAttribute(): ?float
+    {
+        if(!$this->area_total) {
+            return null;
+        }
+        return ceil($this->price / $this->area_total );
+    }
+
+    public function getProvince(): ?string {
+        return $this->c_location_province->name_arm ?? '';
+    }
+
+    public function getCommunity(): ?string {
+        return $this->c_location_community->name_arm ?? '';
+    }
+
+    public function getStreet(): ?string {
+        return $this->c_location_street->name_arm ?? '';
+    }
+
+
+
+
+    /*Local scopes*/
+
+    /**
+     * Scope a query to only include popular users.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeApartment($query)
+    {
+        return $query->where('estate_type_id', '=', 1);
+    }
+
+    public function scopeHouse($query)
+    {
+        return $query->where('estate_type_id', '=', 2);
+    }
+
+    public function scopeCommercial($query)
+    {
+        return $query->where('estate_type_id', '=', 3);
+    }
+
+    public function scopeLand($query)
+    {
+        return $query->where('estate_type_id', '=', 4);
+    }
 }

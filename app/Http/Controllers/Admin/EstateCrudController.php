@@ -21,18 +21,6 @@ class EstateCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
 
-    public function fetchContact()
-    {
-        return $this->fetch([
-        'model' => Contact::class,
-        'searchable_attributes' => ['name_arm', 'last_name_arm'],
-        'paginate' => 10, // items to show per page
-        'searchOperator' => 'LIKE',
-        'query' => function($model) {
-            return $model->where('contact_type_id', '=', 3);
-        }
-    ]);
-    }
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -69,11 +57,36 @@ class EstateCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
+            'name' => 'c_estate_type',
+            'type' => "relationship",
+            'label' => "Estate type",
+            'attribute' => "name_arm",
+            'limit' => 100,
+        ]);
+
+        CRUD::addColumn([
             'name' => 'c_contract_type',
             'type' => "relationship",
             'label' => "Contract type",
             'attribute' => "name_arm",
             'limit' => 100,
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'full_address',
+            'type' => "text",
+            'label' => "Address",
+            'limit' => 500,
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'full_price',
+            'type' => "text",
+            'label' => "Price",
+            'orderable'  => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->orderBy('price', $columnDirection);
+            }
         ]);
 
         CRUD::addColumn([
@@ -85,24 +98,18 @@ class EstateCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
+            'name' => 'price_per_square',
+            'type' => "text",
+            'label' => "$/S",
+            'suffix' => ' $',
+        ]);
+
+        CRUD::addColumn([
             'name' => 'contact',
             'type' => "relationship",
             'attribute' => "full_contact",
             'label' => "Seller",
             'limit' => 150,
-        ]);
-
-        CRUD::addColumn([
-            'name' => 'c_location_country',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "Country",
-        ]);
-        CRUD::addColumn([
-            'name' => 'c_location_province',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "Province",
         ]);
 
         CRUD::addColumn([
@@ -116,6 +123,11 @@ class EstateCrudController extends CrudController
             'type' => "date",
             'label' => "Updated at",
         ]);
+
+
+        /*Filters*/
+        $this->addListFilters();
+
 
     }
 
@@ -153,5 +165,95 @@ class EstateCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+
+    public function fetchContact()
+    {
+        return $this->fetch([
+            'model' => Contact::class,
+            'searchable_attributes' => ['name_arm', 'last_name_arm'],
+            'paginate' => 10, // items to show per page
+            'searchOperator' => 'LIKE',
+            'query' => function ($model) {
+                return $model->where('contact_type_id', '=', 3);
+            }
+        ]);
+    }
+
+    private function addListFilters():void {
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'apartment',
+            'label' => 'Apartment'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('apartment');
+            });
+
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'house',
+            'label' => 'House'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('house');
+            });
+
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'Commercial',
+            'label' => 'Commercial'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('commercial');
+            });
+
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'land',
+            'label' => 'Land'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('land');
+            });
+
+
+        // select2 filter
+        $this->crud->addFilter([
+            'name'  => 'contract_type',
+            'type'  => 'select2',
+            'label' => 'Contract type'
+        ], function () {
+            return [
+                1 => 'Sale',
+                2 => 'Rent',
+                3 => 'Daily Rent',
+            ];
+        }, function ($value) {
+            $this->crud->addClause('where', 'contract_type_id', $value);
+        });
+
+        $this->crud->addFilter([
+            'name'       => 'price',
+            'type'       => 'range',
+            'label'      => 'Price',
+            'label_from' => 'min value',
+            'label_to'   => 'max value'
+        ],
+            false,
+            function($value) {
+                $range = json_decode($value);
+                if ($range->from) {
+                    $this->crud->addClause('where', 'price', '>=', (float) $range->from);
+                }
+                if ($range->to) {
+                    $this->crud->addClause('where', 'price', '<=', (float) $range->to);
+                }
+            });
     }
 }
