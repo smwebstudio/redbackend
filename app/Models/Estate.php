@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Estate
- * 
+ *
  * @property int $id
  * @property int|null $location_country_id
  * @property int|null $location_province_id
@@ -204,7 +204,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $meta_title_ru
  * @property Carbon|null $price_down_on
  * @property bool|null $is_public_text_generation
- * 
+ *
  * @property CBuildingType|null $c_building_type
  * @property CElevatorType|null $c_elevator_type
  * @property CHeatingSystemType|null $c_heating_system_type
@@ -727,4 +727,9 @@ class Estate extends Model
 	{
 		return $this->belongsTo(CLandType::class, 'land_type_id');
 	}
+
+    public function c_contract_type()
+    {
+        return $this->belongsTo(CContractType::class, 'contract_type_id');
+    }
 }

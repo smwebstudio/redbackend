@@ -25,4 +25,8 @@ Route::group([
     Route::crud('role-has-permission', 'RoleHasPermissionCrudController');
     Route::crud('c-building-project-type', 'CBuildingProjectTypeCrudController');
     Route::crud('estate', 'EstateCrudController');
+    Route::crud('c-location-country', 'CLocationCountryCrudController');
+    Route::crud('c-location-province', 'CLocationProvinceCrudController');
+    Route::crud('c-location-street', 'CLocationStreetCrudController');
+    Route::crud('c-location-community', 'CLocationCommunityCrudController');
 }); // this should be the absolute last line of this file

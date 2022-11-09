@@ -12,3 +12,7 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('role-has-permission') }}"><i class="nav-icon la la-question"></i> Role has permissions</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-building-project-type') }}"><i class="nav-icon la la-question"></i> C building project types</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('estate') }}"><i class="nav-icon la la-question"></i> Estates</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-location-country') }}"><i class="nav-icon la la-question"></i> C location countries</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-location-province') }}"><i class="nav-icon la la-question"></i> C location provinces</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-location-street') }}"><i class="nav-icon la la-question"></i> C location streets</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-location-community') }}"><i class="nav-icon la la-question"></i> C location communities</a></li>

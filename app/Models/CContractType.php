@@ -6,12 +6,13 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CContractType
- * 
+ *
  * @property int $id
  * @property bool|null $is_deleted
  * @property Carbon|null $last_modified_on
@@ -30,9 +31,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CContractType extends Model
 {
+    use CrudTrait;
+
 	protected $table = 'c_contract_type';
 	public $incrementing = false;
 	public $timestamps = false;
+    protected string $identifiableAttribute = 'name_arm';
 
 	protected $casts = [
 		'id' => 'int',

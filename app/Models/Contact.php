@@ -6,13 +6,14 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Contact
- * 
+ *
  * @property int $id
  * @property bool|null $is_deleted
  * @property Carbon|null $last_modified_on
@@ -74,7 +75,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $phone_mobile_4
  * @property string|null $viber
  * @property string|null $whatsapp
- * 
+ *
  * @property Collection|Announcement[] $announcements
  * @property Collection|Estate[] $estates
  *
@@ -82,9 +83,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Contact extends Model
 {
+    use CrudTrait;
+
 	protected $table = 'contact';
 	public $incrementing = false;
 	public $timestamps = false;
+
+    protected string $identifiableAttribute = 'name_arm';
 
 	protected $casts = [
 		'id' => 'int',
@@ -200,4 +205,15 @@ class Contact extends Model
 	{
 		return $this->hasMany(Estate::class, 'seller_id');
 	}
+
+    public function getFullNameAttribute()
+    {
+        return $this->name_arm.' '.$this->last_name_arm;
+    }
+
+    public function getFullContactAttribute()
+    {
+        return $this->name_arm.' '.$this->last_name_arm.' ('.$this->phone_mobile_1.')';
+    }
+
 }
