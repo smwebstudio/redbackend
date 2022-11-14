@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Estate
+ * Class EstateResource
  *
  * @property int $id
  * @property int|null $location_country_id

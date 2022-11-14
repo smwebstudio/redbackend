@@ -59,7 +59,7 @@ class EstateCrudController extends CrudController
         CRUD::addColumn([
             'name' => 'c_estate_type',
             'type' => "relationship",
-            'label' => "Estate type",
+            'label' => "EstateResource type",
             'attribute' => "name_arm",
             'limit' => 100,
         ]);
