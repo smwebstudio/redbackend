@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class EstateDocument
- * 
+ *
  * @property int $id
  * @property string|null $comment_arm
  * @property string|null $comment_eng
@@ -30,6 +30,7 @@ class EstateDocument extends Model
 	protected $table = 'estate_document';
 	public $incrementing = false;
 	public $timestamps = false;
+    protected string $identifiableAttribute = 'path';
 
 	protected $casts = [
 		'id' => 'int',

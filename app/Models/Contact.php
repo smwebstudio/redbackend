@@ -196,6 +196,11 @@ class Contact extends Model
 		'whatsapp'
 	];
 
+    public function user()
+    {
+        return $this->hasOne(RealtorUser::class, 'contact_id');
+    }
+
 	public function announcements()
 	{
 		return $this->hasMany(Announcement::class, 'seller_id');

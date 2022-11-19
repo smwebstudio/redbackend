@@ -6,12 +6,13 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CBuildingProjectType
- * 
+ *
  * @property int $id
  * @property int|null $is_deleted
  * @property Carbon|null $last_modified_on
@@ -30,9 +31,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CBuildingProjectType extends Model
 {
+    use CrudTrait;
 	protected $table = 'c_building_project_type';
 	public $incrementing = false;
 	public $timestamps = false;
+    protected string $identifiableAttribute = 'name_arm';
 
 	protected $casts = [
 		'id' => 'int',

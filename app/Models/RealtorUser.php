@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class RealtorUser
- * 
+ *
  * @property int $id
  * @property int|null $contact_id
  * @property string|null $username
@@ -48,7 +48,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $permission_menu_packet_start_date
  * @property Carbon|null $permission_menu_packet_end_date
  * @property int|null $permission_menu_location_province_id
- * 
+ *
  * @property Collection|RealtorUserRole[] $realtor_user_roles
  *
  * @package App\Models
@@ -134,4 +134,9 @@ class RealtorUser extends Model
 	{
 		return $this->hasMany(RealtorUserRole::class, 'user_id');
 	}
+
+    public function professions()
+    {
+        return $this->belongsToMany(CProfessionType::class, 'professional_profession', 'user_id', 'profession_id', 'id');
+    }
 }

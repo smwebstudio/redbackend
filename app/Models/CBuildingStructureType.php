@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CBuildingStructureType
- * 
+ *
  * @property int $id
  * @property bool|null $is_deleted
  * @property Carbon|null $last_modified_on
@@ -33,6 +33,7 @@ class CBuildingStructureType extends Model
 	protected $table = 'c_building_structure_type';
 	public $incrementing = false;
 	public $timestamps = false;
+    protected string $identifiableAttribute = 'name_arm';
 
 	protected $casts = [
 		'id' => 'int',

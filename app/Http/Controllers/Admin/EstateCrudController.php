@@ -34,6 +34,18 @@ class EstateCrudController extends CrudController
         CRUD::setEntityNameStrings('estate', 'estates');
     }
 
+    protected function setupShowOperation()
+    {
+        CRUD::addColumn([
+            'name' => 'estateDocuments',
+            'type' => "relationship",
+            'attribute' => "path",
+            'label' => "ID",
+            'limit' => 100,
+        ]);
+
+    }
+
     /**
      * Define what happens when the List operation is loaded.
      *

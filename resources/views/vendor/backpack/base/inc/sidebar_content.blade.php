@@ -30,3 +30,6 @@
         <li class="nav-item"><a class="nav-link" href="{{ backpack_url('role') }}"><i class="nav-icon la la-cog"></i> Roles</a></li>
     </ul>
 </li>
+
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('contact') }}"><i class="nav-icon la la-question"></i> Contacts</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-contact-type') }}"><i class="nav-icon la la-question"></i> C contact types</a></li>

@@ -733,6 +733,31 @@ class Estate extends Model
         return $this->belongsTo(CContractType::class, 'contract_type_id');
     }
 
+    public function building_structure_type()
+    {
+        return $this->belongsTo(CBuildingStructureType::class, 'building_structure_type_id');
+    }
+
+    public function building_project_type()
+    {
+        return $this->belongsTo(CBuildingProjectType::class, 'building_project_type_id');
+    }
+
+    public function estateDocuments()
+    {
+        return $this->HasMany(EstateDocument::class, 'estate_id');
+    }
+
+    public function year()
+    {
+        return $this->belongsTo(CYear::class, 'year_id');
+    }
+
+    public function entrance_door_position()
+    {
+        return $this->belongsTo(CEntranceDoorPosition::class, 'entrance_door_position_id');
+    }
+
     /*Methods*/
 
     public function getFullAddressAttribute(): ?string

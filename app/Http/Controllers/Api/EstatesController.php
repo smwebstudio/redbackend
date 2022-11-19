@@ -1,0 +1,157 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Models\Estate;
+use DebugBar\DebugBar;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use App\Services\PointCheck;
+use Illuminate\Support\Facades\Http;
+
+class EstatesController extends Controller {
+
+    public function filterAnnouncements( Request $request )
+    {
+        $request_coords = $request->coords;
+        $filter = [];
+
+
+        parse_str($request->filter, $filter);
+
+        // return $filter;
+        if( isset($filter['place']) ) {
+            unset($filter['place']);
+        }
+
+//        $locale = $request->locale;
+        $filter['order_by'] = 'created_at';
+        $filter['order_dir'] = 'DESC';
+//        $data = new Request($filter);
+//        $ajax = true;
+//        $estates = $this->filter($data, $ajax);
+
+        $estates = Estate::where('estate_latitude', '>', 34)->where('estate_longitude', '>', 34)->limit('15')->get();
+
+
+
+        foreach ($estates as $key => $ann) {
+            if(isset($ann['estate_latitude']) && isset($ann['estate_longitude'])) {
+                $response = Http::get('https://geocode-maps.yandex.ru/1.x/?apikey=98976ac2-1627-4fc8-ac83-e4d35764b12c&format=json&results=1&geocode='.$ann->full_address);
+
+                $estate_coords = json_decode($response->body())->response->GeoObjectCollection->featureMember[0]->GeoObject->Point->pos;
+
+                usleep(300);
+//                dd($ann->full_address, $responseData, json_decode($response->body()));
+//                $ann_coords = [$ann['estate_longitude'], $ann['estate_latitude']];
+
+                $ann_coords = $this->pointStringToCoordinates($estate_coords);
+                $vertices_x = [];
+                $vertices_y = [];
+
+
+                foreach ($request_coords as $coord) {
+                    $vertices_x[] = $coord[0];
+                    $vertices_y[] = $coord[1];
+                };
+
+                $points_polygon = count($vertices_x) - 1;
+                $longitude = $ann_coords[0];
+                $latitude = $ann_coords[1];
+
+
+                if ($this->is_in_polygon($request_coords, $points_polygon, $vertices_x, $vertices_y, $longitude, $latitude)) {
+$ann->aaaaaaaaaaaaa = $ann_coords;
+                }
+                else {
+                    unset($estates[$key]);
+                }
+            }
+            else {
+                unset($estates[$key]);
+            }
+        }
+
+
+
+        // return response()->json($outer_html);
+        return response()->json(['data' => $estates, 'current_page' => 2, 'last_page' => 2 ]);
+
+    }
+
+//    public function filter(Request $request, $ajax = false)
+//    {
+//        $locale = $this->changeLang('hy');
+//        $estates = AnnouncementSearch::apply($request)->with('place.parent.parent', 'announcement_type', 'currency_price', 'property_type')
+//            ->whereHas('statuses', function($query) {
+//                $query->where(['status_id' => 4, 'current' => 1]);
+//            })
+//            ->orderBy($request->order_by,$request->order_dir);
+//        $property_types = PropertyType::where('locale', $locale)->get();
+//        $announcement_types = AnnouncementType::where('locale', $locale)->get();
+//        // dd($estates->total());
+//        $states = Place::whereHas('type', function($query) use ($locale){
+//            $query->where([['locale', $locale], ['parent_id', 2]]);
+//        })->with('children.children')->get();
+//        $opt_types = AnnouncementOptionType::where('locale', $locale)->whereIn('parent_id', [13, 52, 109, 106, 22, 1, 4, 46, 103, 73, 94, 130, 133, 136, 97, 139, 142, 145, 148, 106, 100])->with(['options' => function($query) use ($locale){
+//            $query->where('locale',$locale);
+//        }])->get();
+//        $option_types = array();
+//        $option_parents = array();
+//        foreach ($opt_types as $option_type)
+//        {
+//            $option_types[$option_type->id] = $option_type;
+//            $option_parents[$option_type->parent_id] = $option_type;
+//        }
+//        $steets = [];
+//        if(isset($request->place['community_id'])) {
+//            $steets = Place::whereIn('parent_id',$request->place['community_id'])->get();
+//        }
+//        $currencies = Currency::where('locale', $locale)->get();
+//
+//        $currency = Setting::where('name', 'price_options_1')->first()->value;
+//        $currency_ids = json_decode($currency, true);
+//
+//        $currency_area = Setting::where('name', 'area_price_options')->first()->value;
+//        $currency_area_ids = json_decode($currency_area, true);
+//
+//        if ($request->coords && !empty($request->coords) ) {
+//            $request->merge(['filter' => $request->params]);
+//            return $this->filterAnnouncements($request);
+//        }
+//        if (isset($request->page)) {
+//            return response()->json($estates->paginate(8));
+//        }
+//        if( $ajax ) {
+//            return $estates->get();
+//        } else {
+//            return view('pages.announcement.index')->with([
+//                'announcements' => $estates->paginate(8),
+//                'property_types' => $property_types,
+//                'announcement_types' => $announcement_types,
+//                'states' => $states,
+//                'option_types' => $option_types,
+//                'currencies' => $currencies,
+//                'currency_ids' => $currency_ids,
+//                'currency_area_ids' => $currency_area_ids,
+//                'streets' => $steets
+//
+//            ]);
+//        }
+//    }
+
+    public function is_in_polygon($coords, $points_polygon, $vertices_x, $vertices_y, $longitude, $latitude)
+    {
+        $pointLocation = new PointCheck();
+        $point = [$latitude, $longitude];
+        $polygon = $coords;
+
+        return $pointLocation->pointInPolygon($point, $polygon);
+    }
+
+    function pointStringToCoordinates($pointString) {
+        $coordinates = explode(" ", $pointString);
+        return array($coordinates[0],$coordinates[1]);
+    }
+
+}
