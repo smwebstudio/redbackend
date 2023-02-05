@@ -31,4 +31,6 @@ Route::group([
     Route::crud('c-location-community', 'CLocationCommunityCrudController');
     Route::crud('contact', 'ContactCrudController');
     Route::crud('c-contact-type', 'CContactTypeCrudController');
+    Route::crud('c-article-type', 'CArticleTypeCrudController');
+    Route::crud('article', 'ArticleCrudController');
 }); // this should be the absolute last line of this file

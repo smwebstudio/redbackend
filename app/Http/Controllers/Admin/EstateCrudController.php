@@ -152,19 +152,21 @@ class EstateCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(EstateRequest::class);
+//
+//        CRUD::addField([
+//            'name' => 'c_contract_type',
+//            'type' => "relationship",
+//            'label' => "Contract type",
+//        ]);
+//
+//        CRUD::addField([
+//            'name' => 'contact',
+//            'type' => "relationship",
+//            'label' => "Contact",
+//            'ajax' => true,
+//        ]);
 
-        CRUD::addField([
-            'name' => 'c_contract_type',
-            'type' => "relationship",
-            'label' => "Contract type",
-        ]);
-
-        CRUD::addField([
-            'name' => 'contact',
-            'type' => "relationship",
-            'label' => "Contact",
-            'ajax' => true,
-        ]);
+        $this->crud->setFromDb();
 
     }
 

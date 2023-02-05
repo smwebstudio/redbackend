@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\Api\EstatesController;
+use App\Http\Resources\BlogResource;
 use App\Http\Resources\ContactResource;
 use App\Http\Resources\EstateCollection;
 use App\Http\Resources\EstateResource;
 use App\Http\Resources\EvaluationBuildingFloorResource;
 use App\Http\Resources\EvaluationBuildingProjectResource;
 use App\Http\Resources\EvaluationLocationResource;
+use App\Models\Article;
 use App\Models\CEvaluationBuildingFloor;
 use App\Models\CEvaluationBuildingProject;
 use App\Models\CEvaluationLocation;
@@ -91,4 +93,16 @@ Route::get('/brokers/profession/{type}', function ($type) {
 
 Route::get('/brokers/best', function () {
     return  ContactResource::collection((Contact::where('contact_type_id', 3)->whereHas('user')->orderBy('last_modified_on', 'desc')->limit(3)->get()));
+});
+
+Route::get('/blog/news', function () {
+    return  BlogResource::collection(Article::where('article_type_id', 1)->orderBy('last_modified_on', 'desc')->limit(10)->get());
+});
+
+Route::get('/blog/articles', function () {
+    return  BlogResource::collection(Article::where('article_type_id', 2)->orderBy('last_modified_on', 'desc')->limit(10)->get());
+});
+
+Route::get('/blog/{id}', function ($id) {
+    return new BlogResource((Article::findOrfail($id)));
 });
