@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CLocationCity
- * 
+ *
  * @property int $id
  * @property bool|null $is_deleted
  * @property Carbon|null $last_modified_on
@@ -27,7 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $comment
  * @property int|null $created_by
  * @property Carbon|null $created_on
- * 
+ *
  * @property Collection|Announcement[] $announcements
  * @property Collection|Estate[] $estates
  *
@@ -78,4 +78,9 @@ class CLocationCity extends Model
 	{
 		return $this->hasMany(Estate::class, 'location_city_id');
 	}
+
+    public function streets()
+    {
+        return $this->hasMany(CLocationStreet::class, 'parent_id');
+    }
 }

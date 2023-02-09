@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Announcement
- * 
+ *
  * @property int $id
  * @property int|null $location_country_id
  * @property int|null $location_province_id
@@ -192,7 +192,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $hot_offer_start_date
  * @property bool|null $is_on_main_page
  * @property Carbon|null $on_main_page_start_date
- * 
+ *
  * @property CBuildingType|null $c_building_type
  * @property CElevatorType|null $c_elevator_type
  * @property CHeatingSystemType|null $c_heating_system_type
@@ -218,7 +218,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property CRoofMaterialType|null $c_roof_material_type
  * @property CRoofType|null $c_roof_type
  * @property CLandStructureType|null $c_land_structure_type
- * @property CLandType|null $c_land_type
+ * @property EstateOptionType|null $c_land_type
  *
  * @package App\Models
  */
@@ -689,6 +689,6 @@ class Announcement extends Model
 
 	public function c_land_type()
 	{
-		return $this->belongsTo(CLandType::class, 'land_type_id');
+		return $this->belongsTo(EstateOptionType::class, 'land_type_id');
 	}
 }

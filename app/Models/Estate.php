@@ -230,7 +230,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property CRoofMaterialType|null $c_roof_material_type
  * @property CRoofType|null $c_roof_type
  * @property CLandStructureType|null $c_land_structure_type
- * @property CLandType|null $c_land_type
+ * @property EstateOptionType|null $c_land_type
  *
  * @package App\Models
  */
@@ -725,7 +725,7 @@ class Estate extends Model
 
 	public function c_land_type()
 	{
-		return $this->belongsTo(CLandType::class, 'land_type_id');
+		return $this->belongsTo(EstateOptionType::class, 'land_type_id');
 	}
 
     public function c_contract_type()

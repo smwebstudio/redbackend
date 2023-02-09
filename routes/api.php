@@ -4,16 +4,20 @@ use App\Http\Controllers\Api\EstatesController;
 use App\Http\Resources\BlogResource;
 use App\Http\Resources\ContactResource;
 use App\Http\Resources\EstateCollection;
+use App\Http\Resources\EstateOptionTypeResource;
 use App\Http\Resources\EstateResource;
 use App\Http\Resources\EvaluationBuildingFloorResource;
 use App\Http\Resources\EvaluationBuildingProjectResource;
 use App\Http\Resources\EvaluationLocationResource;
+use App\Http\Resources\LocationResource;
 use App\Models\Article;
 use App\Models\CEvaluationBuildingFloor;
 use App\Models\CEvaluationBuildingProject;
 use App\Models\CEvaluationLocation;
+use App\Models\CLocationProvince;
 use App\Models\Contact;
 use App\Models\Estate;
+use App\Models\EstateOptionType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -71,6 +75,8 @@ Route::get('/estates/{id}', function ($id) {
 });
 
 
+
+
 Route::get('/evaluation_locations', function () {
     return new EvaluationLocationResource((CEvaluationLocation::all()));
 });
@@ -103,6 +109,18 @@ Route::get('/blog/articles', function () {
     return  BlogResource::collection(Article::where('article_type_id', 2)->orderBy('last_modified_on', 'desc')->limit(10)->get());
 });
 
+Route::get('/blog/statistics', function () {
+    return  BlogResource::collection(Article::where('article_type_id', 3)->orderBy('last_modified_on', 'desc')->limit(10)->get());
+});
+
 Route::get('/blog/{id}', function ($id) {
     return new BlogResource((Article::findOrfail($id)));
+});
+
+Route::get('/address_data', function () {
+    return  LocationResource::collection((CLocationProvince::all()));
+});
+
+Route::get('/estate_options', function () {
+    return  EstateOptionTypeResource::collection((EstateOptionType::all()));
 });
