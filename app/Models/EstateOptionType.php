@@ -3,6 +3,7 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class EstateOptionType extends Model
 {
+    use CrudTrait;
 
     public $incrementing = false;
     public $timestamps = false;
@@ -25,7 +27,7 @@ class EstateOptionType extends Model
 
     protected $fillable = [
         'name_arm',
-        'name_eng',
+        'name_en',
         'name_ru',
         'estate_type',
     ];

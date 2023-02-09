@@ -37,3 +37,5 @@
 
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('article') }}"><i class="nav-icon la la-question"></i> Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-article-type') }}"><i class="nav-icon la la-question"></i> Article types</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('estate-option-type') }}"><i class="nav-icon la la-question"></i> Estate option types</a></li>
