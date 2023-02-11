@@ -17,7 +17,6 @@ class EstateScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-
         $builder->where('main_image_file_path', 'IS NOT', NULL)->where('main_image_file_path_thumb', 'IS NOT', NULL);
     }
 

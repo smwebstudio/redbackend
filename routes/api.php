@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\EstatesController;
 use App\Http\Resources\BlogResource;
-use App\Http\Resources\ContactResource;
+use App\Http\Resources\ContactEstatesResource;
 use App\Http\Resources\EstateCollection;
 use App\Http\Resources\EstateDetailsResource;
 use App\Http\Resources\EstateOptionTypeResource;
@@ -75,6 +75,10 @@ Route::get('/estates/{id}', function ($id) {
     return new EstateDetailsResource((Estate::findOrfail($id)));
 });
 
+Route::get('/estates/professional/{id}', function ($id) {
+    return  EstateResource::collection((Estate::where('agent_id', $id)->paginate(7)));
+});
+
 
 
 
@@ -91,7 +95,7 @@ Route::get('/evaluation_building_floors', function () {
 });
 
 Route::get('/brokers/profession/{type}', function ($type) {
-    return  ContactResource::collection((Contact::where('contact_type_id', 3)->whereHas('user', function($q) use ($type) {
+    return  ContactEstatesResource::collection((Contact::where('contact_type_id', 3)->whereHas('user', function($q) use ($type) {
         $q->whereHas("professions", function($q) use ($type) {
             $q->where("c_profession_type.id", $type);
         });
@@ -99,7 +103,11 @@ Route::get('/brokers/profession/{type}', function ($type) {
 });
 
 Route::get('/brokers/best', function () {
-    return  ContactResource::collection((Contact::where('contact_type_id', 3)->whereHas('user')->orderBy('last_modified_on', 'desc')->limit(3)->get()));
+    return  ContactEstatesResource::collection((Contact::where('contact_type_id', 3)->whereHas('user')->orderBy('last_modified_on', 'desc')->limit(3)->get()));
+});
+
+Route::get('/professionals/{id}', function ($id) {
+    return new ContactEstatesResource((Contact::findOrfail($id)));
 });
 
 Route::get('/blog/news', function () {
