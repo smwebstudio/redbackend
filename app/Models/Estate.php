@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Scopes\EstateScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -598,37 +599,51 @@ class Estate extends Model
 		'is_public_text_generation'
 	];
 
-	public function c_building_type()
+
+    /*Apply scopes*/
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new EstateScope());
+    }
+
+    /*Scopes end*/
+
+	public function building_type()
 	{
 		return $this->belongsTo(CBuildingType::class, 'building_type_id');
 	}
 
-	public function c_elevator_type()
+	public function elevator_type()
 	{
 		return $this->belongsTo(CElevatorType::class, 'elevator_type_id');
 	}
 
-	public function c_heating_system_type()
+	public function heating_system_type()
 	{
 		return $this->belongsTo(CHeatingSystemType::class, 'heating_system_type_id');
 	}
 
-	public function c_parking_type()
+	public function parking_type()
 	{
 		return $this->belongsTo(CParkingType::class, 'parking_type_id');
 	}
 
-	public function c_repairing_type()
+	public function repairing_type()
 	{
 		return $this->belongsTo(CRepairingType::class, 'repairing_type_id');
 	}
 
-	public function c_service_fee_type()
+	public function service_fee_type()
 	{
 		return $this->belongsTo(CServiceFeeType::class, 'service_fee_type_id');
 	}
 
-	public function c_year()
+	public function year()
 	{
 		return $this->belongsTo(CYear::class, 'year_id');
 	}
@@ -638,97 +653,102 @@ class Estate extends Model
 		return $this->belongsTo(Contact::class, 'seller_id');
 	}
 
-	public function c_currency()
+	public function currency()
 	{
 		return $this->belongsTo(CCurrency::class, 'currency_id');
 	}
 
-	public function c_estate_type()
+	public function estate_type()
 	{
 		return $this->belongsTo(CEstateType::class, 'estate_type_id');
 	}
 
-	public function c_location_city()
+	public function location_city()
 	{
 		return $this->belongsTo(CLocationCity::class, 'location_city_id');
 	}
 
-	public function c_location_community()
+	public function location_community()
 	{
 		return $this->belongsTo(CLocationCommunity::class, 'location_community_id');
 	}
 
-	public function c_location_country()
+	public function location_country()
 	{
 		return $this->belongsTo(CLocationCountry::class, 'location_country_id');
 	}
 
-	public function c_location_province()
+	public function location_province()
 	{
 		return $this->belongsTo(CLocationProvince::class, 'location_province_id');
 	}
 
-	public function c_location_street()
+	public function location_street()
 	{
 		return $this->belongsTo(CLocationStreet::class, 'location_street_id');
 	}
 
-	public function c_registered_right()
+	public function registered_right()
 	{
 		return $this->belongsTo(CRegisteredRight::class, 'registered_right_id');
 	}
 
-	public function c_communication_type()
+	public function communication_type()
 	{
 		return $this->belongsTo(CCommunicationType::class, 'communication_id');
 	}
 
-	public function c_exterior_design_type()
+	public function exterior_design_type()
 	{
 		return $this->belongsTo(CExteriorDesignType::class, 'exterior_design_type_id');
 	}
 
-	public function c_fence_type()
+    public function distance_public_objects()
+    {
+        return $this->belongsTo(CDistancePublicObject::class, 'distance_public_objects_id');
+    }
+
+	public function fence_type()
 	{
 		return $this->belongsTo(CFenceType::class, 'fence_type_id');
 	}
 
-	public function c_front_with_street()
+	public function front_with_street()
 	{
 		return $this->belongsTo(CFrontWithStreet::class, 'front_with_street_id');
 	}
 
-	public function c_house_building_type()
+	public function house_building_type()
 	{
 		return $this->belongsTo(CHouseBuildingType::class, 'house_building_type_id');
 	}
 
-	public function c_road_way_type()
+	public function road_way_type()
 	{
 		return $this->belongsTo(CRoadWayType::class, 'road_way_type_id');
 	}
 
-	public function c_roof_material_type()
+	public function roof_material_type()
 	{
 		return $this->belongsTo(CRoofMaterialType::class, 'roof_material_type_id');
 	}
 
-	public function c_roof_type()
+	public function roof_type()
 	{
 		return $this->belongsTo(CRoofType::class, 'roof_type_id');
 	}
 
-	public function c_land_structure_type()
+	public function land_structure_type()
 	{
 		return $this->belongsTo(CLandStructureType::class, 'land_structure_type_id');
 	}
 
-	public function c_land_type()
+	public function land_type()
 	{
 		return $this->belongsTo(EstateOptionType::class, 'land_type_id');
 	}
 
-    public function c_contract_type()
+    public function contract_type()
     {
         return $this->belongsTo(CContractType::class, 'contract_type_id');
     }
@@ -748,10 +768,7 @@ class Estate extends Model
         return $this->HasMany(EstateDocument::class, 'estate_id');
     }
 
-    public function year()
-    {
-        return $this->belongsTo(CYear::class, 'year_id');
-    }
+
 
     public function entrance_door_position()
     {
@@ -767,7 +784,7 @@ class Estate extends Model
 
     public function getFullPriceAttribute(): ?string
     {
-        return $this->getFormattedPrice().' '.$this->c_currency->name_arm;
+        return $this->getFormattedPrice().' '.$this->currency->name_arm;
     }
 
     public function getFormattedPrice(): ?float
@@ -784,15 +801,15 @@ class Estate extends Model
     }
 
     public function getProvince(): ?string {
-        return $this->c_location_province->name_arm ?? '';
+        return $this->location_province->name_eng ?? '';
     }
 
     public function getCommunity(): ?string {
-        return $this->c_location_community->name_arm ?? '';
+        return $this->location_community->name_eng ?? '';
     }
 
     public function getStreet(): ?string {
-        return $this->c_location_street->name_arm ?? '';
+        return $this->location_street->name_eng ?? '';
     }
 
 

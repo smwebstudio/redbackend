@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\EstatesController;
 use App\Http\Resources\BlogResource;
 use App\Http\Resources\ContactResource;
 use App\Http\Resources\EstateCollection;
+use App\Http\Resources\EstateDetailsResource;
 use App\Http\Resources\EstateOptionTypeResource;
 use App\Http\Resources\EstateResource;
 use App\Http\Resources\EvaluationBuildingFloorResource;
@@ -71,7 +72,7 @@ Route::get('/estates/hot', function () {
 });
 
 Route::get('/estates/{id}', function ($id) {
-    return new EstateResource((Estate::findOrfail($id)));
+    return new EstateDetailsResource((Estate::findOrfail($id)));
 });
 
 

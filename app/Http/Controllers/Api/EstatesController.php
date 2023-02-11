@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Services\PointCheck;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class EstatesController extends Controller {
 
@@ -31,17 +32,28 @@ class EstatesController extends Controller {
 //        $ajax = true;
 //        $estates = $this->filter($data, $ajax);
 
-        $estates = Estate::where('estate_latitude', '>', 34)->where('estate_longitude', '>', 34)->limit('15')->get();
+        $estates = Estate::where('estate_latitude', '>', 34)->where('estate_longitude', '>', 34)->limit('1')->get();
 
 
 
-        foreach ($estates as $key => $ann) {
-            if(isset($ann['estate_latitude']) && isset($ann['estate_longitude'])) {
-                $response = Http::get('https://geocode-maps.yandex.ru/1.x/?apikey=98976ac2-1627-4fc8-ac83-e4d35764b12c&format=json&results=1&geocode='.$ann->full_address);
+        foreach ($estates as $key => $estate) {
+            if(isset($estate['estate_latitude']) && isset($estate['estate_longitude'])) {
+//                $response = Http::get('https://geocode-maps.yandex.ru/1.x/?apikey=98976ac2-1627-4fc8-ac83-e4d35764b12c&format=json&results=1&geocode='.$estate->full_address);
 
-                $estate_coords = json_decode($response->body())->response->GeoObjectCollection->featureMember[0]->GeoObject->Point->pos;
+//                $estate_coords = json_decode($response->body())->response->GeoObjectCollection->featureMember[0]->GeoObject->Point->pos;
 
-                usleep(300);
+
+                $estate_coords = $estate['estate_longitude'].' '.$estate['estate_latitude'];
+
+                Log::info('Estate id -'.$estate->id);
+                Log::info('Pos -'.$estate_coords);
+
+
+                Log::info('Coords -'.$estate_coords);
+
+
+
+//                usleep(100);
 //                dd($ann->full_address, $responseData, json_decode($response->body()));
 //                $ann_coords = [$ann['estate_longitude'], $ann['estate_latitude']];
 
@@ -59,9 +71,15 @@ class EstatesController extends Controller {
                 $longitude = $ann_coords[0];
                 $latitude = $ann_coords[1];
 
+                $estate->estate_latitude = $latitude;
+                $estate->estate_longitude = $longitude;
+                $estate->save();
+
+                Log::info('long - '.$longitude);
+                Log::info('latitude - '.$latitude);
 
                 if ($this->is_in_polygon($request_coords, $points_polygon, $vertices_x, $vertices_y, $longitude, $latitude)) {
-$ann->aaaaaaaaaaaaa = $ann_coords;
+                    $estate->native_coords = $ann_coords;
                 }
                 else {
                     unset($estates[$key]);
