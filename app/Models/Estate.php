@@ -8,6 +8,7 @@ namespace App\Models;
 
 use App\Scopes\EstateScope;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -609,6 +610,16 @@ class Estate extends Model
     protected static function booted()
     {
         static::addGlobalScope(new EstateScope());
+    }
+
+    public function scopePriceFrom(Builder $query, $price): Builder
+    {
+        return $query->where('price', '>=', $price);
+    }
+
+    public function scopePriceTo(Builder $query, $price): Builder
+    {
+        return $query->where('price', '<=', $price);
     }
 
     /*Scopes end*/

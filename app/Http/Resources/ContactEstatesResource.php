@@ -22,6 +22,12 @@ class ContactEstatesResource extends JsonResource
             'phone_1' => $this->phone_mobile_1,
             'user' => $this->user,
             'professions' => $this->user->professions,
+            'communities' => $this->user->locationCommunities,
+            'estateTypes' => $this->user->estateTypes,
+            'messages' => BrokerReview::collection($this->user->messages->where('message_type_id', 4)),
+            'rating' => $this->user->average_rating,
+            'estates' => $this->user->broker_estates,
+            'estates_count' => count($this->user->broker_estates),
             'profile_picture' => $this->user?->profile_picture_path ? 'https://proinfo.am/uploadsWithWaterMark/'.$this->user?->profile_picture_path : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png",
         ];
     }

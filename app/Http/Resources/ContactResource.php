@@ -21,6 +21,7 @@ class ContactResource extends JsonResource
             'full_name' => $this->full_name,
             'phone_1' => $this->phone_mobile_1,
             'user' => $this->user,
+            'rating' => $this->user->average_rating,
             'professions' => $this->user->professions,
             'profile_picture' => $this->user?->profile_picture_path ? 'https://proinfo.am/uploadsWithWaterMark/'.$this->user?->profile_picture_path : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png",
         ];

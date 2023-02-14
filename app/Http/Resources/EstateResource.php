@@ -21,6 +21,7 @@ class EstateResource extends JsonResource
             'old_price' => $this->old_price,
             'full_address' => $this->full_address,
             'area_total' => $this->area_total,
+            'room_count' => $this->room_count,
             'floor' => $this->floor,
             'building_floor_count' => $this->building_floor_count,
             'building_structure_type' => $this->building_structure_type?->name_arm,
@@ -29,7 +30,7 @@ class EstateResource extends JsonResource
             'year' => $this->year?->name_arm,
             'name_arm' => $this->name_arm,
             'images' => $this->estateDocuments,
-            'image' => $this->main_image_file_path_thumb ? 'https://proinfo.am/uploadsWithWaterMark/'.$this->main_image_file_path : 'https://i0.wp.com/lanecdr.org/wp-content/uploads/2019/08/placeholder.png',
+            'image' => $this->main_image_file_path_thumb ? 'https://proinfo.am/uploadsWithWaterMark/'.$this->main_image_file_path_thumb : 'https://i0.wp.com/lanecdr.org/wp-content/uploads/2019/08/placeholder.png',
         ];
     }
 }

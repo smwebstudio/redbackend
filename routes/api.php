@@ -10,6 +10,7 @@ use App\Http\Resources\EstateResource;
 use App\Http\Resources\EvaluationBuildingFloorResource;
 use App\Http\Resources\EvaluationBuildingProjectResource;
 use App\Http\Resources\EvaluationLocationResource;
+use App\Http\Resources\FilterResource;
 use App\Http\Resources\LocationResource;
 use App\Models\Article;
 use App\Models\CEvaluationBuildingFloor;
@@ -41,6 +42,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::controller(EstatesController::class)->group(function () {
     Route::get('/estates/map_search', 'filterAnnouncements');
+    Route::get('/estates/filter/estates', 'filterEstates');
 });
 
 Route::get('/estates/sale', function () {
@@ -80,7 +82,9 @@ Route::get('/estates/professional/{id}', function ($id) {
 });
 
 
-
+Route::get('/filters', function () {
+    return  new FilterResource(null);
+});
 
 Route::get('/evaluation_locations', function () {
     return new EvaluationLocationResource((CEvaluationLocation::all()));
@@ -99,7 +103,7 @@ Route::get('/brokers/profession/{type}', function ($type) {
         $q->whereHas("professions", function($q) use ($type) {
             $q->where("c_profession_type.id", $type);
         });
-    })->orderBy('last_modified_on', 'desc')->limit(50)->get()));
+    })->orderBy('last_modified_on', 'desc')->limit(20)->get()));
 });
 
 Route::get('/brokers/best', function () {

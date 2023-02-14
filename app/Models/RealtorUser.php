@@ -139,4 +139,32 @@ class RealtorUser extends Model
     {
         return $this->belongsToMany(CProfessionType::class, 'professional_profession', 'user_id', 'profession_id', 'id');
     }
+    public function locationCommunities()
+    {
+        return $this->belongsToMany(CLocationCommunity::class, 'professional_location_community', 'user_id', 'location_community_id', 'id');
+    }
+
+    public function estateTypes()
+    {
+        return $this->belongsToMany(CEstateType::class, 'professional_menu_estate_type', 'user_id', 'estate_type_id', 'id');
+    }
+
+
+    public function broker_estates(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Estate::class, 'agent_id');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'recipient_id');
+    }
+
+
+    public function getAverageRatingAttribute()
+    {
+        return ceil($this->messages->avg('overall_rating'));
+    }
+
+
 }

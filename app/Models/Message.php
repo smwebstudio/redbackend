@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Message
- * 
+ *
  * @property int $id
  * @property int|null $recipient_id
  * @property int|null $estate_id
@@ -74,4 +74,9 @@ class Message extends Model
 		'sent_on',
 		'ip_address'
 	];
+
+    public function messageServiceName()
+    {
+        return $this->belongsTo(CServiceType::class, 'service_id');
+    }
 }
