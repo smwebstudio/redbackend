@@ -13,10 +13,12 @@ use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class EstatesController extends Controller {
+class EstatesController extends Controller
+{
 
 
-    public function filterEstates(Request $request) {
+    public function filterEstates(Request $request)
+    {
 
 
         Log::info($request->input('page_size'));
@@ -38,19 +40,21 @@ class EstatesController extends Controller {
                 AllowedFilter::exact('prices'),
                 AllowedFilter::scope('price_from'),
                 AllowedFilter::scope('price_to'),
+                AllowedFilter::scope('text_search'),
                 AllowedFilter::exact('currency'),
                 AllowedFilter::exact('room_count'),
                 AllowedFilter::exact('estate_type_id'),
                 AllowedFilter::exact('location_province_id'),
                 AllowedFilter::exact('location_city_id'),
-                AllowedFilter::exact('location_community_id'),])
+                AllowedFilter::exact('location_community_id'),
+            ])
             ->paginate($pageSize)
             ->appends(request()->query()));
 
 
     }
 
-    public function filterAnnouncements( Request $request )
+    public function filterAnnouncements(Request $request)
     {
         $request_coords = $request->coords;
         $filter = [];
@@ -59,7 +63,7 @@ class EstatesController extends Controller {
         parse_str($request->filter, $filter);
 
         // return $filter;
-        if( isset($filter['place']) ) {
+        if (isset($filter['place'])) {
             unset($filter['place']);
         }
 
@@ -73,22 +77,20 @@ class EstatesController extends Controller {
         $estates = Estate::where('estate_latitude', '>', 34)->where('estate_longitude', '>', 34)->limit('1')->get();
 
 
-
         foreach ($estates as $key => $estate) {
-            if(isset($estate['estate_latitude']) && isset($estate['estate_longitude'])) {
+            if (isset($estate['estate_latitude']) && isset($estate['estate_longitude'])) {
 //                $response = Http::get('https://geocode-maps.yandex.ru/1.x/?apikey=98976ac2-1627-4fc8-ac83-e4d35764b12c&format=json&results=1&geocode='.$estate->full_address);
 
 //                $estate_coords = json_decode($response->body())->response->GeoObjectCollection->featureMember[0]->GeoObject->Point->pos;
 
 
-                $estate_coords = $estate['estate_longitude'].' '.$estate['estate_latitude'];
+                $estate_coords = $estate['estate_longitude'] . ' ' . $estate['estate_latitude'];
 
-                Log::info('Estate id -'.$estate->id);
-                Log::info('Pos -'.$estate_coords);
+                Log::info('Estate id -' . $estate->id);
+                Log::info('Pos -' . $estate_coords);
 
 
-                Log::info('Coords -'.$estate_coords);
-
+                Log::info('Coords -' . $estate_coords);
 
 
 //                usleep(100);
@@ -113,25 +115,22 @@ class EstatesController extends Controller {
                 $estate->estate_longitude = $longitude;
                 $estate->save();
 
-                Log::info('long - '.$longitude);
-                Log::info('latitude - '.$latitude);
+                Log::info('long - ' . $longitude);
+                Log::info('latitude - ' . $latitude);
 
                 if ($this->is_in_polygon($request_coords, $points_polygon, $vertices_x, $vertices_y, $longitude, $latitude)) {
                     $estate->native_coords = $ann_coords;
-                }
-                else {
+                } else {
                     unset($estates[$key]);
                 }
-            }
-            else {
+            } else {
                 unset($estates[$key]);
             }
         }
 
 
-
         // return response()->json($outer_html);
-        return response()->json(['data' => $estates, 'current_page' => 2, 'last_page' => 2 ]);
+        return response()->json(['data' => $estates, 'current_page' => 2, 'last_page' => 2]);
 
     }
 
@@ -205,9 +204,10 @@ class EstatesController extends Controller {
         return $pointLocation->pointInPolygon($point, $polygon);
     }
 
-    function pointStringToCoordinates($pointString) {
+    function pointStringToCoordinates($pointString)
+    {
         $coordinates = explode(" ", $pointString);
-        return array($coordinates[0],$coordinates[1]);
+        return array($coordinates[0], $coordinates[1]);
     }
 
 }

@@ -622,6 +622,21 @@ class Estate extends Model
         return $query->where('price', '<=', $price);
     }
 
+    public function scopeTextSearch(Builder $query, $searchText): Builder
+    {
+        return $query->where('id', '=', $searchText)
+            ->orWhere('code', 'like', '%'.$searchText.'%')
+            ->orWhereHas('location_city', function ($query) use($searchText){
+            $query->where('name_arm', 'LIKE',  '%' . $searchText . '%');
+                })
+            ->orWhereHas('location_street', function ($query) use($searchText){
+                $query->where('name_arm', 'LIKE',  '%' . $searchText . '%');
+            })
+            ->orWhereHas('location_community', function ($query) use($searchText){
+                $query->where('name_arm', 'LIKE',  '%' . $searchText . '%');
+            });
+    }
+
     /*Scopes end*/
 
 	public function building_type()
