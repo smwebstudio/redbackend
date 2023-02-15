@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\EstatesController;
+use App\Http\Controllers\Api\OptionsController;
 use App\Http\Resources\BlogResource;
 use App\Http\Resources\ContactEstatesResource;
 use App\Http\Resources\EstateCollection;
 use App\Http\Resources\EstateDetailsResource;
-use App\Http\Resources\EstateOptionTypeResource;
+use App\Http\Resources\OptionTypeResource;
 use App\Http\Resources\EstateResource;
 use App\Http\Resources\EvaluationBuildingFloorResource;
 use App\Http\Resources\EvaluationBuildingProjectResource;
@@ -135,5 +136,10 @@ Route::get('/address_data', function () {
 });
 
 Route::get('/estate_options', function () {
-    return  EstateOptionTypeResource::collection((EstateOptionType::all()));
+    return  OptionTypeResource::collection((EstateOptionType::all()));
+});
+
+
+Route::controller(OptionsController::class)->group(function () {
+    Route::get('/options', 'getOptions');
 });

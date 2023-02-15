@@ -21,7 +21,7 @@ class CityResource extends JsonResource
             'value' => $this->id,
             'name' => $this->name_arm,
             'label' => $this->name_arm,
-            'children' => EstateOptionTypeResource::collection($this->streets),
+            'children' => OptionTypeResource::collection($this->streets),
         ];
     }
 
