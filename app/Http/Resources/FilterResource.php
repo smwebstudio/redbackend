@@ -18,8 +18,6 @@ class FilterResource extends JsonResource
      */
     public function toArray($request)
     {
-
-
         return [
             'estate_types' => OptionTypeResource::collection(CEstateType::all()),
             'locations' => LocationResource::collection((CLocationProvince::all())),
