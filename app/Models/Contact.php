@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -88,6 +89,11 @@ class Contact extends Model
 	protected $table = 'contact';
 	public $incrementing = false;
 	public $timestamps = false;
+
+    use ApiMultiLanguage;
+    protected array $multi_lang = [
+        'name',
+    ];
 
     protected string $identifiableAttribute = 'name_arm';
 

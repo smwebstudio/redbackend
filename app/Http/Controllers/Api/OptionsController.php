@@ -11,6 +11,7 @@ use App\Models\CDistancePublicObject;
 use App\Models\CEntranceDoorType;
 use App\Models\CExteriorDesignType;
 use App\Models\CHeatingSystemType;
+use App\Models\CLocationCommunity;
 use App\Models\CLocationProvince;
 use App\Models\CParkingType;
 use App\Models\CRepairingType;
@@ -46,6 +47,7 @@ class OptionsController extends Controller
         $buildingOptionsData->buildingWindowCount =  OptionTypeResource::collection((CBuildingWindowCount::all()));
 
         $data->locationData =   LocationResource::collection((CLocationProvince::all()));
+        $data->communitiesData =   OptionTypeResource::collection((CLocationCommunity::all()));
         $data->estateOptionsData =  OptionTypeResource::collection((EstateOptionType::all()));
         $data->buildingOptionsData = $buildingOptionsData;
 

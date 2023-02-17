@@ -6,11 +6,12 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class AnnouncementRequest
- * 
+ *
  * @property int $id
  * @property int|null $announcement_id
  * @property int|null $requester_id
@@ -23,6 +24,11 @@ class AnnouncementRequest extends Model
 	protected $table = 'announcement_request';
 	public $incrementing = false;
 	public $timestamps = false;
+
+    use ApiMultiLanguage;
+    protected  $multi_lang = [
+        'name',
+    ];
 
 	protected $casts = [
 		'id' => 'int',

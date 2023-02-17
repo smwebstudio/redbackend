@@ -6,12 +6,13 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CEvaluationBuildingWindowPosition
- * 
+ *
  * @property int $id
  * @property string|null $sort_id
  * @property string|null $name_arm
@@ -32,6 +33,10 @@ class CEvaluationBuildingWindowPosition extends Model
 	public $incrementing = false;
 	public $timestamps = false;
 
+    use ApiMultiLanguage;
+    protected array $multi_lang = [
+        'name',
+    ];
 	protected $casts = [
 		'id' => 'int',
 		'coefficient' => 'float',

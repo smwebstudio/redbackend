@@ -6,12 +6,13 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CEvaluationLocation
- * 
+ *
  * @property int $id
  * @property string|null $sort_id
  * @property string|null $name_arm
@@ -29,6 +30,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CEvaluationLocation extends Model
 {
+
+    use ApiMultiLanguage;
+    protected array $multi_lang = [
+        'name',
+    ];
+
+
 	protected $table = 'c_evaluation_location';
 	public $incrementing = false;
 	public $timestamps = false;
@@ -59,4 +67,14 @@ class CEvaluationLocation extends Model
 		'created_on',
 		'evaluation_location_type_id'
 	];
+
+    protected $appends = array('availability');
+
+    public function getAvailabilityAttribute()
+    {
+        return $this->calculateAvailability();
+    }
+
+
+
 }

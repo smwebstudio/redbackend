@@ -6,13 +6,14 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Article
- * 
+ *
  * @property int $id
  * @property int|null $article_type_id
  * @property string|null $title_arm
@@ -37,7 +38,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $metatitle_arm
  * @property string|null $metatitle_ru
  * @property string|null $metatitle_ar
- * 
+ *
  * @property CArticleType|null $c_article_type
  *
  * @package App\Models
@@ -48,6 +49,11 @@ class Article extends Model
 	protected $table = 'article';
 	public $incrementing = false;
 	public $timestamps = false;
+
+    use ApiMultiLanguage;
+    protected  $multi_lang = [
+        'name',
+    ];
 
 	protected $casts = [
 		'id' => 'int',

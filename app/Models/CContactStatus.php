@@ -6,12 +6,13 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CContactStatus
- * 
+ *
  * @property int $id
  * @property bool|null $is_deleted
  * @property Carbon|null $last_modified_on
@@ -33,6 +34,11 @@ class CContactStatus extends Model
 	protected $table = 'c_contact_status';
 	public $incrementing = false;
 	public $timestamps = false;
+
+    use ApiMultiLanguage;
+    protected array $multi_lang = [
+        'name',
+    ];
 
 	protected $casts = [
 		'id' => 'int',

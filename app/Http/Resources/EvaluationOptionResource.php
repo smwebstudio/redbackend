@@ -3,8 +3,9 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\App;
 
-class LocationResource extends JsonResource
+class EvaluationOptionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -12,16 +13,15 @@ class LocationResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
+
     public function toArray($request)
     {
-        $languageApi = $request->server('HTTP_ACCEPT_LANGUAGE');
-        $language = config('constants.'.$languageApi);
-        $name = 'name_'.$language;
-
         return [
             'id' => $this->id,
-            'name' => $this->$name,
-            'cities' => CityResource::collection($this->cities),
-            ];
+            'value' => $this->coefficient,
+            'label' => $this->name,
+        ];
     }
+
+
 }

@@ -15,11 +15,14 @@ class OptionTypeResource extends JsonResource
 
     public function toArray($request)
     {
+        $languageApi = $request->server('HTTP_ACCEPT_LANGUAGE');
+        $language = config('constants.'.$languageApi);
+        $name = 'name_'.$language;
 
         return [
             'id' => $this->id,
             'value' => $this->id,
-            'label' => $this->name_arm,
+            'label' => $this->$name,
         ];
     }
 

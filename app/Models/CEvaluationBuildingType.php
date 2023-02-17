@@ -6,11 +6,12 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CEvaluationBuildingType
- * 
+ *
  * @property int $id
  * @property string|null $name_arm
  * @property string|null $name_eng
@@ -24,6 +25,11 @@ class CEvaluationBuildingType extends Model
 	protected $table = 'c_evaluation_building_type';
 	public $incrementing = false;
 	public $timestamps = false;
+
+    use ApiMultiLanguage;
+    protected array $multi_lang = [
+        'name',
+    ];
 
 	protected $casts = [
 		'id' => 'int'

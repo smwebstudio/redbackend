@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use App\Scopes\EstateScope;
+use App\Traits\ApiMultiLanguage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -239,6 +240,7 @@ use Illuminate\Database\Eloquent\Model;
 class Estate extends Model
 {
     use \Backpack\CRUD\app\Models\Traits\CrudTrait;
+    use ApiMultiLanguage;
 	protected $table = 'estate';
 	public $incrementing = false;
 	public $timestamps = false;
@@ -601,6 +603,9 @@ class Estate extends Model
 	];
 
 
+    protected array $multi_lang = [
+        'name',
+    ];
     /*Apply scopes*/
     /**
      * The "booted" method of the model.

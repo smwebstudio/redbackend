@@ -18,11 +18,13 @@ class FilterResource extends JsonResource
      */
     public function toArray($request)
     {
+
+
         return [
-            'estate_types' => CEstateType::all(),
+            'estate_types' => OptionTypeResource::collection(CEstateType::all()),
             'locations' => LocationResource::collection((CLocationProvince::all())),
-            'prices' => CPricePerQwdMeterArm::all(),
-            'rooms' => CRoomsQuantity::all(),
+            'prices' => OptionTypeResource::collection(CPricePerQwdMeterArm::all()),
+            'rooms' => OptionTypeResource::collection(CRoomsQuantity::all()),
         ];
     }
 }

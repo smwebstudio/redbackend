@@ -6,12 +6,13 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CEvaluationLocationType
- * 
+ *
  * @property int $id
  * @property string|null $sort_id
  * @property string|null $name_arm
@@ -30,6 +31,12 @@ class CEvaluationLocationType extends Model
 	protected $table = 'c_evaluation_location_type';
 	public $incrementing = false;
 	public $timestamps = false;
+
+    use ApiMultiLanguage;
+    protected array $multi_lang = [
+        'name',
+    ];
+
 
 	protected $casts = [
 		'id' => 'int',

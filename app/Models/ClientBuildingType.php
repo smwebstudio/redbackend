@@ -6,11 +6,12 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class ClientBuildingType
- * 
+ *
  * @property int $id
  * @property string|null $client_id
  * @property string|null $building_type_id
@@ -22,6 +23,11 @@ class ClientBuildingType extends Model
 	protected $table = 'client_building_type';
 	public $incrementing = false;
 	public $timestamps = false;
+
+    use ApiMultiLanguage;
+    protected array $multi_lang = [
+        'name',
+    ];
 
 	protected $casts = [
 		'id' => 'int'

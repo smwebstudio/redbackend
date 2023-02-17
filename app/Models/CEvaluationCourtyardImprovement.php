@@ -6,12 +6,13 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CEvaluationCourtyardImprovement
- * 
+ *
  * @property int $id
  * @property string|null $sort_id
  * @property string|null $name_arm
@@ -32,6 +33,11 @@ class CEvaluationCourtyardImprovement extends Model
 	protected $table = 'c_evaluation_courtyard_improvement';
 	public $incrementing = false;
 	public $timestamps = false;
+    use ApiMultiLanguage;
+    protected array $multi_lang = [
+        'name',
+    ];
+
 
 	protected $casts = [
 		'id' => 'int',

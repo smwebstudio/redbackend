@@ -6,12 +6,13 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CBuildingWindowCount
- * 
+ *
  * @property int $id
  * @property string|null $sort_id
  * @property string|null $name_arm
@@ -30,6 +31,11 @@ class CBuildingWindowCount extends Model
 	protected $table = 'c_building_window_count';
 	public $incrementing = false;
 	public $timestamps = false;
+
+    use ApiMultiLanguage;
+    protected array $multi_lang = [
+        'name',
+    ];
 
 	protected $casts = [
 		'id' => 'int',

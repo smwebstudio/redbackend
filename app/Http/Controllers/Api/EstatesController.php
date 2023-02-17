@@ -20,20 +20,8 @@ class EstatesController extends Controller
     public function filterEstates(Request $request)
     {
 
-
-        Log::info($request->input('page_size'));
         $pageSize = $request->input('page_size') ? $request->input('page_size') : 12;
 
-//        $estates = QueryBuilder::for(Estate::class)
-//            ->allowedFilters([
-//                AllowedFilter::exact('estate_type_id'),
-//                AllowedFilter::exact('location_province_id'),
-//                AllowedFilter::exact('location_city_id'),
-//                AllowedFilter::exact('location_community_id'),])
-//            ->paginate()
-//            ->appends(request()->query());
-//
-//        return $estates;
 
         return new EstateCollection(QueryBuilder::for(Estate::class)
             ->allowedFilters([
@@ -48,6 +36,7 @@ class EstatesController extends Controller
                 AllowedFilter::exact('location_city_id'),
                 AllowedFilter::exact('location_community_id'),
             ])
+            ->allowedSorts(['created_on', 'visits_count', 'room_count'])
             ->paginate($pageSize)
             ->appends(request()->query()));
 

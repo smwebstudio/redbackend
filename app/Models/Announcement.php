@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -227,6 +228,11 @@ class Announcement extends Model
 	protected $table = 'announcement';
 	public $incrementing = false;
 	public $timestamps = false;
+    use ApiMultiLanguage;
+    protected  $multi_lang = [
+        'name',
+    ];
+
 
 	protected $casts = [
 		'id' => 'int',

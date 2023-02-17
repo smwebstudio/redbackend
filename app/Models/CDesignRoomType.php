@@ -6,13 +6,14 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CDesignRoomType
- * 
+ *
  * @property int $id
  * @property int|null $parent_id
  * @property bool|null $is_deleted
@@ -27,7 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $comment
  * @property int|null $created_by
  * @property Carbon|null $created_on
- * 
+ *
  * @property CDesignRoom|null $c_design_room
  * @property Collection|Design[] $designs
  *
@@ -38,6 +39,11 @@ class CDesignRoomType extends Model
 	protected $table = 'c_design_room_type';
 	public $incrementing = false;
 	public $timestamps = false;
+
+    use ApiMultiLanguage;
+    protected array $multi_lang = [
+        'name',
+    ];
 
 	protected $casts = [
 		'id' => 'int',

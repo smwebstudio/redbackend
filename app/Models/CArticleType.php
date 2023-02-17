@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CArticleType
- * 
+ *
  * @property int $id
  * @property bool|null $is_deleted
  * @property Carbon|null $last_modified_on
@@ -27,7 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $comment
  * @property int|null $created_by
  * @property Carbon|null $created_on
- * 
+ *
  * @property Collection|Article[] $articles
  *
  * @package App\Models
@@ -38,6 +39,11 @@ class CArticleType extends Model
 	protected $table = 'c_article_type';
 	public $incrementing = false;
 	public $timestamps = false;
+
+    use ApiMultiLanguage;
+    protected  $multi_lang = [
+        'name',
+    ];
 
 	protected $casts = [
 		'id' => 'int',

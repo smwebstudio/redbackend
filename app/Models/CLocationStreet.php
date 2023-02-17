@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CLocationStreet
- * 
+ *
  * @property int $id
  * @property bool|null $is_deleted
  * @property Carbon|null $last_modified_on
@@ -31,7 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $community_id
  * @property int|null $city_id
  * @property bool|null $parent_is_community
- * 
+ *
  * @property Collection|Announcement[] $announcements
  * @property Collection|Estate[] $estates
  *
@@ -43,6 +44,11 @@ class CLocationStreet extends Model
 	protected $table = 'c_location_street';
 	public $incrementing = false;
 	public $timestamps = false;
+
+    use ApiMultiLanguage;
+    protected array $multi_lang = [
+        'name',
+    ];
 
 	protected $casts = [
 		'id' => 'int',
