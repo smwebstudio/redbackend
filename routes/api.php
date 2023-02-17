@@ -136,7 +136,7 @@ Route::middleware(['setLocale'])->group(function () {
 
 
     Route::controller(OptionsController::class)->group(function () {
-        Route::get('/options', 'getOptions');
+        Route::post('/options', 'getOptions');
     });
 
     Route::controller(EvaluationController::class)->group(function () {

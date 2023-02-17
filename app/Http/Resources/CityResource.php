@@ -15,16 +15,11 @@ class CityResource extends JsonResource
 
     public function toArray($request)
     {
-        $languageApi = $request->server('HTTP_ACCEPT_LANGUAGE');
-        $language = config('constants.'.$languageApi);
-        $name = 'name_'.$language;
-
-
         return [
             'id' => $this->id,
             'value' => $this->id,
-            'name' => $this->$name,
-            'label' => $this->$name,
+            'name' => $this->name,
+            'label' => $this->name,
             'children' => OptionTypeResource::collection($this->streets),
         ];
     }

@@ -14,13 +14,9 @@ class LocationResource extends JsonResource
      */
     public function toArray($request)
     {
-        $languageApi = $request->server('HTTP_ACCEPT_LANGUAGE');
-        $language = config('constants.'.$languageApi);
-        $name = 'name_'.$language;
-
         return [
             'id' => $this->id,
-            'name' => $this->$name,
+            'label' => $this->name,
             'cities' => CityResource::collection($this->cities),
             ];
     }

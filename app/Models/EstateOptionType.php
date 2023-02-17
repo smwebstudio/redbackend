@@ -3,6 +3,7 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,10 +15,14 @@ use Illuminate\Database\Eloquent\Model;
 class EstateOptionType extends Model
 {
     use CrudTrait;
+    use ApiMultiLanguage;
 
     public $incrementing = false;
     public $timestamps = false;
 
+    protected  array $multi_lang = [
+        'name'
+    ];
     protected $casts = [
         'id' => 'int',
         'name_arm' => 'string',

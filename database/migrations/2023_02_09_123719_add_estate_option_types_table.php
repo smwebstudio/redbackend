@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('estate_option_types', function (Blueprint $table) {
             $table->integer('id')->primary();
-            $table->string('name_arm');
-            $table->string('name_en');
-            $table->string('name_ru');
+            $table->string('name_arm')->nullable();
+            $table->string('name_eng')->nullable();
+            $table->string('name_ru')->nullable();
             $table->integer('estate_type')->constrained('c_estate_type');
         });
     }

@@ -19,7 +19,7 @@ class StreetResource extends JsonResource
         return [
             'id' => $this->id,
             'value' => $this->id,
-            'label' => $this->name_arm,
+            'label' => $this->name,
         ];
     }
 
