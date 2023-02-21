@@ -49,8 +49,8 @@ return [
 
     // CSS files that are loaded in all pages, using Laravel's asset() helper
     'styles' => [
-        //'packages/backpack/base/css/bundle.css', // has primary color electric purple (backpack default)
-        'packages/backpack/base/css/blue-bundle.css', // has primary color blue
+        'packages/backpack/base/css/bundle.css', // has primary color electric purple (backpack default)
+//        'packages/backpack/base/css/blue-bundle.css', // has primary color blue
 
         // Here's what's inside the bundle:
         // 'packages/@digitallyhappy/backstrap/css/style.min.css',
@@ -349,6 +349,6 @@ return [
     | https://www.backpackforlaravel.com
     |
     */
+    'license_code' => env('BACKPACK_LICENSE', false),
 
-    'token_username' => env('BACKPACK_TOKEN_USERNAME', false),
 ];

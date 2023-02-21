@@ -1,3 +1,16 @@
 table {
     font-size: 0.7rem;
 }
+
+#bp-filters-navbar {
+    padding: 20px 30px;
+}
+
+.select2-container {
+    width:300px !important
+}
+
+
+#bp-filters-navbar .nav-item.dropdown.show .dropdown-menu {
+    width: 300px !important;
+}

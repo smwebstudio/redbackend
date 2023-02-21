@@ -8,6 +8,7 @@
         "php": "^8.0.2",
         "ext-pdo": "*",
         "backpack/crud": "^5.4",
+        "backpack/pro": "^1.6",
         "guzzlehttp/guzzle": "^7.5",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",

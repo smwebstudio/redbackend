@@ -810,7 +810,23 @@ class Estate extends Model
 
     public function getFullAddressAttribute(): ?string
     {
-        return $this->getProvince().', '.$this->getCommunity().', '.$this->getStreet().', '.$this->address_building.', '.$this->address_apartment;
+        $fullAddress = null;
+        if($this->getProvince()) {
+            $fullAddress = $this->getProvince();
+        }
+        if($this->getCommunity()) {
+            $fullAddress .= ', '.$this->getCommunity();
+        }
+        if($this->getStreet()) {
+            $fullAddress .= ', '.$this->getStreet();
+        }
+        if($this->address_building) {
+            $fullAddress .= ', '.$this->address_building;
+        }
+        if($this->address_apartment) {
+            $fullAddress .= ', '.$this->address_apartment;
+        }
+        return $fullAddress;
     }
 
     public function getFullPriceAttribute(): ?string
@@ -832,15 +848,15 @@ class Estate extends Model
     }
 
     public function getProvince(): ?string {
-        return $this->location_province->name_eng ?? '';
+        return $this->location_province->name_arm ?? '';
     }
 
     public function getCommunity(): ?string {
-        return $this->location_community->name_eng ?? '';
+        return $this->location_community->name_arm ?? '';
     }
 
     public function getStreet(): ?string {
-        return $this->location_street->name_eng ?? '';
+        return $this->location_street->name_arm ?? '';
     }
 
 
