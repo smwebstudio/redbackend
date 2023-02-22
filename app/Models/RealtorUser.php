@@ -139,6 +139,12 @@ class RealtorUser extends Model
     {
         return $this->belongsToMany(CProfessionType::class, 'professional_profession', 'user_id', 'profession_id', 'id');
     }
+
+    public function contact()
+    {
+        return $this->belongsTo(Contact::class, 'id', 'contact_id');
+    }
+
     public function locationCommunities()
     {
         return $this->belongsToMany(CLocationCommunity::class, 'professional_location_community', 'user_id', 'location_community_id', 'id');

@@ -889,4 +889,14 @@ class Estate extends Model
     {
         return $query->where('estate_type_id', '=', 4);
     }
+
+    public function scopeIsExclusive($query)
+    {
+        return $query->whereNotNull('agent_id');
+    }
+
+    public function scopeIsNotExclusive($query)
+    {
+        return $query->whereNull('agent_id');
+    }
 }

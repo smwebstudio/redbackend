@@ -2,7 +2,7 @@
 <li filter-name="{{ $filter->name }}"
     filter-type="{{ $filter->type }}"
     filter-key="{{ $filter->key }}"
-	class="nav-item dropdown {{ Request::get($filter->name)?'active':'' }}">
+	class="nav-item dropdown {{ Request::get($filter->name)?'active':'' }} col-{{ $filter->options['col'] ?? '' }}">
     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ $filter->label }} <span class="caret"></span></a>
     <div class="dropdown-menu p-0">
       <div class="form-group backpack-filter mb-0">
@@ -91,7 +91,7 @@
                 let filter_name_origin_value = filter_name_value.text();
                 filter_name_value.attr('filter-origin-name', filter_name_origin_value);
                 if (currentValue.length > 1) {
-                    filter_name_value.html('<strong>'+currentValue+'</strong>');
+                    filter_name_value.html('<strong>'+filter_name_origin_value +': ' +currentValue+'</strong>');
                 }
 
             	$(this).attr('data-filter-enabled', 'true');
@@ -103,6 +103,10 @@
 					dropdownParent: $(this).parent('.form-group'),
 	        	    placeholder: $(this).attr('placeholder'),
 	            }).on('change', function(c) {
+
+
+
+
 					var value = $(this).val();
 					var parameter = $(this).attr('data-filter-name');
 
@@ -112,13 +116,16 @@
                     //Update select link with selected value
                     if($(this).select2('data')) {
                         let filter_name_value = $("[filter-name="+filterName+"]").find('.nav-link.dropdown-toggle');
-                        filter_name_value.html('<strong>'+$(this).select2('data')[0].text+'</strong>');
+                        filter_name_value.html('<strong>'+filter_name_origin_value +': ' + $(this).select2('data')[0].text+'</strong>');
                     }
                     var new_url = updateDatatablesOnFilterChange(filterName, value, true);
 
                     // mark this filter as active in the navbar-filters
                     if (URI(new_url).hasQuery(filterName, true)) {
                         $("li[filter-key="+filterKey+"]").addClass('active');
+                        if($(this)[0].name == 'filter_locationProvince') {
+                            location.reload()
+                        }
                     }
 				}).on('select2:unselecting', function (e) {
 

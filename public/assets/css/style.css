@@ -2,15 +2,59 @@ table {
     font-size: 0.7rem;
 }
 
+.nav-item .la-filter {
+    display: none !important;
+}
+
+#crudTable_wrapper #crudTable td, #crudTable_wrapper #crudTable th, #crudTable_wrapper table.dataTable td, #crudTable_wrapper table.dataTable th {
+    max-width: 100px;
+    white-space: normal;
+}
+
+#crudTable_wrapper #crudTable td>span {
+    line-height: 16px;
+}
+
+.navbar-nav .nav-link {
+    color: #414141;
+}
+
+.navbar-filters .navbar-nav>.active>a, .navbar-filters .navbar-nav>.active>a:focus, .navbar-filters .navbar-nav>.active>a:hover, .navbar-filters .navbar-nav>.open>a, .navbar-filters .navbar-nav>.open>a:focus, .navbar-filters .navbar-nav>.open>a {
+    background-color: #D8002C;
+    color:#fff;
+    border-radius: 3px;
+    white-space: normal;
+}
+
 #bp-filters-navbar {
     padding: 20px 30px;
+    margin-bottom: 50px;
+    box-shadow: 0px 3px 15px rgba(166, 166, 166, 0.15);
+}
+
+.navbar-filters li.nav-item {
+    margin: 0 15px !important;
+}
+
+.navbar-filters li {
+    font-size: 14px;
+}
+
+.rangeFilterWrapper .dropdown-menu {
+    min-width: 250px !important;
 }
 
 .select2-container {
-    width:300px !important
+    width:100% !important
 }
 
 
 #bp-filters-navbar .nav-item.dropdown.show .dropdown-menu {
-    width: 300px !important;
+    width: 100% !important;
+}
+
+.navbar-filters .nav-item.dropdown.divider {
+    width: 100%;
+    border-bottom: 1px solid #fefefe;
+    margin: 15px 0px !important;
 }

@@ -40,12 +40,18 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+
 Route::middleware(['setLocale'])->group(function () {
 
     Route::controller(EstatesController::class)->group(function () {
         Route::get('/estates/map_search', 'filterAnnouncements');
         Route::get('/estates/filter/estates', 'filterEstates');
-        Route::get('/estates/all', 'filterEstates');
+        Route::post('/estates/all', 'filterEstates');
+    });
+
+    Route::get('/estates/sale', function () {
+        return EstateResource::collection(Estate::where("contract_type_id", 1)->orderBy('created_on', 'desc')->paginate());
     });
 
     Route::get('/estates/rent', function () {
@@ -79,6 +85,10 @@ Route::middleware(['setLocale'])->group(function () {
 
 
     Route::post('/filters', function () {
+        return new FilterResource(null);
+    });
+
+    Route::get('/filters', function () {
         return new FilterResource(null);
     });
 
@@ -150,7 +160,5 @@ Route::middleware(['setLocale'])->group(function () {
         Route::post('/evaluate', 'evaluate');
     });
 
-    Route::post('/estates/sale', function () {
-        return EstateResource::collection(Estate::where("contract_type_id", 1)->orderBy('created_on', 'desc')->paginate());
-    });
+
 });

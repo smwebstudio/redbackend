@@ -21,95 +21,63 @@ class ContactCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
     {
         CRUD::setModel(\App\Models\Contact::class);
+        $this->crud->addClause('where', 'contact_type_id', '!=', 6);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/contact');
         CRUD::setEntityNameStrings('contact', 'contacts');
     }
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
     protected function setupListOperation()
     {
-        CRUD::column('is_deleted');
-        CRUD::column('last_modified_on');
-        CRUD::column('version');
-        CRUD::column('email');
-        CRUD::column('organization');
-        CRUD::column('contact_type_id');
+        CRUD::column('id');
+        CRUD::column('full_name');
+
+        CRUD::addColumn([
+            'name' => 'contact_type',
+            'type' => "relationship",
+            'label' => "Կոնտակտի տեսակը",
+            'attribute' => "name_arm",
+            'limit' => 100,
+            'orderable'  => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->orderBy('contact_type_id', $columnDirection);
+            }
+        ]);
         CRUD::column('phone_mobile_1');
-        CRUD::column('phone_mobile_2');
-        CRUD::column('phone_office');
-        CRUD::column('phone_home');
-        CRUD::column('fax');
-        CRUD::column('comment_arm');
-        CRUD::column('comment_eng');
-        CRUD::column('comment_ru');
-        CRUD::column('comment_ar');
-        CRUD::column('last_modified_by');
-        CRUD::column('name_arm');
-        CRUD::column('name_eng');
-        CRUD::column('name_ru');
-        CRUD::column('name_ar');
-        CRUD::column('last_name_arm');
-        CRUD::column('last_name_eng');
-        CRUD::column('last_name_ru');
-        CRUD::column('last_name_ar');
-        CRUD::column('is_seller');
-        CRUD::column('is_buyer');
-        CRUD::column('is_rent_owner');
-        CRUD::column('is_renter');
-        CRUD::column('is_inner_agent');
+        CRUD::column('last_modified_on');
         CRUD::column('created_on');
-        CRUD::column('created_by');
-        CRUD::column('is_from_public');
-        CRUD::column('estate_type_id');
-        CRUD::column('estate_contract_type_id');
-        CRUD::column('location_province_id');
-        CRUD::column('location_city_id');
-        CRUD::column('location_community_id');
-        CRUD::column('location_street_id');
-        CRUD::column('currency_id');
-        CRUD::column('price_from');
-        CRUD::column('price_from_usd');
-        CRUD::column('price_to');
-        CRUD::column('price_to_usd');
-        CRUD::column('area_from');
-        CRUD::column('area_to');
-        CRUD::column('room_count_from');
-        CRUD::column('room_count_to');
-        CRUD::column('building_type_id');
-        CRUD::column('repairing_type_id');
-        CRUD::column('new_construction');
-        CRUD::column('broker_id');
-        CRUD::column('info_source_id');
-        CRUD::column('location_building');
-        CRUD::column('contact_status_id');
-        CRUD::column('is_urgent');
-        CRUD::column('web_site');
-        CRUD::column('phone_mobile_3');
-        CRUD::column('phone_mobile_4');
-        CRUD::column('viber');
-        CRUD::column('whatsapp');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
+
+    protected function setupShowOperation()
+    {
+        CRUD::addColumn([
+            'name' => 'contactType',
+            'type' => "relationship",
+            'label' => "Կոնտակտի տեսակը",
+            'attribute' => "name_arm",
+        ]);
+    }
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
@@ -181,13 +149,13 @@ class ContactCrudController extends CrudController
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */

@@ -69,4 +69,10 @@ class CContactType extends Model
 		'created_by',
 		'created_on'
 	];
+
+
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class, 'contact_type_id');
+    }
 }

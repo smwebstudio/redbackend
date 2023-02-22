@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\EstateRequest;
 use App\Models\Contact;
+use App\Models\RealtorUser;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\Pro\Http\Controllers\Operations\FetchOperation;
@@ -46,6 +47,14 @@ class EstateCrudController extends CrudController
             'limit' => 100,
         ]);
 
+        CRUD::addColumn([
+            'name' => 'estate_type',
+            'type' => "relationship",
+            'label' => "EstateResource type",
+            'attribute' => "name_arm",
+            'limit' => 100,
+        ]);
+
     }
 
     /**
@@ -61,6 +70,31 @@ class EstateCrudController extends CrudController
             'type' => "text",
             'label' => "ID",
             'limit' => 100,
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'estate_status_id',
+            'type' => "custom_html",
+            'label' => "Status",
+            'limit' => 100,
+            'value' => function ($entry) {
+                if ($entry->estate_status_id === 8) {
+                    return '<i class="las la-file-archive"></i>';
+                }
+
+                if ($entry->estate_status_id === 4) {
+                    return '<i class="las la-check-square"></i>';
+                }
+
+                return $entry->estate_status_id;
+
+            },
+            'wrapper' => [
+                'element' => 'span',
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url('article/' . $related_key . '/show');
+                },
+            ],
         ]);
 
         CRUD::addColumn([
@@ -97,7 +131,7 @@ class EstateCrudController extends CrudController
             'name' => 'full_price',
             'type' => "text",
             'label' => "Price",
-            'orderable'  => true,
+            'orderable' => true,
             'orderLogic' => function ($query, $column, $columnDirection) {
                 return $query->orderBy('price', $columnDirection);
             }
@@ -128,12 +162,12 @@ class EstateCrudController extends CrudController
 
 
         CRUD::addColumn([
-            'name'      => 'main_image_file_path_thumb', // The db column name
-            'label'     => 'Image', // Table column heading
-            'type'      => 'image',
-             'prefix' => 'https://proinfo.am/uploadsWithWaterMark/',
-             'height' => '70px',
-             'width'  => '90px',
+            'name' => 'main_image_file_path_thumb', // The db column name
+            'label' => 'Image', // Table column heading
+            'type' => 'image',
+            'prefix' => 'https://proinfo.am/uploadsWithWaterMark/',
+            'height' => '70px',
+            'width' => '90px',
         ]);
 
         CRUD::addColumn([
@@ -207,7 +241,8 @@ class EstateCrudController extends CrudController
         ]);
     }
 
-    private function addListFilters():void {
+    private function addListFilters(): void
+    {
         $this->crud->addFilter([
             'type' => 'simple',
             'name' => 'apartment',
@@ -247,13 +282,43 @@ class EstateCrudController extends CrudController
             function () {
                 $this->crud->addClause('land');
             });
+        $this->crud->addFilter([
+            'type' => 'divider',
+            'name' => 'divider_types',
+        ]);
+
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'isExclusive',
+            'label' => 'Միայն էքսկլուզիվ գույքերը'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('isExclusive');
+            });
+
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'isNotExclusive',
+            'label' => 'Բացի էքսկլյուզիվ գույքերից'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('isNotExclusive');
+            });
+
+
+        $this->crud->addFilter([
+            'type' => 'divider',
+            'name' => 'divider_1',
+        ]);
 
 
         // select2 filter
         $this->crud->addFilter([
-            'name'  => 'contract_type',
-            'type'  => 'select2',
-            'label' => 'Տիպ'
+            'name' => 'contract_type',
+            'type' => 'select2',
+            'label' => 'Տիպ',
         ], function () {
             return [
                 1 => 'Վաճառք',
@@ -264,73 +329,251 @@ class EstateCrudController extends CrudController
             $this->crud->addClause('where', 'contract_type_id', $value);
         });
 
-        $this->crud->addFilter([
-            'name'       => 'price',
-            'type'       => 'range',
-            'label'      => 'Գին',
-            'label_from' => 'min value',
-            'label_to'   => 'max value'
-        ],
-            false,
-            function($value) {
-                $range = json_decode($value);
-                if ($range->from) {
-                    $this->crud->addClause('where', 'price', '>=', (float) $range->from);
-                }
-                if ($range->to) {
-                    $this->crud->addClause('where', 'price', '<=', (float) $range->to);
-                }
-            });
-
-        $this->crud->addFilter([
-            'name'       => 'area',
-            'type'       => 'range',
-            'label'      => 'Մակերես',
-            'label_from' => 'min value',
-            'label_to'   => 'max value'
-        ],
-            false,
-            function($value) {
-                $range = json_decode($value);
-                if ($range->from) {
-                    $this->crud->addClause('where', 'area_total', '>=', (float) $range->from);
-                }
-                if ($range->to) {
-                    $this->crud->addClause('where', 'area_total', '<=', (float) $range->to);
-                }
-            });
 
         $this->crud->addFilter([
             'name' => 'location_province',
             'type' => 'select2',
-            'label' => 'Մարզ'
+            'label' => 'Մարզ',
         ], function () {
             return \App\Models\CLocationProvince::all()->pluck('name_arm', 'id')->toArray();
         }, function ($value) { // if the filter is active
             $this->crud->addClause('where', 'location_province_id', $value);
         });
 
+        if (request('location_province')) {
+            $province = request('location_province');
+
+            if ($province == 1) {
+                $this->crud->addFilter([
+                    'name' => 'location_community',
+                    'type' => 'select2_multiple_red',
+                    'label' => 'Համայնք',
+                ], function () {
+                    return \App\Models\CLocationCommunity::all()->pluck('name_arm', 'id')->toArray();
+                }, function ($values) { // if the filter is active
+                    $this->crud->addClause('whereIn', 'location_community_id', json_decode($values));
+                });
+            } else {
+                $this->crud->addFilter([
+                    'name' => 'location_city',
+                    'type' => 'select2',
+                    'label' => 'Քաղաք',
+                ], function () {
+                    $province = request('location_province');
+                    return \App\Models\CLocationCity::where('parent_id', '=', json_decode($province))->pluck('name_arm', 'id')->toArray();
+                }, function ($value) { // if the filter is active
+                    $this->crud->addClause('where', 'location_city_id', $value);
+                });
+            }
+        }
+
+
         $this->crud->addFilter([
-            'name' => 'location_community',
-            'type' => 'select2_multiple_red',
-            'label' => 'Համայնք',
-            'label5' => 'Համայնք',
-            'flexOrder' => 4,
+            'name' => 'location_street',
+            'type' => 'select2',
+            'label' => 'Փողոց',
         ], function () {
-            return \App\Models\CLocationCommunity::all()->pluck('name_arm', 'id')->toArray();
-        }, function ($values) { // if the filter is active
-            $this->crud->addClause('whereIn', 'location_community_id', json_decode($values));
+            return \App\Models\CLocationStreet::all()->pluck('name_arm', 'id')->toArray();
+        }, function ($value) { // if the filter is active
+            $this->crud->addClause('where', 'location_street_id', $value);
         });
 
         $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'address_building',
+            'label' => 'Շենք',
+        ],
+            false,
+            function ($value) { // if the filter is active
+                $this->crud->addClause('where', 'address_building', '=', $value);
+            });
+
+        $this->crud->addFilter([
+            'type' => 'divider',
+            'name' => 'divider_2',
+        ]);
+
+        $this->crud->addFilter([
+            'name' => 'price',
+            'type' => 'range',
+            'label' => 'Գին',
+            'label_from' => 'min value',
+            'label_to' => 'max value',
+        ],
+            false,
+            function ($value) {
+                $range = json_decode($value);
+                if ($range->from) {
+                    $this->crud->addClause('where', 'price', '>=', (float)$range->from);
+                }
+                if ($range->to) {
+                    $this->crud->addClause('where', 'price', '<=', (float)$range->to);
+                }
+            });
+
+        $this->crud->addFilter([
+            'name' => 'area',
+            'type' => 'range',
+            'label' => 'Մակերես',
+            'label_from' => 'min value',
+            'label_to' => 'max value',
+        ],
+            false,
+            function ($value) {
+                $range = json_decode($value);
+                if ($range->from) {
+                    $this->crud->addClause('where', 'area_total', '>=', (float)$range->from);
+                }
+                if ($range->to) {
+                    $this->crud->addClause('where', 'area_total', '<=', (float)$range->to);
+                }
+            });
+
+        $this->crud->addFilter([
+            'type' => 'divider',
+            'name' => 'divider_3',
+        ]);
+
+        $this->crud->addFilter([
             'name' => 'building_project_type',
-            'type' => 'select2',
-            'label' => 'Շենքի նախագիծը'
+            'type' => 'select2_multiple_red',
+            'label' => 'Շենքի նախագիծը',
         ], function () {
             return \App\Models\CBuildingProjectType::all()->pluck('name_arm', 'id')->toArray();
-        }, function ($value) { // if the filter is active
-            $this->crud->addClause('where', 'building_project_type_id', $value);
+        }, function ($values) { // if the filter is active
+            $this->crud->addClause('whereIn', 'building_project_type_id', json_decode($values));
         });
+
+        $this->crud->addFilter([
+            'name' => 'building_type',
+            'type' => 'select2_multiple_red',
+            'label' => 'Արտաքին պատեր',
+        ], function () {
+            return \App\Models\CBuildingType::all()->pluck('name_arm', 'id')->toArray();
+        }, function ($values) { // if the filter is active
+            $this->crud->addClause('whereIn', 'building_type_id', json_decode($values));
+        });
+
+        $this->crud->addFilter([
+            'name' => 'repairing_type',
+            'type' => 'select2_multiple_red',
+            'label' => 'Վերանորոգման տեսակ',
+        ], function () {
+            return \App\Models\CRepairingType::all()->pluck('name_arm', 'id')->toArray();
+        }, function ($values) { // if the filter is active
+            $this->crud->addClause('whereIn', 'repairing_type_id', json_decode($values));
+        });
+
+        $this->crud->addFilter([
+            'type' => 'divider',
+            'name' => 'divider_4',
+        ]);
+
+
+        $this->crud->addFilter([
+            'name' => 'estate_status',
+            'type' => 'select2_multiple_red',
+            'label' => 'Կարգավիճակ',
+        ], function () {
+            return \App\Models\CEstateStatus::all()->pluck('name_arm', 'id')->toArray();
+        }, function ($values) { // if the filter is active
+            $this->crud->addClause('whereIn', 'estate_status_id', json_decode($values));
+        });
+
+
+
+
+        $this->crud->addFilter([
+            'name' => 'agents',
+            'type' => 'select2',
+            'label' => 'Գործակալ',
+        ], function () {
+            return Contact::with('user')->where('contact_type_id', 3)->whereNotNull('name_arm')->get()->pluck('full_name', 'user.id')->toArray();
+        }, function ($value) { // if the filter is active
+            $this->crud->addClause('where', 'agent_id', $value);
+        });
+
+
+
+        $this->crud->addFilter([
+            'name' => 'info_source',
+            'type' => 'select2',
+            'label' => 'Ինֆորմացիայի աղբյուր',
+        ], function () {
+            return Contact::with('user')->where('contact_type_id', 3)->whereNotNull('name_arm')->get()->pluck('full_name', 'user.id')->toArray();
+        }, function ($value) { // if the filter is active
+            $this->crud->addClause('where', 'info_source_id', $value);
+        });
+
+        $this->crud->addFilter([
+            'name' => 'property_agent',
+            'type' => 'select2',
+            'label' => 'Տեղազննող Գործակալ',
+        ], function () {
+            return Contact::with('user')->where('contact_type_id', 3)->whereNotNull('name_arm')->get()->pluck('full_name', 'user.id')->toArray();
+        }, function ($value) { // if the filter is active
+            $this->crud->addClause('where', 'property_agent_id', $value);
+        });
+
+
+
+        $this->crud->addFilter([
+            'type' => 'divider',
+            'name' => 'divider_5',
+        ]);
+
+        $this->crud->addFilter([
+            'type'  => 'date_range',
+            'name'  => 'created_on',
+            'label' => 'Ստեղծված'
+        ],
+            false,
+            function ($value) { // if the filter is active, apply these constraints
+                 $dates = json_decode($value);
+                 $this->crud->addClause('where', 'created_on', '>=', $dates->from);
+                 $this->crud->addClause('where', 'created_on', '<=', $dates->to . ' 23:59:59');
+            });
+
+        $this->crud->addFilter([
+            'type'  => 'date_range',
+            'name'  => 'modifid_on',
+            'label' => 'Թարմացված'
+        ],
+            false,
+            function ($value) { // if the filter is active, apply these constraints
+                $dates = json_decode($value);
+                $this->crud->addClause('where', 'last_modified_on', '>=', $dates->from);
+                $this->crud->addClause('where', 'last_modified_on', '<=', $dates->to . ' 23:59:59');
+            });
+
+        $this->crud->addFilter([
+            'type'  => 'date_range',
+            'name'  => 'examined_on',
+            'label' => 'Տեղազնված'
+        ],
+            false,
+            function ($value) { // if the filter is active, apply these constraints
+                $dates = json_decode($value);
+                $this->crud->addClause('where', 'last_modified_on', '>=', $dates->from);
+                $this->crud->addClause('where', 'last_modified_on', '<=', $dates->to . ' 23:59:59');
+            });
+
+        $this->crud->addFilter([
+            'type'  => 'date_range',
+            'name'  => 'approved_on',
+            'label' => 'Հաստատված'
+        ],
+            false,
+            function ($value) { // if the filter is active, apply these constraints
+                $dates = json_decode($value);
+                $this->crud->addClause('where', 'last_modified_on', '>=', $dates->from);
+                $this->crud->addClause('where', 'last_modified_on', '<=', $dates->to . ' 23:59:59');
+            });
+
+        $this->crud->addFilter([
+            'type' => 'divider',
+            'name' => 'divider_6',
+        ]);
 
     }
 }

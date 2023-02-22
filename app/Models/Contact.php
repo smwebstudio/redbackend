@@ -95,7 +95,7 @@ class Contact extends Model
         'name',
     ];
 
-    protected string $identifiableAttribute = 'name_arm';
+//    protected string $identifiableAttribute = 'name_arm';
 
 	protected $casts = [
 		'id' => 'int',
@@ -205,6 +205,11 @@ class Contact extends Model
     public function user()
     {
         return $this->hasOne(RealtorUser::class, 'contact_id');
+    }
+
+    public function contact_type()
+    {
+        return $this->belongsTo(CContactType::class, 'contact_type_id');
     }
 
 	public function announcements()

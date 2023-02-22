@@ -22,7 +22,6 @@ class EstatesController extends Controller
 
         $pageSize = $request->input('page_size') ? $request->input('page_size') : 12;
 
-
         return new EstateCollection(QueryBuilder::for(Estate::class)
             ->allowedFilters([
                 AllowedFilter::exact('prices'),
