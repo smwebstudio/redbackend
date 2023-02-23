@@ -58,3 +58,8 @@ table {
     border-bottom: 1px solid #fefefe;
     margin: 15px 0px !important;
 }
+
+
+.sidebar.sidebar-pills .nav-link, .sidebar.sidebar-pills .nav-title {
+    font-size: 13px !important;
+}
