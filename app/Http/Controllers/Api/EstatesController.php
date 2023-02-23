@@ -62,7 +62,7 @@ class EstatesController extends Controller
 //        $ajax = true;
 //        $estates = $this->filter($data, $ajax);
 
-        $estates = Estate::where('estate_latitude', '>', 34)->where('estate_longitude', '>', 34)->limit('1')->get();
+        $estates = Estate::orderBy('id')->limit('30')->get();
 
 
         foreach ($estates as $key => $estate) {
