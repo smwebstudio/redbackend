@@ -34,7 +34,7 @@ class EstateCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Estate::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/estate');
-        CRUD::setEntityNameStrings('estate', 'estates');
+        CRUD::setEntityNameStrings('Անշարժ Գույք', 'Անշարժ Գույք');
     }
 
     protected function setupShowOperation()
@@ -198,19 +198,31 @@ class EstateCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(EstateRequest::class);
-//
-//        CRUD::addField([
-//            'name' => 'c_contract_type',
-//            'type' => "relationship",
-//            'label' => "Contract type",
-//        ]);
-//
-//        CRUD::addField([
-//            'name' => 'contact',
-//            'type' => "relationship",
-//            'label' => "Contact",
-//            'ajax' => true,
-//        ]);
+
+        CRUD::addField([
+            'name' => 'building_structure_type',
+            'type' => "relationship",
+            'attribute' => "name_arm",
+            'label' => "Շենքի կառուցվածք",
+            'placeholder' => '-Ընտրել մեկը-',
+            'tab' => 'Main',
+            'wrapper' => [
+                'class' => 'form-group col-md-3'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'building_floor_type',
+            'type' => "relationship",
+            'attribute' => "name_arm",
+            'label' => "Արտաքին պատեր",
+            'tab' => 'Main',
+            'placeholder' => '-Ընտրել մեկը-',
+            'wrapper' => [
+                'class' => 'form-group col-md-3'
+            ],
+        ]);
+
 
         $this->crud->setFromDb();
 
@@ -246,7 +258,7 @@ class EstateCrudController extends CrudController
         $this->crud->addFilter([
             'type' => 'simple',
             'name' => 'apartment',
-            'label' => 'Apartment'
+            'label' => 'ԲՆԱԿԱՐԱՆ'
         ],
             false,
             function () {
@@ -256,7 +268,7 @@ class EstateCrudController extends CrudController
         $this->crud->addFilter([
             'type' => 'simple',
             'name' => 'house',
-            'label' => 'House'
+            'label' => 'ԱՌԱՆՁՆԱՏՈՒՆ'
         ],
             false,
             function () {
@@ -266,7 +278,7 @@ class EstateCrudController extends CrudController
         $this->crud->addFilter([
             'type' => 'simple',
             'name' => 'Commercial',
-            'label' => 'Commercial'
+            'label' => 'ԿՈՄԵՐՑԻՈՆ'
         ],
             false,
             function () {
@@ -276,7 +288,7 @@ class EstateCrudController extends CrudController
         $this->crud->addFilter([
             'type' => 'simple',
             'name' => 'land',
-            'label' => 'Land'
+            'label' => 'ՀՈՂ'
         ],
             false,
             function () {
@@ -481,8 +493,6 @@ class EstateCrudController extends CrudController
         });
 
 
-
-
         $this->crud->addFilter([
             'name' => 'agents',
             'type' => 'select2',
@@ -492,7 +502,6 @@ class EstateCrudController extends CrudController
         }, function ($value) { // if the filter is active
             $this->crud->addClause('where', 'agent_id', $value);
         });
-
 
 
         $this->crud->addFilter([
@@ -516,27 +525,26 @@ class EstateCrudController extends CrudController
         });
 
 
-
         $this->crud->addFilter([
             'type' => 'divider',
             'name' => 'divider_5',
         ]);
 
         $this->crud->addFilter([
-            'type'  => 'date_range',
-            'name'  => 'created_on',
+            'type' => 'date_range',
+            'name' => 'created_on',
             'label' => 'Ստեղծված'
         ],
             false,
             function ($value) { // if the filter is active, apply these constraints
-                 $dates = json_decode($value);
-                 $this->crud->addClause('where', 'created_on', '>=', $dates->from);
-                 $this->crud->addClause('where', 'created_on', '<=', $dates->to . ' 23:59:59');
+                $dates = json_decode($value);
+                $this->crud->addClause('where', 'created_on', '>=', $dates->from);
+                $this->crud->addClause('where', 'created_on', '<=', $dates->to . ' 23:59:59');
             });
 
         $this->crud->addFilter([
-            'type'  => 'date_range',
-            'name'  => 'modifid_on',
+            'type' => 'date_range',
+            'name' => 'modifid_on',
             'label' => 'Թարմացված'
         ],
             false,
@@ -547,8 +555,8 @@ class EstateCrudController extends CrudController
             });
 
         $this->crud->addFilter([
-            'type'  => 'date_range',
-            'name'  => 'examined_on',
+            'type' => 'date_range',
+            'name' => 'examined_on',
             'label' => 'Տեղազնված'
         ],
             false,
@@ -559,8 +567,8 @@ class EstateCrudController extends CrudController
             });
 
         $this->crud->addFilter([
-            'type'  => 'date_range',
-            'name'  => 'approved_on',
+            'type' => 'date_range',
+            'name' => 'approved_on',
             'label' => 'Հաստատված'
         ],
             false,

@@ -30,7 +30,7 @@ class EstateResource extends JsonResource
             'year' => $this->year?->name_arm,
             'name_arm' => $this->name_arm,
             'images' => $this->estateDocuments,
-            'image' => $this->main_image_file_path_thumb ? 'https://proinfo.am/uploadsWithWaterMark/'.$this->main_image_file_path_thumb : 'https://i0.wp.com/lanecdr.org/wp-content/uploads/2019/08/placeholder.png',
+            'image' => $this->main_image_file_path_thumb ? $this->path : 'https://i0.wp.com/lanecdr.org/wp-content/uploads/2019/08/placeholder.png',
         ];
     }
 }

@@ -28,7 +28,7 @@ class ContactEstatesResource extends JsonResource
             'rating' => $this->user->average_rating,
             'estates' => $this->user->broker_estates,
             'estates_count' => count($this->user->broker_estates),
-            'profile_picture' => $this->user?->profile_picture_path ? 'https://proinfo.am/uploadsWithWaterMark/'.$this->user?->profile_picture_path : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png",
+            'profile_picture' => $this->user?->profile_picture_path ? $this->user->path : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png",
         ];
     }
 }

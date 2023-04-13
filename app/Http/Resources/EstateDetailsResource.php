@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Contact;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 
 class EstateDetailsResource extends JsonResource
 {
@@ -14,6 +16,14 @@ class EstateDetailsResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        $images  = $this->estateDocuments;
+        $imagesPaths = [];
+
+        foreach ($images as $image) {
+            $imagesPaths[] = $image->path;
+        }
+
         return [
             'id' => $this->id,
             'price' => $this->full_price,
@@ -21,8 +31,11 @@ class EstateDetailsResource extends JsonResource
             'room_count' => $this->room_count,
             'old_price' => $this->old_price,
             'full_address' => $this->full_address,
+            'public_text_arm' => $this->public_text_arm,
+            'name' => $this->name,
             'area_total' => $this->area_total,
             'floor' => $this->floor,
+            'building_floor_count' => $this->building_floor_count,
 
             'building_attributes' => [
                 'building_floor_type' => ['value' => $this->building_floor_type?->name_arm, 'label' => trans('estate.building_floor_type'),],
@@ -65,8 +78,10 @@ class EstateDetailsResource extends JsonResource
 
             'year' => $this->year?->name_arm,
             'name_arm' => $this->name_arm,
-            'images' => $this->estateDocuments,
+            'images' => $imagesPaths,
             'image' => $this->main_image_file_path_thumb ? 'https://proinfo.am/uploadsWithWaterMark/' . $this->main_image_file_path : 'https://i0.wp.com/lanecdr.org/wp-content/uploads/2019/08/placeholder.png',
+
+            'contact' => $this->agent ? new ContactEstatesResource((Contact::findOrfail($this->agent?->contact_id))) : '',
         ];
     }
 }

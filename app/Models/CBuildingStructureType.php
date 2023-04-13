@@ -34,11 +34,22 @@ class CBuildingStructureType extends Model
 	protected $table = 'c_building_structure_type';
 	public $incrementing = false;
 	public $timestamps = false;
-    protected string $identifiableAttribute = 'name_arm';
+//    protected string $identifiableAttribute = 'name_arm';
     use ApiMultiLanguage;
     protected array $multi_lang = [
         'name',
     ];
+
+    /**
+     * Get the attribute shown on the element to identify this model.
+     *
+     * @return string
+     */
+    public function identifiableAttribute()
+    {
+        // process stuff here
+        return $this->name_arm;
+    }
 
 
 	protected $casts = [

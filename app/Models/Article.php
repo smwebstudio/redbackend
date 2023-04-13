@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use App\Traits\ApiMultiLanguage;
+use App\Traits\Models\HasFilePath;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -46,6 +47,8 @@ use Illuminate\Database\Eloquent\Model;
 class Article extends Model
 {
     use CrudTrait;
+    use HasFilePath;
+
 	protected $table = 'article';
 	public $incrementing = false;
 	public $timestamps = false;

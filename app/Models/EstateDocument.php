@@ -6,6 +6,8 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\EstateDocumentScope;
+use App\Traits\Models\HasFilePath;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -22,11 +24,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $path_thumb
  * @property string|null $file_name
  * @property bool|null $is_public
+ * @property mixed $storage_path
  *
  * @package App\Models
  */
 class EstateDocument extends Model
 {
+
+    use HasFilePath;
+
 	protected $table = 'estate_document';
 	public $incrementing = false;
 	public $timestamps = false;
@@ -51,4 +57,17 @@ class EstateDocument extends Model
 		'file_name',
 		'is_public'
 	];
+
+
+    public function getStoragePathAttribute(): string
+    {
+        $name = $this->path_thumb;
+
+        return "/estate/photos/$name";
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new EstateDocumentScope());
+    }
 }

@@ -8,6 +8,7 @@ namespace App\Models;
 
 use App\Scopes\EstateScope;
 use App\Traits\ApiMultiLanguage;
+use App\Traits\Models\HasFilePath;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -241,6 +242,7 @@ class Estate extends Model
 {
     use \Backpack\CRUD\app\Models\Traits\CrudTrait;
     use ApiMultiLanguage;
+    use HasFilePath;
 	protected $table = 'estate';
 	public $incrementing = false;
 	public $timestamps = false;
@@ -648,6 +650,11 @@ class Estate extends Model
 	{
 		return $this->belongsTo(CBuildingType::class, 'building_type_id');
 	}
+    public function building_floor_type()
+    {
+        return $this->belongsTo(CBuildingFloorType::class, 'building_floor_type_id');
+    }
+
 
 	public function elevator_type()
 	{
@@ -806,6 +813,11 @@ class Estate extends Model
         return $this->belongsTo(CEntranceDoorPosition::class, 'entrance_door_position_id');
     }
 
+    public function agent()
+    {
+        return $this->belongsTo(RealtorUser::class, 'agent_id');
+    }
+
     /*Methods*/
 
     public function getFullAddressAttribute(): ?string
@@ -898,5 +910,12 @@ class Estate extends Model
     public function scopeIsNotExclusive($query)
     {
         return $query->whereNull('agent_id');
+    }
+
+    public function getStoragePathAttribute(): string
+    {
+        $name = $this->main_image_file_path_thumb;
+
+        return "/estate/photos/$name";
     }
 }

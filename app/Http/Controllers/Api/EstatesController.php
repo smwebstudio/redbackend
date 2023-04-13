@@ -62,7 +62,7 @@ class EstatesController extends Controller
 //        $ajax = true;
 //        $estates = $this->filter($data, $ajax);
 
-        $estates = Estate::orderBy('id')->limit('30')->get();
+        $estates = Estate::orderBy('id', 'desc')->limit('30')->get();
 
 
         foreach ($estates as $key => $estate) {
@@ -74,11 +74,6 @@ class EstatesController extends Controller
 
                 $estate_coords = $estate['estate_longitude'] . ' ' . $estate['estate_latitude'];
 
-                Log::info('Estate id -' . $estate->id);
-                Log::info('Pos -' . $estate_coords);
-
-
-                Log::info('Coords -' . $estate_coords);
 
 
 //                usleep(100);
@@ -99,12 +94,10 @@ class EstatesController extends Controller
                 $longitude = $ann_coords[0];
                 $latitude = $ann_coords[1];
 
-                $estate->estate_latitude = $latitude;
-                $estate->estate_longitude = $longitude;
-                $estate->save();
+//                $estate->estate_latitude = $latitude;
+//                $estate->estate_longitude = $longitude;
+////                $estate->save();
 
-                Log::info('long - ' . $longitude);
-                Log::info('latitude - ' . $latitude);
 
                 if ($this->is_in_polygon($request_coords, $points_polygon, $vertices_x, $vertices_y, $longitude, $latitude)) {
                     $estate->native_coords = $ann_coords;
@@ -118,7 +111,7 @@ class EstatesController extends Controller
 
 
         // return response()->json($outer_html);
-        return response()->json(['data' => $estates, 'current_page' => 2, 'last_page' => 2]);
+        return response()->json(['data' => $estates, 'current_page' => 1, 'last_page' => 2]);
 
     }
 

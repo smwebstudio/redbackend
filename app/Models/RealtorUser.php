@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Traits\Models\HasFilePath;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -55,6 +56,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class RealtorUser extends Model
 {
+    use HasFilePath;
+
 	protected $table = 'realtor_user';
 	public $incrementing = false;
 	public $timestamps = false;
@@ -155,7 +158,6 @@ class RealtorUser extends Model
         return $this->belongsToMany(CEstateType::class, 'professional_menu_estate_type', 'user_id', 'estate_type_id', 'id');
     }
 
-
     public function broker_estates(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Estate::class, 'agent_id');
@@ -170,6 +172,13 @@ class RealtorUser extends Model
     public function getAverageRatingAttribute()
     {
         return ceil($this->messages->avg('overall_rating'));
+    }
+
+    public function getStoragePathAttribute(): string
+    {
+        $name = $this->profile_picture_path;
+
+        return "/estate/photos/$name";
     }
 
 
