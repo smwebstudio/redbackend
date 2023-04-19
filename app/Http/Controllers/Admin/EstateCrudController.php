@@ -165,7 +165,6 @@ class EstateCrudController extends CrudController
             'name' => 'main_image_file_path_thumb', // The db column name
             'label' => 'Image', // Table column heading
             'type' => 'image',
-            'prefix' => 'https://proinfo.am/uploadsWithWaterMark/',
             'height' => '70px',
             'width' => '90px',
         ]);

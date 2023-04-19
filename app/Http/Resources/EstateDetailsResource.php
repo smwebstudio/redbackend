@@ -79,7 +79,7 @@ class EstateDetailsResource extends JsonResource
             'year' => $this->year?->name_arm,
             'name_arm' => $this->name_arm,
             'images' => $imagesPaths,
-            'image' => $this->main_image_file_path_thumb ? 'https://proinfo.am/uploadsWithWaterMark/' . $this->main_image_file_path : 'https://i0.wp.com/lanecdr.org/wp-content/uploads/2019/08/placeholder.png',
+            'image' => $this->main_image_file_path_thumb ? $this->main_image_file_path : 'https://i0.wp.com/lanecdr.org/wp-content/uploads/2019/08/placeholder.png',
 
             'contact' => $this->agent ? new ContactEstatesResource((Contact::findOrfail($this->agent?->contact_id))) : '',
         ];
