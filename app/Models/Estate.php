@@ -12,6 +12,8 @@ use App\Traits\Models\HasFilePath;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class EstateResource
@@ -627,6 +629,27 @@ class Estate extends Model
     public function scopePriceTo(Builder $query, $price): Builder
     {
         return $query->where('price', '<=', $price);
+    }
+
+    public function scopeCoordinates(Builder $query, $coordinates): Builder
+    {
+
+
+
+        $request_coords = json_decode($coordinates);
+
+
+        Log::info($coordinates);
+        Log::info($request_coords);
+
+        $polygon_coords = '';
+        foreach ($request_coords as $coord) {
+            $polygon_coords .= $coord[0] . ' ' . $coord[1] . ', ';
+        }
+        $polygon_coords .= $request_coords[0][0] . ' ' . $request_coords[0][1]; // add first coordinate again to close the polygon
+
+
+        return $query->whereIn('estate_status_id', [2, 3, 4])->whereRaw("ST_Within(Point(estate_latitude, estate_longitude), PolygonFromText('POLYGON((" . $polygon_coords . "))'))");
     }
 
     public function scopeTextSearch(Builder $query, $searchText): Builder

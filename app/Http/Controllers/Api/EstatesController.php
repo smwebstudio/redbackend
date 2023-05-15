@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\EstateCollection;
 use App\Http\Resources\EstateResource;
 use App\Models\Estate;
-use DebugBar\DebugBar;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Services\PointCheck;
@@ -24,6 +24,17 @@ class EstatesController extends Controller
 
         $pageSize = $request->input('page_size') ? $request->input('page_size') : 12;
 
+        $request_coords = $request->input('filter.coordinates');
+        $fromMap = $request->input('fromMap');
+
+        if($fromMap) {
+            Log:;info('from map');
+            $pageSize = 100;
+        }
+
+        Log::error($request_coords);
+
+        $queryParams = request()->query();
 
         return new EstateCollection(QueryBuilder::for(Estate::class)
             ->allowedFilters([
@@ -31,6 +42,7 @@ class EstatesController extends Controller
                 AllowedFilter::scope('price_from'),
                 AllowedFilter::scope('price_to'),
                 AllowedFilter::scope('text_search'),
+                AllowedFilter::scope('coordinates', null, '|'),
                 AllowedFilter::exact('currency_id'),
                 AllowedFilter::exact('room_count'),
                 AllowedFilter::exact('estate_type_id'),
@@ -46,85 +58,30 @@ class EstatesController extends Controller
 
     }
 
-    public function filterAnnouncements(Request $request)
+    public function mapSearch(Request $request)
     {
-//        $request_coords = $request->coords; -YANDEX GET REQUEST
 
-        $request_coords = json_decode($request->input('coords'));
-
-
+        if($request->input('coords')) {
+            $request_coords = json_decode($request->input('coords'));
 
 
-        $filter = [];
+            $polygon_coords = '';
+            foreach ($request_coords as $coord) {
+                $polygon_coords .= $coord[0] . ' ' . $coord[1] . ', ';
+            }
+            $polygon_coords .= $request_coords[0][0] . ' ' . $request_coords[0][1]; // add first coordinate again to close the polygon
 
-        parse_str($request->filter, $filter);
 
-        // return $filter;
-        if (isset($filter['place'])) {
-            unset($filter['place']);
+            $estates = Estate::whereIn('estate_status_id', [2, 3, 4])->whereRaw("ST_Within(Point(estate_latitude, estate_longitude), PolygonFromText('POLYGON((" . $polygon_coords . "))'))")->limit(150)
+                ->get();
+        } else {
+            $estates = Estate::whereIn('estate_status_id', [2, 3, 4])->limit(150)
+                ->get();
         }
 
-
-
-//        $locale = $request->locale;
-        $filter['order_by'] = 'created_at';
-        $filter['order_dir'] = 'DESC';
-
-
-        $polygon_coords = '';
-        foreach ($request_coords as $coord) {
-            $polygon_coords .= $coord[0] . ' ' . $coord[1] . ', ';
-        }
-        $polygon_coords .= $request_coords[0][0] . ' ' . $request_coords[0][1]; // add first coordinate again to close the polygon
-
-
-        $estates = Estate::whereIn('estate_status_id', [2, 3, 4])->whereRaw("ST_Within(Point(estate_latitude, estate_longitude), PolygonFromText('POLYGON((" . $polygon_coords . "))'))")->limit(50)
-            ->get();
-
-
-
-//        $estates = Estate::where('estate_status_id', '>=', 2)
-//            ->whereIn('estate_status_id', [2, 3, 4])
-//            ->where('estate_latitude', '>', 30)
-//            ->where('estate_longitude', '>', 30)->orderBy('created_on', 'desc')->limit('50')->get();
-
-
-//        foreach ($estates as $key => $estate) {
-//            if (isset($estate['estate_latitude']) && isset($estate['estate_longitude'])) {
-//
-//                $estate_coords = $estate['estate_longitude'] . ' ' . $estate['estate_latitude'];
-//
-//                $estate_pointed_coords = $this->pointStringToCoordinates($estate_coords);
-//                $vertices_x = [];
-//                $vertices_y = [];
-//
-//
-//                foreach ($request_coords as $coord) {
-//                    $vertices_x[] = $coord[0];
-//                    $vertices_y[] = $coord[1];
-//                };
-//
-//                $points_polygon = count($vertices_x) - 1;
-//                $longitude = $estate_pointed_coords[0];
-//                $latitude = $estate_pointed_coords[1];
-//
-//
-//                if ($this->is_in_polygon($request_coords, $points_polygon, $vertices_x, $vertices_y, $longitude, $latitude)) {
-//                    $estate->native_coords = $estate_pointed_coords;
-//                } else {
-//                    unset($estates[$key]);
-//                }
-//            } else {
-//                unset($estates[$key]);
-//            }
-//        }
 
 
         return EstateResource::collection($estates);
-
-        // return response()->json($outer_html);
-//        return response()->json(['data' => $estates, 'current_page' => 1, 'last_page' => 2, 'count' => count($estates)]);
-
     }
 
 //    public function filter(Request $request, $ajax = false)

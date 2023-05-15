@@ -21,7 +21,7 @@ class EstateResource extends JsonResource
             'old_price' => $this->old_price,
             'full_address' => $this->full_address,
 //            'native_coords' => $this->native_coords ? $this->native_coords : [],
-            'native_coords' => $this->estate_latitude ? [$this->estate_longitude, $this->estate_latitude] : [],
+            'native_coords' => $this->estate_latitude ? [$this->estate_latitude, $this->estate_longitude] : [],
             'area_total' => $this->area_total,
             'room_count' => $this->room_count,
             'floor' => $this->floor,
