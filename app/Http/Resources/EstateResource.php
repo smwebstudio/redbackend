@@ -20,9 +20,12 @@ class EstateResource extends JsonResource
             'code' => $this->code,
             'old_price' => $this->old_price,
             'full_address' => $this->full_address,
+//            'native_coords' => $this->native_coords ? $this->native_coords : [],
+            'native_coords' => $this->estate_latitude ? [$this->estate_longitude, $this->estate_latitude] : [],
             'area_total' => $this->area_total,
             'room_count' => $this->room_count,
             'floor' => $this->floor,
+            'ceilingHeight' => $this->ceilingHeight,
             'building_floor_count' => $this->building_floor_count,
             'building_structure_type' => $this->building_structure_type?->name_arm,
             'building_project_type' => $this->building_project_type?->name_arm,
@@ -30,7 +33,7 @@ class EstateResource extends JsonResource
             'year' => $this->year?->name_arm,
             'name_arm' => $this->name_arm,
             'images' => $this->estateDocuments,
-            'image' => $this->main_image_file_path_thumb ? $this->path : 'https://i0.wp.com/lanecdr.org/wp-content/uploads/2019/08/placeholder.png',
+            'image' => $this->main_image_file_path_thumb ? $this->public_path : 'https://i0.wp.com/lanecdr.org/wp-content/uploads/2019/08/placeholder.png',
         ];
     }
 }

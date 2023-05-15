@@ -914,7 +914,7 @@ class Estate extends Model
 
     public function getStoragePathAttribute(): string
     {
-        $name = $this->main_image_file_path_thumb;
+        $name = $this->main_image_file_path;
 
         return "/estate/photos/$name";
     }

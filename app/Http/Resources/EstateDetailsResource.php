@@ -21,7 +21,7 @@ class EstateDetailsResource extends JsonResource
         $imagesPaths = [];
 
         foreach ($images as $image) {
-            $imagesPaths[] = $image->path;
+            $imagesPaths[] = $image->public_path;
         }
 
         return [

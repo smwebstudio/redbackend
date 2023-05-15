@@ -45,7 +45,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::middleware(['setLocale'])->group(function () {
 
     Route::controller(EstatesController::class)->group(function () {
-        Route::get('/estates/map_search', 'filterAnnouncements');
+        Route::post('/estates/map_search', 'filterAnnouncements');
         Route::get('/estates/filter/estates', 'filterEstates');
         Route::post('/estates/all', 'filterEstates');
     });

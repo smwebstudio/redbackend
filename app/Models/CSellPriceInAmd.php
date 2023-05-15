@@ -6,12 +6,13 @@
 
 namespace App\Models;
 
+use App\Traits\ApiMultiLanguage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CSellPriceInAmd
- * 
+ *
  * @property int $id
  * @property bool|null $is_deleted
  * @property Carbon|null $last_modified_on
@@ -33,6 +34,11 @@ class CSellPriceInAmd extends Model
 	protected $table = 'c_sell_price_in_amd';
 	public $incrementing = false;
 	public $timestamps = false;
+
+    use ApiMultiLanguage;
+    protected array $multi_lang = [
+        'name',
+    ];
 
 	protected $casts = [
 		'id' => 'int',

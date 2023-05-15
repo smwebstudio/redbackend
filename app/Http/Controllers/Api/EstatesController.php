@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\EstateCollection;
+use App\Http\Resources\EstateResource;
 use App\Models\Estate;
 use DebugBar\DebugBar;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Services\PointCheck;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -22,15 +24,17 @@ class EstatesController extends Controller
 
         $pageSize = $request->input('page_size') ? $request->input('page_size') : 12;
 
+
         return new EstateCollection(QueryBuilder::for(Estate::class)
             ->allowedFilters([
-                AllowedFilter::exact('prices'),
+                AllowedFilter::exact('id'),
                 AllowedFilter::scope('price_from'),
                 AllowedFilter::scope('price_to'),
                 AllowedFilter::scope('text_search'),
-                AllowedFilter::exact('currency'),
+                AllowedFilter::exact('currency_id'),
                 AllowedFilter::exact('room_count'),
                 AllowedFilter::exact('estate_type_id'),
+                AllowedFilter::exact('contract_type_id'),
                 AllowedFilter::exact('location_province_id'),
                 AllowedFilter::exact('location_city_id'),
                 AllowedFilter::exact('location_community_id'),
@@ -44,9 +48,14 @@ class EstatesController extends Controller
 
     public function filterAnnouncements(Request $request)
     {
-        $request_coords = $request->coords;
-        $filter = [];
+//        $request_coords = $request->coords; -YANDEX GET REQUEST
 
+        $request_coords = json_decode($request->input('coords'));
+
+
+
+
+        $filter = [];
 
         parse_str($request->filter, $filter);
 
@@ -55,63 +64,66 @@ class EstatesController extends Controller
             unset($filter['place']);
         }
 
+
+
 //        $locale = $request->locale;
         $filter['order_by'] = 'created_at';
         $filter['order_dir'] = 'DESC';
-//        $data = new Request($filter);
-//        $ajax = true;
-//        $estates = $this->filter($data, $ajax);
-
-        $estates = Estate::orderBy('id', 'desc')->limit('30')->get();
 
 
-        foreach ($estates as $key => $estate) {
-            if (isset($estate['estate_latitude']) && isset($estate['estate_longitude'])) {
-//                $response = Http::get('https://geocode-maps.yandex.ru/1.x/?apikey=98976ac2-1627-4fc8-ac83-e4d35764b12c&format=json&results=1&geocode='.$estate->full_address);
-
-//                $estate_coords = json_decode($response->body())->response->GeoObjectCollection->featureMember[0]->GeoObject->Point->pos;
-
-
-                $estate_coords = $estate['estate_longitude'] . ' ' . $estate['estate_latitude'];
-
-
-
-//                usleep(100);
-//                dd($ann->full_address, $responseData, json_decode($response->body()));
-//                $ann_coords = [$ann['estate_longitude'], $ann['estate_latitude']];
-
-                $ann_coords = $this->pointStringToCoordinates($estate_coords);
-                $vertices_x = [];
-                $vertices_y = [];
-
-
-                foreach ($request_coords as $coord) {
-                    $vertices_x[] = $coord[0];
-                    $vertices_y[] = $coord[1];
-                };
-
-                $points_polygon = count($vertices_x) - 1;
-                $longitude = $ann_coords[0];
-                $latitude = $ann_coords[1];
-
-//                $estate->estate_latitude = $latitude;
-//                $estate->estate_longitude = $longitude;
-////                $estate->save();
-
-
-                if ($this->is_in_polygon($request_coords, $points_polygon, $vertices_x, $vertices_y, $longitude, $latitude)) {
-                    $estate->native_coords = $ann_coords;
-                } else {
-                    unset($estates[$key]);
-                }
-            } else {
-                unset($estates[$key]);
-            }
+        $polygon_coords = '';
+        foreach ($request_coords as $coord) {
+            $polygon_coords .= $coord[0] . ' ' . $coord[1] . ', ';
         }
+        $polygon_coords .= $request_coords[0][0] . ' ' . $request_coords[0][1]; // add first coordinate again to close the polygon
 
+
+        $estates = Estate::whereIn('estate_status_id', [2, 3, 4])->whereRaw("ST_Within(Point(estate_latitude, estate_longitude), PolygonFromText('POLYGON((" . $polygon_coords . "))'))")->limit(50)
+            ->get();
+
+
+
+//        $estates = Estate::where('estate_status_id', '>=', 2)
+//            ->whereIn('estate_status_id', [2, 3, 4])
+//            ->where('estate_latitude', '>', 30)
+//            ->where('estate_longitude', '>', 30)->orderBy('created_on', 'desc')->limit('50')->get();
+
+
+//        foreach ($estates as $key => $estate) {
+//            if (isset($estate['estate_latitude']) && isset($estate['estate_longitude'])) {
+//
+//                $estate_coords = $estate['estate_longitude'] . ' ' . $estate['estate_latitude'];
+//
+//                $estate_pointed_coords = $this->pointStringToCoordinates($estate_coords);
+//                $vertices_x = [];
+//                $vertices_y = [];
+//
+//
+//                foreach ($request_coords as $coord) {
+//                    $vertices_x[] = $coord[0];
+//                    $vertices_y[] = $coord[1];
+//                };
+//
+//                $points_polygon = count($vertices_x) - 1;
+//                $longitude = $estate_pointed_coords[0];
+//                $latitude = $estate_pointed_coords[1];
+//
+//
+//                if ($this->is_in_polygon($request_coords, $points_polygon, $vertices_x, $vertices_y, $longitude, $latitude)) {
+//                    $estate->native_coords = $estate_pointed_coords;
+//                } else {
+//                    unset($estates[$key]);
+//                }
+//            } else {
+//                unset($estates[$key]);
+//            }
+//        }
+
+
+        return EstateResource::collection($estates);
 
         // return response()->json($outer_html);
-        return response()->json(['data' => $estates, 'current_page' => 1, 'last_page' => 2]);
+//        return response()->json(['data' => $estates, 'current_page' => 1, 'last_page' => 2, 'count' => count($estates)]);
 
     }
 

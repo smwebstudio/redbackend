@@ -134,10 +134,10 @@ class FileService
      * @param string $path
      * @return string
      */
-    public function getFileFromDisk(string $path): string
+    public function getFileFromDisk(string $path, string $disk = 'S3'): string
     {
 //        if (!empty($path) && Storage::disk($this->getDisk())->exists($path)) {
-            return Storage::disk($this->getDisk())->url($path);
+            return Storage::disk($disk)->url($path);
 //        }
 
         return '';

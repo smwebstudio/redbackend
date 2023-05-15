@@ -15,12 +15,20 @@ trait HasFilePath
         return $fileService->getTemporaryUrl($path, $lifetime);
     }
 
-    public function getPathAttribute(): string
+    public function getPrivatePathAttribute(): string
     {
         $fileService = new FileService();
         $path = $this->storage_path;
 
         return $fileService->getFileFromDisk($path);
+    }
+
+    public function getPublicPathAttribute(): string
+    {
+        $fileService = new FileService();
+        $path = $this->storage_path;
+
+        return $fileService->getFileFromDisk($path, 'S3Public');
     }
 
 }

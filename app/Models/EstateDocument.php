@@ -9,6 +9,7 @@ namespace App\Models;
 use App\Models\Scopes\EstateDocumentScope;
 use App\Traits\Models\HasFilePath;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class EstateDocument
@@ -61,8 +62,7 @@ class EstateDocument extends Model
 
     public function getStoragePathAttribute(): string
     {
-        $name = $this->path_thumb;
-
+        $name = $this->path;
         return "/estate/photos/$name";
     }
 
