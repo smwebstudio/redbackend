@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\EstateCollection;
+use App\Http\Resources\EstateDetailsCollection;
 use App\Http\Resources\EstateResource;
 use App\Models\Estate;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,13 +33,10 @@ class EstatesController extends Controller
             $pageSize = 100;
         }
 
-        Log::error($request_coords);
-
-        $queryParams = request()->query();
 
         return new EstateCollection(QueryBuilder::for(Estate::class)
             ->allowedFilters([
-                AllowedFilter::exact('id'),
+                AllowedFilter::exact('id', ),
                 AllowedFilter::scope('price_from'),
                 AllowedFilter::scope('price_to'),
                 AllowedFilter::scope('text_search'),
@@ -57,6 +55,37 @@ class EstatesController extends Controller
 
 
     }
+
+
+    public function compareEstates(Request $request)
+    {
+
+        $pageSize = $request->input('page_size') ? $request->input('page_size') : 50;
+
+
+
+        return new EstateDetailsCollection(QueryBuilder::for(Estate::class)
+            ->allowedFilters([
+                AllowedFilter::exact('id', ),
+                AllowedFilter::scope('price_from'),
+                AllowedFilter::scope('price_to'),
+                AllowedFilter::scope('text_search'),
+                AllowedFilter::scope('coordinates', null, '|'),
+                AllowedFilter::exact('currency_id'),
+                AllowedFilter::exact('room_count'),
+                AllowedFilter::exact('estate_type_id'),
+                AllowedFilter::exact('contract_type_id'),
+                AllowedFilter::exact('location_province_id'),
+                AllowedFilter::exact('location_city_id'),
+                AllowedFilter::exact('location_community_id'),
+            ])
+            ->allowedSorts(['created_on', 'visits_count', 'room_count'])
+            ->paginate($pageSize)
+            ->appends(request()->query()));
+
+
+    }
+
 
     public function mapSearch(Request $request)
     {

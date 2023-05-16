@@ -49,6 +49,7 @@ Route::middleware(['setLocale'])->group(function () {
         Route::post('/estates/map/map_search', 'mapSearch');
         Route::post('/estates/filter/estates', 'filterEstates');
         Route::get('/estates/filter/estates', 'filterEstates');
+        Route::get('/estates/compare/estates', 'compareEstates');
         Route::post('/estates/all', 'filterEstates');
     });
 

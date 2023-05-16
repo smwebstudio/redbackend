@@ -85,6 +85,7 @@ return [
     'current_month_archives' => ' Ամսվա Արխիվացված',
     'commercial_purpose_use_type' => ' Կոմերցիոն օգտ. տեսակ',
     'purpose_type' => ' Նպատակային օգտ. տեսակ',
+    'building_floor_type' => ' Շենքի կառուցվածք',
     'building_project_type' => ' Շենքի նախագիծը',
     'exterior_design_type' => ' Շենքը արտաքինից',
     'courtyard_improvement' => ' Շենքի բակի բարեկարգում',

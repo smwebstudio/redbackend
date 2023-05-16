@@ -103,4 +103,11 @@ class Article extends Model
 	{
 		return $this->belongsTo(CArticleType::class, 'article_type_id');
 	}
+
+    public function getStoragePathAttribute(): string
+    {
+        $name = $this->main_image_file_path;
+
+        return "/estate/photos/$name";
+    }
 }

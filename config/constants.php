@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Facade;
 return [
 
     'hy' => 'arm',
-    'en' => 'eng',
+    'en' => 'en',
     'ru' => 'ru'
 
 ];

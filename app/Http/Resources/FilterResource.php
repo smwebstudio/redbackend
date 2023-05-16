@@ -2,6 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Models\CAreaForBuilding;
+use App\Models\CBuildingProjectType;
+use App\Models\CBuildingType;
 use App\Models\CContactType;
 use App\Models\CContractType;
 use App\Models\CDailyPriceInAmd;
@@ -16,6 +19,7 @@ use App\Models\CPricePerQwdMeterUsd;
 use App\Models\CRentPriceInAmd;
 use App\Models\CRentPriceInRur;
 use App\Models\CRentPriceInUsd;
+use App\Models\CRepairingType;
 use App\Models\CRoomsQuantity;
 use App\Models\CSellPriceInAmd;
 use App\Models\CSellPriceInRur;
@@ -55,6 +59,11 @@ class FilterResource extends JsonResource
             ],
             'location_community' => OptionTypeResource::collection(CLocationCommunity::all()),
             'rooms' => OptionTypeResource::collection(CRoomsQuantity::all()),
+            'area_total' => OptionTypeResource::collection(CAreaForBuilding::all()),
+            'prece_per_qwd' => OptionTypeResource::collection(CPricePerQwdMeterArm::all()),
+            'building_project_type' => OptionTypeResource::collection(CBuildingProjectType::all()),
+            'building_type' => OptionTypeResource::collection(CBuildingType::all()),
+            'repairing_type' => OptionTypeResource::collection(CRepairingType::all()),
         ];
     }
 }

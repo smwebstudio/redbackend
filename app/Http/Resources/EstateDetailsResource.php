@@ -17,7 +17,7 @@ class EstateDetailsResource extends JsonResource
     public function toArray($request)
     {
 
-        $images  = $this->estateDocuments;
+        $images = $this->estateDocuments;
         $imagesPaths = [];
 
         foreach ($images as $image) {
@@ -28,6 +28,7 @@ class EstateDetailsResource extends JsonResource
             'id' => $this->id,
             'price' => $this->full_price,
             'code' => $this->code,
+            'native_coords' => $this->estate_latitude ? [$this->estate_latitude, $this->estate_longitude] : [],
             'room_count' => $this->room_count,
             'old_price' => $this->old_price,
             'full_address' => $this->full_address,
@@ -72,14 +73,42 @@ class EstateDetailsResource extends JsonResource
                 'windows_view' => ['value' => $this->windows_view?->name_arm, 'label' => trans('estate.windows_view'),],
                 'building_window_count' => ['value' => $this->building_window_count?->name_arm, 'label' => trans('estate.building_window_count'),],
 
+            ],
 
+            'estate_facilities' => [
+                'hasFurniture' => ['value' => $this->furniture, 'label' => trans('estate.furniture')],
+                'hasKitchenFurniture' => ['value' => $this->kitchen_furniture, 'label' => trans('estate.kitchen_furniture')],
+                'hasGasHeater' => ['value' => $this->gas_heater, 'label' => trans('estate.gas_heater')],
+                'hasPersistentWater' => ['value' => $this->persistent_water, 'label' => trans('estate.persistent_water')],
+                'hasNaturalGas' => ['value' => $this->natural_gas, 'label' => trans('estate.natural_gas')],
+                'hasGasPossibility' => ['value' => $this->gas_possibility, 'label' => trans('estate.gas_possibility')],
+                'hasInternet' => ['value' => $this->internet, 'label' => trans('estate.internet')],
+                'hasSatelliteTv' => ['value' => $this->satellite_tv, 'label' => trans('estate.satellite_tv')],
+                'hasCableTv' => ['value' => $this->cable_tv, 'label' => trans('estate.cable_tv')],
+                'sunny' => ['value' => $this->sunny, 'label' => trans('estate.sunny')],
+                'hasExclusiveDesign' => ['value' => $this->exclusive_design, 'label' => trans('estate.exclusive_design')],
+                'expandingPossible' => ['value' => $this->expanding_possible, 'label' => trans('estate.expanding_possible')],
+                'hasOpenBalcony' => ['value' => $this->open_balcony, 'label' => trans('estate.open_balcony')],
+                'hasOriel' => ['value' => $this->oriel, 'label' => trans('estate.oriel')],
+                'hasNewWiring' => ['value' => $this->new_wiring, 'label' => trans('estate.new_wiring')],
+                'hasNewWaterTubes' => ['value' => $this->new_water_tubes, 'label' => trans('estate.new_water_tubes')],
+                'hasHeatingGround' => ['value' => $this->heating_ground, 'label' => trans('estate.heating_ground')],
+                'hasParquet' => ['value' => $this->parquet, 'label' => trans('estate.parquet')],
+                'newDoors' => ['value' => $this->new_doors, 'label' => trans('estate.new_doors')],
+                'newWindows' => ['value' => $this->new_windows, 'label' => trans('estate.new_windows')],
+                'newBathroom' => ['value' => $this->new_bathroom, 'label' => trans('estate.new_bathroom')],
+                'newFloor' => ['value' => $this->new_floor, 'label' => trans('estate.new_floor')],
+                'newRoof' => ['value' => $this->new_roof, 'label' => trans('estate.new_roof')],
+                'canBeUsedAsCommercial' => ['value' => $this->can_be_used_as_commercial, 'label' => trans('estate.can_be_used_as_commercial')],
+                'isNewConstruction' => ['value' => $this->new_construction, 'label' => trans('estate.new_construction')],
+                'isApartmentConstruction' => ['value' => $this->apartment_construction, 'label' => trans('estate.apartment_construction')],
             ],
 
 
             'year' => $this->year?->name_arm,
             'name_arm' => $this->name_arm,
             'images' => $imagesPaths,
-            'image' => $this->main_image_file_path_thumb ? $this->main_image_file_path : 'https://i0.wp.com/lanecdr.org/wp-content/uploads/2019/08/placeholder.png',
+            'image' => $this->main_image_file_path_thumb ? $this->public_path : 'https://i0.wp.com/lanecdr.org/wp-content/uploads/2019/08/placeholder.png',
 
             'contact' => $this->agent ? new ContactEstatesResource((Contact::findOrfail($this->agent?->contact_id))) : '',
         ];
