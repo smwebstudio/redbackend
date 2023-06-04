@@ -30,7 +30,7 @@ class EstatesController extends Controller
 
         if($fromMap) {
             Log:;info('from map');
-            $pageSize = 100;
+            $pageSize = 50;
         }
 
 
