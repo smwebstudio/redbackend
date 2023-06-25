@@ -200,12 +200,67 @@ class EstateCrudController extends CrudController
         CRUD::setValidation(EstateRequest::class);
 
         CRUD::addField([
+            'name' => 'contract_type',
+            'type' => "relationship",
+            'attribute' => "name_arm",
+            'label' => "Կոնտրակտի տեսակ",
+            'placeholder' => '-Ընտրել մեկը-',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+        CRUD::addField([
+            'name' => 'location_province',
+            'type' => "relationship",
+            'attribute' => "name_arm",
+            'label' => "Մարզ",
+            'placeholder' => '-Ընտրել մեկը-',
+            'wrapper' => [
+                'class' => 'form-group col-md-3 '
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'location_city',
+            'type' => "relationship",
+            'attribute' => "name_arm",
+            'label' => "Քաղաք",
+            'placeholder' => '-Ընտրել մեկը-',
+            'wrapper' => [
+                'class' => 'form-group col-md-3 '
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'location_community',
+            'type' => "relationship",
+            'attribute' => "name_arm",
+            'label' => "Համայնք",
+            'placeholder' => '-Ընտրել մեկը-',
+            'wrapper' => [
+                'class' => 'form-group col-md-3'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'location_street',
+            'type' => "relationship",
+            'attribute' => "name_arm",
+            'label' => "Փողոց",
+            'placeholder' => '-Ընտրել մեկը-',
+            'wrapper' => [
+                'class' => 'form-group col-md-3'
+            ],
+        ]);
+
+
+        CRUD::addField([
             'name' => 'building_structure_type',
             'type' => "relationship",
             'attribute' => "name_arm",
             'label' => "Շենքի կառուցվածք",
             'placeholder' => '-Ընտրել մեկը-',
-            'tab' => 'Main',
+            'tab' => 'Հիմնական',
             'wrapper' => [
                 'class' => 'form-group col-md-3'
             ],
@@ -216,15 +271,119 @@ class EstateCrudController extends CrudController
             'type' => "relationship",
             'attribute' => "name_arm",
             'label' => "Արտաքին պատեր",
-            'tab' => 'Main',
+            'tab' => 'Հիմնական',
             'placeholder' => '-Ընտրել մեկը-',
             'wrapper' => [
                 'class' => 'form-group col-md-3'
             ],
         ]);
 
+        CRUD::addField([
+            'name' => 'building_project_type',
+            'type' => "relationship",
+            'attribute' => "name_arm",
+            'label' => "Արտաքին պատեր",
+            'tab' => 'Հիմնական',
+            'placeholder' => '-Ընտրել մեկը-',
+            'wrapper' => [
+                'class' => 'form-group col-md-3'
+            ],
+        ]);
 
-        $this->crud->setFromDb();
+        CRUD::addField([
+            'name' => 'separator1',
+            'type' => 'custom_html',
+            'value' => '<hr>',
+            'tab' => 'Հիմնական',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'separator',
+            'type' => 'custom_html',
+            'value' => '<h2>Կոմունալ հարմարություններ</h2>',
+            'tab' => 'Հիմնական',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+        $featuresList = [
+            'balcony',
+            'cable_tv',
+            'cellar',
+            'conditioner',
+            'dish_washer',
+            'exclusive_design',
+            'furniture',
+            'garage',
+            'gas_heater',
+            'gas_possibility',
+            'heating_ground',
+            'has_intercom',
+            'internet',
+            'jacuzzi',
+            'kitchen_furniture',
+            'laminat',
+            'land',
+            'natural_gas',
+            'new_water_tubes',
+            'new_wiring',
+            'niche',
+            'open_balcony',
+            'oriel',
+            'pantry',
+            'parquet',
+            'persistent_water',
+            'possible_extension',
+            'refrigirator',
+            'satellite_tv',
+            'separate_room',
+            'tv',
+            'washer',
+            'heating_system_type_id',
+            'intercom',
+            'expanding_possible',
+            'new_construction',
+            'apartment_construction',
+            'sunny',
+            'new_bathroom',
+            'new_doors',
+            'new_floor',
+            'new_roof',
+            'new_windows'
+        ];
+        $addFeaturesList = [];
+
+        foreach ($featuresList as $feature) {
+            $addFeaturesList[] = [
+                'name' => $feature,
+                'type' => 'switch',
+                'label' => trans('estate.' . $feature),
+                'tab' => 'Հիմնական',
+                'wrapper' => [
+                    'class' => 'form-group col-md-3'
+                ],
+            ];
+        }
+
+
+
+        CRUD::addFields($addFeaturesList);
+
+
+        CRUD::addField([
+            'name' => 'separator',
+            'type' => 'custom_html',
+            'value' => '<h2>Կոմունալ հարմարություններ</h2>',
+            'tab' => 'Հիմնական',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
 
     }
 
@@ -234,13 +393,15 @@ class EstateCrudController extends CrudController
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
-    protected function setupUpdateOperation()
+    protected
+    function setupUpdateOperation()
     {
         $this->setupCreateOperation();
     }
 
 
-    public function fetchContact()
+    public
+    function fetchContact()
     {
         return $this->fetch([
             'model' => Contact::class,
@@ -253,7 +414,8 @@ class EstateCrudController extends CrudController
         ]);
     }
 
-    private function addListFilters(): void
+    private
+    function addListFilters(): void
     {
         $this->crud->addFilter([
             'type' => 'simple',
