@@ -1,14 +1,16 @@
 table {
-    font-size: 0.7rem;
+    font-size:0.9rem;
 }
 
 .nav-item .la-filter {
     display: none !important;
 }
 
+
 #crudTable_wrapper #crudTable td, #crudTable_wrapper #crudTable th, #crudTable_wrapper table.dataTable td, #crudTable_wrapper table.dataTable th {
     max-width: 100px;
     white-space: normal;
+    text-align: center;
 }
 
 #crudTable_wrapper #crudTable td>span {

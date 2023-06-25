@@ -897,7 +897,7 @@ class Estate extends Model
 
     public function getFullCodeAttribute()
     {
-        return $this->estate_type->name_arm . '<br/>'. $this->code  . '<br/>'.   $this->contract_type->name_arm;
+        return $this->estate_type?->name_arm . '<br/>'. $this->code  . '<br/>'.   $this->contract_type?->name_arm;
     }
 
 
@@ -911,32 +911,32 @@ class Estate extends Model
      */
     public function scopeApartment($query)
     {
-        return $query->where('estate_type_id', '=', 1);
+        return $query->orWhere('estate_type_id', '=', 1);
     }
 
     public function scopeHouse($query)
     {
-        return $query->where('estate_type_id', '=', 2);
+        return $query->orWhere('estate_type_id', '=', 2);
     }
 
     public function scopeCommercial($query)
     {
-        return $query->where('estate_type_id', '=', 3);
+        return $query->orWhere('estate_type_id', '=', 3);
     }
 
     public function scopeLand($query)
     {
-        return $query->where('estate_type_id', '=', 4);
+        return $query->orWhere('estate_type_id', '=', 4);
     }
 
     public function scopeIsExclusive($query)
     {
-        return $query->whereNotNull('agent_id');
+        return $query->orWhereNotNull('agent_id');
     }
 
     public function scopeIsNotExclusive($query)
     {
-        return $query->whereNull('agent_id');
+        return $query->orWhereNull('agent_id');
     }
 
     public function getStoragePathAttribute(): string

@@ -65,12 +65,6 @@ class EstateCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-//        CRUD::addColumn([
-//            'name' => 'id',
-//            'type' => "text",
-//            'label' => "ID",
-//            'limit' => 100,
-//        ]);
 
         CRUD::addColumn([
             'name' => 'estate_status_id',
@@ -124,7 +118,7 @@ class EstateCrudController extends CrudController
             'name' => 'full_code',
             'type' => "markdown",
             'value' => function ($entry) {
-                    return '<div style="text-align: center">'.$entry->full_code.'</div>';
+                    return '<div style="text-align: center"><a href="/admin/estate/'.$entry->id.'/show">'.$entry->full_code.'</a></div>';
             },
             'label' => "Կոդ",
             'limit' => 100,
@@ -175,12 +169,13 @@ class EstateCrudController extends CrudController
             'name' => 'main_image_file_path_thumb', // The db column name
             'label' => 'Image', // Table column heading
             'type' => 'image',
+            'prefix' => '/estate/photos/',
             'disk' => 'S3',
             'height' => '70px',
             'width' => '90px',
         ]);
 
-        
+
 
 
         /*Filters*/
@@ -414,9 +409,11 @@ class EstateCrudController extends CrudController
         ]);
     }
 
-    private
-    function addListFilters(): void
+    private  function addListFilters(): void
     {
+
+
+
         $this->crud->addFilter([
             'type' => 'simple',
             'name' => 'apartment',
@@ -454,6 +451,7 @@ class EstateCrudController extends CrudController
         ],
             false,
             function () {
+                $this->crud->removeAllFilters();
                 $this->crud->addClause('land');
             });
         $this->crud->addFilter([
@@ -461,38 +459,11 @@ class EstateCrudController extends CrudController
             'name' => 'divider_types',
         ]);
 
-        $this->crud->addFilter([
-            'type' => 'simple',
-            'name' => 'isExclusive',
-            'label' => 'Միայն էքսկլուզիվ գույքերը'
-        ],
-            false,
-            function () {
-                $this->crud->addClause('isExclusive');
-            });
-
-        $this->crud->addFilter([
-            'type' => 'simple',
-            'name' => 'isNotExclusive',
-            'label' => 'Բացի էքսկլյուզիվ գույքերից'
-        ],
-            false,
-            function () {
-                $this->crud->addClause('isNotExclusive');
-            });
-
-
-        $this->crud->addFilter([
-            'type' => 'divider',
-            'name' => 'divider_1',
-        ]);
-
-
         // select2 filter
         $this->crud->addFilter([
             'name' => 'contract_type',
             'type' => 'select2',
-            'label' => 'Տիպ',
+            'label' => 'Գործարքային տիպը',
         ], function () {
             return [
                 1 => 'Վաճառք',
@@ -502,7 +473,6 @@ class EstateCrudController extends CrudController
         }, function ($value) {
             $this->crud->addClause('where', 'contract_type_id', $value);
         });
-
 
         $this->crud->addFilter([
             'name' => 'location_province',
@@ -561,6 +531,43 @@ class EstateCrudController extends CrudController
             function ($value) { // if the filter is active
                 $this->crud->addClause('where', 'address_building', '=', $value);
             });
+
+        $this->crud->addFilter([
+            'type' => 'divider',
+            'name' => 'divider_9',
+        ]);
+
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'isExclusive',
+            'label' => 'Միայն էքսկլուզիվ գույքերը'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('isExclusive');
+            });
+
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'isNotExclusive',
+            'label' => 'Բացի էքսկլյուզիվ գույքերից'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('isNotExclusive');
+            });
+
+
+        $this->crud->addFilter([
+            'type' => 'divider',
+            'name' => 'divider_1',
+        ]);
+
+
+
+
+
+
 
         $this->crud->addFilter([
             'type' => 'divider',

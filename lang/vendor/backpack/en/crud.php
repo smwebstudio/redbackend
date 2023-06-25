@@ -106,7 +106,7 @@ return [
     'emptyTable' => 'Տվյալներ աղյուսակում չկան',
     'info' => 'Ցուցադրվում է _START_ -ից _END_ -ը առաջին _TOTAL_ գրառումներից',
     'infoEmpty' => 'Գրառումներ չկան',
-    'infoFiltered' => '(զրոյացված _MAX_ ընդհանուր գրառումներից)',
+    'infoFiltered' => ' ',
     'infoPostFix' => '։',
     'thousands' => ',',
     'lengthMenu' => '_MENU_ գրառումներ էջում',
