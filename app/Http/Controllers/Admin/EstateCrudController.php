@@ -8,6 +8,7 @@ use App\Models\Contact;
 use App\Models\RealtorUser;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\CRUD\app\Library\Widget;
 use Backpack\Pro\Http\Controllers\Operations\FetchOperation;
 
 /**
@@ -39,21 +40,15 @@ class EstateCrudController extends CrudController
 
     protected function setupShowOperation()
     {
-        CRUD::addColumn([
-            'name' => 'estateDocuments',
-            'type' => "relationship",
-            'attribute' => "path",
-            'label' => "ID",
-            'limit' => 100,
-        ]);
+        CRUD::setShowView('redg.estate.show');
 
-        CRUD::addColumn([
-            'name' => 'estate_type',
-            'type' => "relationship",
-            'label' => "EstateResource type",
-            'attribute' => "name_arm",
-            'limit' => 100,
-        ]);
+        Widget::add()->type('script')
+            ->content('https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js')
+            ->crossorigin('anonymous');
+        $estate = $this->crud->getCurrentEntry();
+
+        $this->crud->data['estate'] = $estate;
+
 
     }
 

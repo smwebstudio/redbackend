@@ -836,6 +836,11 @@ class Estate extends Model
         return $this->belongsTo(CEntranceDoorPosition::class, 'entrance_door_position_id');
     }
 
+    public function ceiling_height_type()
+    {
+        return $this->belongsTo(CCeilingHeightType::class, 'ceiling_height_type_id');
+    }
+
     public function agent()
     {
         return $this->belongsTo(RealtorUser::class, 'agent_id');

@@ -66,6 +66,7 @@ return [
         // 'https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome-font-awesome.min.css',
         // 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic',
 
+     "https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css",
         // Example (load font-awesome instead of line-awesome):
         // 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css',
         'assets/css/style.css',
@@ -144,7 +145,6 @@ return [
         // 'https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
         // 'https://unpkg.com/sweetalert/dist/sweetalert.min.js',
         // 'https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js'
-
         // examples (VueJS or React)
         // 'https://unpkg.com/vue@2.4.4/dist/vue.min.js',
         // 'https://unpkg.com/react@16/umd/react.production.min.js',
