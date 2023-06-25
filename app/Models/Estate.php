@@ -895,6 +895,10 @@ class Estate extends Model
     }
 
 
+    public function getFullCodeAttribute()
+    {
+        return $this->estate_type->name_arm . '<br/>'. $this->code  . '<br/>'.   $this->contract_type->name_arm;
+    }
 
 
     /*Local scopes*/

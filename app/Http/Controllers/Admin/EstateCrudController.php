@@ -65,26 +65,49 @@ class EstateCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::addColumn([
-            'name' => 'id',
-            'type' => "text",
-            'label' => "ID",
-            'limit' => 100,
-        ]);
+//        CRUD::addColumn([
+//            'name' => 'id',
+//            'type' => "text",
+//            'label' => "ID",
+//            'limit' => 100,
+//        ]);
 
         CRUD::addColumn([
             'name' => 'estate_status_id',
             'type' => "custom_html",
-            'label' => "Status",
+            'label' => "",
             'limit' => 100,
             'value' => function ($entry) {
-                if ($entry->estate_status_id === 8) {
-                    return '<i class="las la-file-archive"></i>';
+                if ($entry->estate_status_id === 1) {
+                    return '<i class="las la-file" style="font-size: 24px; color: #C00"  title="Սևագիր"></i>';
+                }
+
+                if ($entry->estate_status_id === 2) {
+                    return '<i class="las la-file-alt" style="font-size: 24px; color: #939309"  title="Թերի Լրացված"></i>';
+                }
+
+                if ($entry->estate_status_id === 3) {
+                    return '<i class="las la-camera-retro" style="font-size: 24px; color: #00a2d6"  title="Տեղազնված"></i>';
                 }
 
                 if ($entry->estate_status_id === 4) {
-                    return '<i class="las la-check-square"></i>';
+                    return '<i class="las la-check-square" style="font-size: 24px; color: #066c3c"  title="Հաստատված"></i>';
                 }
+
+                if ($entry->estate_status_id === 6) {
+                    return '<i class="las la-tag" style="font-size: 24px; color: #066c3c" title="Վարձակալված"></i>';
+                }
+
+
+                if ($entry->estate_status_id === 7) {
+                    return '<i class="las la-calendar-check" style="font-size: 24px; color: #9369aa" title="Վաճառված"></i>';
+                }
+
+                if ($entry->estate_status_id === 8) {
+                    return '<i class="las la-file-download" style="font-size: 24px; color: #222f3e" title="Արխիվացված"></i>';
+                }
+
+
 
                 return $entry->estate_status_id;
 
@@ -98,25 +121,12 @@ class EstateCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
-            'name' => 'code',
-            'type' => "text",
-            'label' => "Code",
-            'limit' => 100,
-        ]);
-
-        CRUD::addColumn([
-            'name' => 'estate_type',
-            'type' => "relationship",
-            'label' => "EstateResource type",
-            'attribute' => "name_arm",
-            'limit' => 100,
-        ]);
-
-        CRUD::addColumn([
-            'name' => 'contract_type',
-            'type' => "relationship",
-            'label' => "Contract type",
-            'attribute' => "name_arm",
+            'name' => 'full_code',
+            'type' => "markdown",
+            'value' => function ($entry) {
+                    return '<div style="text-align: center">'.$entry->full_code.'</div>';
+            },
+            'label' => "Կոդ",
             'limit' => 100,
         ]);
 
@@ -170,17 +180,7 @@ class EstateCrudController extends CrudController
             'width' => '90px',
         ]);
 
-        CRUD::addColumn([
-            'name' => 'created_on',
-            'type' => "date",
-            'label' => "Created at",
-        ]);
-
-        CRUD::addColumn([
-            'name' => 'last_modified_on',
-            'type' => "date",
-            'label' => "Updated at",
-        ]);
+        
 
 
         /*Filters*/
