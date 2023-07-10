@@ -23,6 +23,7 @@ class EstateCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\Pro\Http\Controllers\Operations\DropzoneOperation;
     use FetchOperation;
 
 
@@ -35,7 +36,7 @@ class EstateCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Estate::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/estate');
-        CRUD::setEntityNameStrings('Անշարժ Գույք', 'Անշարժ Գույք');
+        CRUD::setEntityNameStrings('estate', 'Estates');
     }
 
     protected function setupShowOperation()
@@ -97,7 +98,6 @@ class EstateCrudController extends CrudController
                 }
 
 
-
                 return $entry->estate_status_id;
 
             },
@@ -113,7 +113,7 @@ class EstateCrudController extends CrudController
             'name' => 'full_code',
             'type' => "markdown",
             'value' => function ($entry) {
-                    return '<div style="text-align: center"><a href="/admin/estate/'.$entry->id.'/show">'.$entry->full_code.'</a></div>';
+                return '<div style="text-align: center"><a href="/admin/estate/' . $entry->id . '/show">' . $entry->full_code . '</a></div>';
             },
             'label' => "Կոդ",
             'limit' => 100,
@@ -171,8 +171,6 @@ class EstateCrudController extends CrudController
         ]);
 
 
-
-
         /*Filters*/
         $this->addListFilters();
 
@@ -188,6 +186,24 @@ class EstateCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(EstateRequest::class);
+
+
+        CRUD::addField([
+            'name' => 'estateDocuments',
+            'label' => 'Photos',
+            'type' => "dropzone",
+            'configuration' => [
+                'parallelUploads' => 2,
+            ],
+            'withFiles' => ([
+                'disk' => 'S3', // the disk where file will be stored
+                'path' => 'uploads', // the path inside the disk where file will be stored
+            ]),
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ]
+
+        ]);
 
         CRUD::addField([
             'name' => 'contract_type',
@@ -333,7 +349,6 @@ class EstateCrudController extends CrudController
             'separate_room',
             'tv',
             'washer',
-            'heating_system_type_id',
             'intercom',
             'expanding_possible',
             'new_construction',
@@ -358,7 +373,6 @@ class EstateCrudController extends CrudController
                 ],
             ];
         }
-
 
 
         CRUD::addFields($addFeaturesList);
@@ -404,9 +418,8 @@ class EstateCrudController extends CrudController
         ]);
     }
 
-    private  function addListFilters(): void
+    private function addListFilters(): void
     {
-
 
 
         $this->crud->addFilter([
@@ -557,11 +570,6 @@ class EstateCrudController extends CrudController
             'type' => 'divider',
             'name' => 'divider_1',
         ]);
-
-
-
-
-
 
 
         $this->crud->addFilter([

@@ -46,7 +46,7 @@ return [
     // ----
 
     // Project name - shown in the window title
-    'project_name' => 'Backpack Admin Panel',
+    'project_name' => 'Red Group',
 
     // Content of the HTML meta robots tag to prevent indexing and link following
     'meta_robots_content' => 'noindex, nofollow',
@@ -63,7 +63,7 @@ return [
     'home_link' => '',
 
     // Menu logo. You can replace this with an <img> tag if you have a logo.
-    'project_logo'   => '<b>Back</b>pack',
+    'project_logo'   => 'RedGroup',
 
     // Show / hide breadcrumbs on admin panel pages.
     'breadcrumbs' => true,
@@ -90,8 +90,12 @@ return [
 
     // CSS files that are loaded in all pages, using Laravel's asset() helper
     'styles' => [
-        // 'styles/example.css',
-        // 'https://some-cdn.com/example.css',
+        'packages/backpack/base/css/bundle.css',
+        'packages/source-sans-pro/source-sans-pro.css',
+        'packages/line-awesome/css/line-awesome.min.css',
+        'assets/css/normalize.css',
+        "https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css",
+        'assets/css/style.css',
     ],
 
     // CSS files that are loaded in all pages, using Laravel's mix() helper
