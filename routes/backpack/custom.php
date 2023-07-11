@@ -34,4 +34,5 @@ Route::group([
     Route::crud('c-article-type', 'CArticleTypeCrudController');
     Route::crud('article', 'ArticleCrudController');
     Route::crud('estate-option-type', 'EstateOptionTypeCrudController');
+    Route::crud('c-location-city', 'CLocationCityCrudController');
 }); // this should be the absolute last line of this file
