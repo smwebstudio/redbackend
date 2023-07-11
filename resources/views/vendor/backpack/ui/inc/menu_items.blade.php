@@ -9,10 +9,11 @@
 <li class="nav-item nav-dropdown">
     <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon las la-search-location"></i>Տարածաշրջան</a>
     <ul class="nav-dropdown-items">
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-location-country') }}"><i class="nav-icon la la-cog"></i> Countries</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-location-province') }}"><i class="nav-icon la la-cog"></i> Provinces</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-location-street') }}"><i class="nav-icon la la-cog"></i> Streets</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-location-community') }}"><i class="nav-icon la la-cog"></i> Communities</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-location-country') }}"><i class="nav-icon la la-cog"></i> Երկրներ</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-location-province') }}"><i class="nav-icon la la-cog"></i> Մարզեր</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-location-city') }}"><i class="nav-icon la la-cog"></i> Քաղաքներ</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-location-street') }}"><i class="nav-icon la la-cog"></i> Փողոցներ</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('c-location-community') }}"><i class="nav-icon la la-cog"></i> Համայնքներ</a></li>
     </ul>
 </li>
 
