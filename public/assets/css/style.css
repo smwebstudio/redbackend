@@ -6,6 +6,25 @@ table {
     display: none !important;
 }
 
+.app-body main nav ol {
+    display: none !important;
+}
+
+.crudTable_wrapper a .btn-group-sm>.btn, .btn-sm {
+    border-radius: 0.2rem;
+    font-size: 1.2rem;
+    line-height: 1.2;
+    padding: 1px;
+}
+
+/*main .header-operation {*/
+/*    max-width: calc(100% - 300px);*/
+/*}*/
+
+main .header-operation h1 {
+    margin-top:0px
+}
+
 .tab-content .tab-pane {
     padding: 2rem !important;
 }

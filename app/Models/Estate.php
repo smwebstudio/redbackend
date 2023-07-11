@@ -929,6 +929,18 @@ class Estate extends Model
         return $this->getFormattedPrice().' '.$this->currency->name_arm;
     }
 
+    public function getFullPriceWithChangeAttribute(): ?string
+    {
+
+        $fullPrice = $this->fullPrice;
+        if($this->price && $this->old_price && $this->price < $this->old_price) {
+            $fullPrice = $fullPrice.'<i class="las la-arrow-down" style="color: green; font-size: 28px"></i>';
+        } elseif ($this->price && $this->old_price && $this->price > $this->old_price) {
+            $fullPrice =  $fullPrice.'<i class="las la-arrow-up" style="color: red; font-size: 28px"></i>';
+        }
+        return '<span style="background: #fff; display: inline-block; padding: 5px; border:1px solid #888; width: 100%">'.$fullPrice.'</span>';
+    }
+
     public function getFormattedPrice(): ?float
     {
         return $this->price ?? 0;

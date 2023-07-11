@@ -40,7 +40,7 @@ class EstateCrudController extends CrudController
     {
         CRUD::setModel(Estate::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/estate');
-        CRUD::setEntityNameStrings('edstate', 'Estates');
+        CRUD::setEntityNameStrings('գույք', 'Անշարժ գույք');
     }
 
     protected function setupShowOperation()
@@ -66,19 +66,28 @@ class EstateCrudController extends CrudController
     protected function setupListOperation()
     {
 
-        CRUD::addColumn([
-            'name' => 'id',
-            'label' => "ID",
-            'searchLogic' => function ($query, $column, $searchTerm) {
-                $query->orWhere('id', 'like', '%' . $searchTerm . '%')->orWhere('code', 'like', '%' . $searchTerm . '%');
-            },
-        ]);
+        $this->crud->addButton('line', 'archive', 'view', 'crud::buttons.archive');
+        $this->crud->addButton('line', 'photo', 'view', 'crud::buttons.photo');
+        $this->crud->addButton('line', 'message', 'view', 'crud::buttons.message');
+        $this->crud->addButton('line', 'star', 'view', 'crud::buttons.star');
+        $this->crud->addButton('line', 'copy', 'view', 'crud::buttons.copy');
+
+//        CRUD::addColumn([
+//            'name' => 'id',
+//            'label' => "ID",
+//            'searchLogic' => function ($query, $column, $searchTerm) {
+//                $query->orWhere('id', 'like', '%' . $searchTerm . '%')->orWhere('code', 'like', '%' . $searchTerm . '%');
+//            },
+//        ]);
 
         CRUD::addColumn([
             'name' => 'estate_status_id',
             'type' => "custom_html",
             'label' => "",
             'limit' => 100,
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhere('id', 'like', '%' . $searchTerm . '%')->orWhere('code', 'like', '%' . $searchTerm . '%');
+            },
             'value' => function ($entry) {
                 if ($entry->estate_status_id === 1) {
                     return '<i class="las la-file" style="font-size: 24px; color: #C00"  title="Սևագիր"></i>';
@@ -134,14 +143,14 @@ class EstateCrudController extends CrudController
         CRUD::addColumn([
             'name' => 'full_address',
             'type' => "text",
-            'label' => "Address",
+            'label' => "Հասցե",
             'limit' => 500,
         ]);
 
         CRUD::addColumn([
-            'name' => 'full_price',
-            'type' => "text",
-            'label' => "Price",
+            'name' => 'full_price_with_change',
+            'type' => "markdown",
+            'label' => "Գին",
             'orderable' => true,
             'orderLogic' => function ($query, $column, $columnDirection) {
                 return $query->orderBy('price', $columnDirection);
@@ -151,7 +160,7 @@ class EstateCrudController extends CrudController
         CRUD::addColumn([
             'name' => 'area_total',
             'type' => "text",
-            'label' => "Area",
+            'label' => "Մակերես",
             'escaped' => false,
             'suffix' => ' m<sup>2</sup>',
         ]);
@@ -167,19 +176,31 @@ class EstateCrudController extends CrudController
             'name' => 'contact',
             'type' => "relationship",
             'attribute' => "full_contact",
-            'label' => "Seller",
+            'label' => "Վաճառող",
             'limit' => 150,
         ]);
 
 
         CRUD::addColumn([
             'name' => 'main_image_file_path_thumb', // The db column name
-            'label' => 'Image', // Table column heading
+            'label' => 'Նկար', // Table column heading
             'type' => 'image',
             'prefix' => '/estate/photos/',
             'disk' => 'S3',
             'height' => '70px',
             'width' => '90px',
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'created_on', // The db column name
+            'label' => 'Ստեղծված', // Table column heading
+            'type' => 'text',
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'last_modified_on', // The db column name
+            'label' => 'Թարմացված', // Table column heading
+            'type' => 'text',
         ]);
 
 
@@ -899,10 +920,7 @@ class EstateCrudController extends CrudController
         ]);
 
 
-        $this->crud->addFilter([
-            'type' => 'divider',
-            'name' => 'divider_2',
-        ]);
+
 
         $this->crud->addFilter([
             'name' => 'price',
