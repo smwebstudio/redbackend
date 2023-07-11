@@ -201,6 +201,8 @@ class Contact extends Model
 		'viber',
 		'whatsapp'
 	];
+    protected $appends = ['fullName'];
+
 
     public function user()
     {
@@ -222,9 +224,15 @@ class Contact extends Model
 		return $this->hasMany(Estate::class, 'seller_id');
 	}
 
+
     public function getFullNameAttribute()
     {
         return $this->name_arm.' '.$this->last_name_arm;
+    }
+
+    public function getFullNameEngAttribute()
+    {
+        return $this->name_eng.' '.$this->last_name_eng;
     }
 
     public function getFullContactAttribute()

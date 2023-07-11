@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Requests\EstateRequest;
+use App\Models\CLocationCity;
+use App\Models\CLocationCommunity;
+use App\Models\CLocationStreet;
 use App\Models\Contact;
+use App\Models\Estate;
 use App\Models\RealtorUser;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -34,9 +38,9 @@ class EstateCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Estate::class);
+        CRUD::setModel(Estate::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/estate');
-        CRUD::setEntityNameStrings('estate', 'Estates');
+        CRUD::setEntityNameStrings('edstate', 'Estates');
     }
 
     protected function setupShowOperation()
@@ -61,6 +65,14 @@ class EstateCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+
+        CRUD::addColumn([
+            'name' => 'id',
+            'label' => "ID",
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhere('id', 'like', '%' . $searchTerm . '%')->orWhere('code', 'like', '%' . $searchTerm . '%');
+            },
+        ]);
 
         CRUD::addColumn([
             'name' => 'estate_status_id',
@@ -186,7 +198,7 @@ class EstateCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(EstateRequest::class);
-
+        Widget::add()->type('script')->content('assets/js/admin/forms/estate.js');
 
         CRUD::addField([
             'name' => 'estateDocuments',
@@ -196,12 +208,13 @@ class EstateCrudController extends CrudController
                 'parallelUploads' => 2,
             ],
             'withFiles' => ([
-                'disk' => 'S3', // the disk where file will be stored
+                'disk' => 'S3Public', // the disk where file will be stored
                 'path' => 'uploads', // the path inside the disk where file will be stored
             ]),
             'wrapper' => [
                 'class' => 'form-group col-md-12'
-            ]
+            ],
+            'tab' => 'Նկարներ',
 
         ]);
 
@@ -212,9 +225,23 @@ class EstateCrudController extends CrudController
             'label' => "Կոնտրակտի տեսակ",
             'placeholder' => '-Ընտրել մեկը-',
             'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'contact',
+            'entity' => 'seller',
+            'type' => "relationship",
+            'attribute' => "fullName",
+            'placeholder' => '-Ընտրել մեկը-',
+            'ajax' => true,
+            'label' => "Վաճառող",
+            'wrapper' => [
                 'class' => 'form-group col-md-12'
             ],
         ]);
+
         CRUD::addField([
             'name' => 'location_province',
             'type' => "relationship",
@@ -230,7 +257,11 @@ class EstateCrudController extends CrudController
             'name' => 'location_city',
             'type' => "relationship",
             'attribute' => "name_arm",
+            'ajax' => true,
+            'minimum_input_length' => 0,
+            'include_all_form_fields' => true,
             'label' => "Քաղաք",
+            'dependencies' => ['location_province'],
             'placeholder' => '-Ընտրել մեկը-',
             'wrapper' => [
                 'class' => 'form-group col-md-3 '
@@ -241,6 +272,9 @@ class EstateCrudController extends CrudController
             'name' => 'location_community',
             'type' => "relationship",
             'attribute' => "name_arm",
+            'ajax' => true,
+            'minimum_input_length' => 0,
+            'dependencies' => ['location_province'],
             'label' => "Համայնք",
             'placeholder' => '-Ընտրել մեկը-',
             'wrapper' => [
@@ -252,32 +286,58 @@ class EstateCrudController extends CrudController
             'name' => 'location_street',
             'type' => "relationship",
             'attribute' => "name_arm",
+            'ajax' => true,
+            'minimum_input_length' => 0,
+            'dependencies' => ['location_province'],
             'label' => "Փողոց",
             'placeholder' => '-Ընտրել մեկը-',
             'wrapper' => [
-                'class' => 'form-group col-md-3'
+                'class' => 'form-group col-md-6'
             ],
         ]);
 
-
         CRUD::addField([
-            'name' => 'building_structure_type',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "Շենքի կառուցվածք",
-            'placeholder' => '-Ընտրել մեկը-',
-            'tab' => 'Հիմնական',
+            'name' => 'address_building',
+            'type' => "text",
+            'label' => "Շենք",
             'wrapper' => [
                 'class' => 'form-group col-md-3'
             ],
         ]);
 
         CRUD::addField([
-            'name' => 'building_floor_type',
+            'name' => 'address_apartment',
+            'type' => "text",
+            'label' => "Բնակարան",
+            'wrapper' => [
+                'class' => 'form-group col-md-3'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'floor',
+            'type' => "number",
+            'label' => "Հարկ",
+            'wrapper' => [
+                'class' => 'form-group col-md-3'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'building_floor_count',
+            'type' => "number",
+            'label' => "Շենքի հարկ",
+            'wrapper' => [
+                'class' => 'form-group col-md-3'
+            ],
+        ]);
+
+
+        CRUD::addField([
+            'name' => 'ceiling_height_type',
             'type' => "relationship",
             'attribute' => "name_arm",
-            'label' => "Արտաքին պատեր",
-            'tab' => 'Հիմնական',
+            'label' => "Առաստաղի բարձրություն",
             'placeholder' => '-Ընտրել մեկը-',
             'wrapper' => [
                 'class' => 'form-group col-md-3'
@@ -285,17 +345,178 @@ class EstateCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'building_project_type',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "Արտաքին պատեր",
-            'tab' => 'Հիմնական',
-            'placeholder' => '-Ընտրել մեկը-',
+            'name' => 'room_count',
+            'type' => "number",
+            'label' => "Սենյակներ",
             'wrapper' => [
                 'class' => 'form-group col-md-3'
             ],
         ]);
 
+        CRUD::addField([
+            'name' => 'area_total',
+            'type' => "number",
+            'label' => "Ընդհանուր մակերես",
+            'wrapper' => [
+                'class' => 'form-group col-md-3'
+            ],
+        ]);
+
+
+        CRUD::addField([
+            'name' => 'separator123',
+            'type' => 'custom_html',
+            'value' => '<br/>'
+        ]);
+
+
+        CRUD::addField([
+            'name' => 'price',
+            'type' => "number",
+            'label' => "Գին",
+            'wrapper' => [
+                'class' => 'form-group col-md-2'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'currency',
+            'type' => "relationship",
+            'attribute' => "name_arm",
+            'label' => "<br/>",
+            'allows_null' => false,
+            'default' => 1,
+            'placeholder' => '-Ընտրել մեկը-',
+            'wrapper' => [
+                'class' => 'form-group col-md-1'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'separator12',
+            'type' => 'custom_html',
+            'value' => '<h4>Շենք/Բնակարան</h4>',
+            'tab' => 'Հիմնական',
+        ]);
+
+
+//        CRUD::addField([
+//            'name' => 'building_structure_type',
+//            'type' => "relationship",
+//            'attribute' => "name_arm",
+//            'label' => "Շենքի կառուցվածք",
+//            'placeholder' => '-Ընտրել մեկը-',
+//            'tab' => 'Հիմնական',
+//            'wrapper' => [
+//                'class' => 'form-group col-md-3'
+//            ],
+//        ]);
+//
+//        CRUD::addField([
+//            'name' => 'building_floor_type',
+//            'type' => "relationship",
+//            'attribute' => "name_arm",
+//            'label' => "Արտաքին պատեր",
+//            'tab' => 'Հիմնական',
+//            'placeholder' => '-Ընտրել մեկը-',
+//            'wrapper' => [
+//                'class' => 'form-group col-md-3'
+//            ],
+//        ]);
+//
+//        CRUD::addField([
+//            'name' => 'building_project_type',
+//            'type' => "relationship",
+//            'attribute' => "name_arm",
+//            'label' => "Արտաքին պատեր",
+//            'tab' => 'Հիմնական',
+//            'placeholder' => '-Ընտրել մեկը-',
+//            'wrapper' => [
+//                'class' => 'form-group col-md-3'
+//            ],
+//        ]);
+
+
+        /*Apartment building attribute*/
+
+        $building_attributes = [
+            'building_structure_type',
+            'building_type',
+            'building_project_type',
+            'building_floor_type',
+            'exterior_design_type',
+//            'communication_type',
+            'courtyard_improvement',
+            'distance_public_objects',
+            'elevator_type',
+            'year',
+            'parking_type',
+            'entrance_type',
+            'entrance_door_position',
+            'entrance_door_type',
+            'windows_view',
+            'building_window_count',
+            'repairing_type',
+            'heating_system_type',
+            'service_fee_type',
+//            'fence_type',
+//            'front_with_street',
+//            'house_building_type',
+//            'house_floors_type',
+//            'land_structure_type',
+//            'land_type',
+//            'land_use_type',
+//            'parking_type',
+//            'registered_right',
+//            'road_way_type',
+//            'roof_material_type',
+//            'roof_type',
+//            'separate_entrance_type',
+//            'vitrage_type',
+        ];
+
+        $addBuildingList = [];
+
+        foreach ($building_attributes as $buildingAttribute) {
+            $addBuildingList[] = [
+                'name' => $buildingAttribute,
+                'type' => 'relationship',
+                'attribute' => "name_arm",
+                'label' => trans('estate.' . $buildingAttribute),
+                'placeholder' => '-Ընտրել մեկը-',
+                'tab' => 'Հիմնական',
+                'wrapper' => [
+                    'class' => 'form-group col-md-3 apartment_building_attribute'
+                ],
+            ];
+        }
+
+
+        CRUD::addFields($addBuildingList);
+
+        CRUD::addField([
+            'name' => 'service_amount',
+            'type' => "number",
+            'label' => "Սպասարկման վճար",
+            'tab' => 'Հիմնական',
+            'wrapper' => [
+                'class' => 'form-group col-md-2 apartment_building_attribute'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'service_amount_currency',
+            'type' => "relationship",
+            'attribute' => "name_arm",
+            'label' => "<br/>",
+            'allows_null' => false,
+            'default' => 1,
+            'placeholder' => '-Ընտրել մեկը-',
+            'tab' => 'Հիմնական',
+            'wrapper' => [
+                'class' => 'form-group col-md-1 apartment_building_attribute'
+            ],
+        ]);
         CRUD::addField([
             'name' => 'separator1',
             'type' => 'custom_html',
@@ -305,62 +526,65 @@ class EstateCrudController extends CrudController
                 'class' => 'form-group col-md-12'
             ],
         ]);
-
         CRUD::addField([
             'name' => 'separator',
             'type' => 'custom_html',
-            'value' => '<h2>Կոմունալ հարմարություններ</h2>',
+            'value' => '<h4>Կոմունալ հարմարություններ</h4>',
             'tab' => 'Հիմնական',
             'wrapper' => [
                 'class' => 'form-group col-md-12'
             ],
         ]);
 
+
         $featuresList = [
-            'balcony',
-            'cable_tv',
-            'cellar',
-            'conditioner',
-            'dish_washer',
-            'exclusive_design',
-            'furniture',
-            'garage',
-            'gas_heater',
-            'gas_possibility',
-            'heating_ground',
-            'has_intercom',
-            'internet',
-            'jacuzzi',
-            'kitchen_furniture',
-            'laminat',
-            'land',
-            'natural_gas',
-            'new_water_tubes',
-            'new_wiring',
-            'niche',
-            'open_balcony',
-            'oriel',
-            'pantry',
-            'parquet',
-            'persistent_water',
-            'possible_extension',
-            'refrigirator',
-            'satellite_tv',
-            'separate_room',
-            'tv',
-            'washer',
-            'intercom',
-            'expanding_possible',
-            'new_construction',
-            'apartment_construction',
-            'sunny',
-            'new_bathroom',
-            'new_doors',
-            'new_floor',
-            'new_roof',
-            'new_windows'
+            "new_construction",
+            "apartment_construction",
+            "exclusive_design",
+            "has_possible_extension",
+            "new_roof",
+            "has_separate_room",
+            "has_balcony",
+            "oriel",
+            "open_balcony",
+            "un_inhabited",
+            "new_water_tubes",
+            "new_wiring",
+            "new_windows",
+            "new_doors",
+            "new_floor",
+            "has_laminat",
+            "parquet",
+            "heating_ground",
+            "new_bathroom",
+            "has_jucuzzi",
+            "persistent_water",
+            "natural_gas",
+            "gas_heater",
+            "has_refrigerator",
+            "has_washer",
+            "has_dishwasher",
+            "has_tv",
+            "has_conditioner",
+            "cable_tv",
+            "internet",
+            "kitchen_furniture",
+            "furniture",
+            "has_pantry",
+            "has_niche",
+            "has_cellar",
+            "has_garage",
+            "has_land",
+            "has_intercom",
+            "sunny",
+            "basement",
+            "duplex",
+            "mansard_floor",
+            "as_commercial",
+            "can_be_exchanged"
         ];
         $addFeaturesList = [];
+
 
         foreach ($featuresList as $feature) {
             $addFeaturesList[] = [
@@ -377,15 +601,19 @@ class EstateCrudController extends CrudController
 
         CRUD::addFields($addFeaturesList);
 
-
         CRUD::addField([
-            'name' => 'separator',
-            'type' => 'custom_html',
-            'value' => '<h2>Կոմունալ հարմարություններ</h2>',
-            'tab' => 'Հիմնական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
+            'name' => 'location',
+            'label' => 'Տեղը քարտեզի վրա',
+            'type' => 'google_map',
+            'tab' => 'Քարտեզ',
+            'value' => '{"lat":40.179674748428745,"lng":44.504069898889185}',
+            // optionals
+            'map_options' => [
+                'default_lat' => 40.1783632,
+                'default_lng' => 44.51106509999999,
+                'locate' => false,
+                'height' => 400,
+            ]
         ]);
 
 
@@ -404,16 +632,80 @@ class EstateCrudController extends CrudController
     }
 
 
-    public
-    function fetchContact()
+    public function fetchSeller()
     {
         return $this->fetch([
             'model' => Contact::class,
-            'searchable_attributes' => ['name_arm', 'last_name_arm'],
-            'paginate' => 10, // items to show per page
+            'searchable_attributes' => ['name_arm', 'name_eng'],
+            'paginate' => 30, // items to show per page
             'searchOperator' => 'LIKE',
             'query' => function ($model) {
-                return $model->where('contact_type_id', '=', 3);
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`) LIKE "%' . $search . '%"');
+                } else {
+                    return $model->where('contract_type_id', '=', 1);
+                }
+            }
+        ]);
+    }
+
+    public function fetchLocationCity()
+    {
+        return $this->fetch([
+            'model' => CLocationCity::class,
+            'searchable_attributes' => [],
+            'paginate' => 30, // items to show per page
+            'searchOperator' => 'LIKE',
+            'query' => function ($model) {
+                $params = collect(request()->input('form'))->pluck('value', 'name');
+                $provinceId = $params['location_province'];
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->where('parent_id', '=', $provinceId)->whereRaw('CONCAT(`name_eng`," ",`name_arm`) LIKE "%' . $search . '%"');
+                } else {
+                    return $model->where('parent_id', '=', $provinceId);
+                }
+            }
+        ]);
+    }
+
+    public function fetchLocationCommunity()
+    {
+        return $this->fetch([
+            'model' => CLocationCommunity::class,
+            'searchable_attributes' => [],
+            'paginate' => 30, // items to show per page
+            'searchOperator' => 'LIKE',
+            'query' => function ($model) {
+                $params = collect(request()->input('form'))->pluck('value', 'name');
+                $provinceId = $params['location_province'];
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->where('parent_id', '=', $provinceId)->whereRaw('CONCAT(`name_eng`," ",`name_arm`) LIKE "%' . $search . '%"');
+                } else {
+                    return $model->where('parent_id', '=', $provinceId);
+                }
+            }
+        ]);
+    }
+
+    public function fetchLocationStreet()
+    {
+        return $this->fetch([
+            'model' => CLocationStreet::class,
+            'searchable_attributes' => [],
+            'paginate' => 30, // items to show per page
+            'searchOperator' => 'LIKE',
+            'query' => function ($model) {
+                $params = collect(request()->input('form'))->pluck('value', 'name');
+                $provinceId = $params['location_province'];
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->where('parent_id', '=', $provinceId)->whereRaw('CONCAT(`name_eng`," ",`name_arm`) LIKE "%' . $search . '%"');
+                } else {
+                    return $model->where('parent_id', '=', $provinceId);
+                }
             }
         ]);
     }
@@ -756,4 +1048,6 @@ class EstateCrudController extends CrudController
         ]);
 
     }
+
+
 }

@@ -6,6 +6,9 @@ table {
     display: none !important;
 }
 
+.tab-content .tab-pane {
+    padding: 2rem !important;
+}
 
 #crudTable_wrapper #crudTable td, #crudTable_wrapper #crudTable th, #crudTable_wrapper table.dataTable td, #crudTable_wrapper table.dataTable th {
     max-width: 100px;
@@ -64,4 +67,13 @@ table {
 
 .sidebar.sidebar-pills .nav-link, .sidebar.sidebar-pills .nav-title {
     font-size: 13px !important;
+}
+
+
+/*Estate create form overrides*/
+
+.apartment_building_attribute label {
+    font-size: 12px;
+    color: #888 !important;
+    margin-top: 16px;
 }

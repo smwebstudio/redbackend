@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\EstateDocumentUploaded;
 use App\Models\Estate;
 use App\Services\FileService;
 
@@ -19,6 +20,13 @@ class EstateObserver
         $this->fileService = $fileService;
     }
 
+    /**
+     * Handle the Estate "creating" event.
+     */
+    public function creating(Estate $estate): void
+    {
+       dd(request()->input('estateDocuments'), $estate);
+    }
 
 
     /**
@@ -26,7 +34,9 @@ class EstateObserver
      */
     public function created(Estate $estate): void
     {
-        //
+        $estate->name_arm = 'name arm';
+
+        $estate->save();
     }
 
     /**
@@ -63,13 +73,12 @@ class EstateObserver
 
     public function saved(Estate $estate)
     {
-        $patientId = $estate->patient_id;
-        $finalPath = "/patient/$patientId/records/$estate->id";
+        $finalPath = "/estate/photos/records/$estate->id";
         if (request()->has('files')) {
             $files = request()->input('files');
 
             if ($files) {
-                event(new RecordFileUploaded(
+                event(new EstateDocumentUploaded(
                         finalPath: $finalPath,
                         files: $files,
                         model: $estate->withoutGlobalScopes()->where('id', $estate->id)->first(),

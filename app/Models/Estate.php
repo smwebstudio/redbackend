@@ -250,34 +250,34 @@ class Estate extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'id' => 'int',
-		'location_country_id' => 'int',
-		'location_province_id' => 'int',
-		'location_city_id' => 'int',
-		'location_community_id' => 'int',
-		'location_street_id' => 'int',
-		'estate_type_id' => 'int',
+		'id' => 'integer',
+		'location_country_id' => 'integer',
+		'location_province_id' => 'integer',
+		'location_city_id' => 'integer',
+		'location_community_id' => 'integer',
+		'location_street_id' => 'integer',
+		'estate_type_id' => 'integer',
 		'area_total' => 'float',
 		'old_price' => 'float',
 		'price' => 'float',
-		'currency_id' => 'int',
-		'seller_id' => 'int',
+		'currency_id' => 'integer',
+		'seller_id' => 'integer',
 		'area_residential' => 'float',
-		'registered_right_id' => 'int',
-		'repairing_type_id' => 'int',
-		'room_count' => 'int',
-		'building_type_id' => 'int',
-		'building_project_type_id' => 'int',
+		'registered_right_id' => 'integer',
+		'repairing_type_id' => 'integer',
+		'room_count' => 'integer',
+		'building_type_id' => 'integer',
+		'building_project_type_id' => 'integer',
 		'conditioner' => 'bool',
-		'room_count_modified' => 'int',
-		'exterior_design_type_id' => 'int',
-		'elevator_type_id' => 'int',
-		'year_id' => 'int',
-		'heating_system_type_id' => 'int',
-		'parking_type_id' => 'int',
-		'service_fee_type_id' => 'int',
+		'room_count_modified' => 'integer',
+		'exterior_design_type_id' => 'integer',
+		'elevator_type_id' => 'integer',
+		'year_id' => 'integer',
+		'heating_system_type_id' => 'integer',
+		'parking_type_id' => 'integer',
+		'service_fee_type_id' => 'integer',
 		'service_amount' => 'float',
-		'service_amount_currency_id' => 'int',
+		'service_amount_currency_id' => 'integer',
 		'furniture' => 'bool',
 		'kitchen_furniture' => 'bool',
 		'gas_heater' => 'bool',
@@ -299,28 +299,28 @@ class Estate extends Model
 		'parquet' => 'bool',
 		'laminat' => 'bool',
 		'equipped' => 'bool',
-		'roof_type_id' => 'int',
-		'floor_count_id' => 'int',
-		'house_building_type_id' => 'int',
+		'roof_type_id' => 'integer',
+		'floor_count_id' => 'integer',
+		'house_building_type_id' => 'integer',
 		'roof_repaired' => 'bool',
-		'roof_material_type_id' => 'int',
-		'fence_type_id' => 'int',
-		'communication_type_id' => 'int',
-		'front_with_street_id' => 'int',
-		'road_way_type_id' => 'int',
-		'commercial_purpose_type_id' => 'int',
-		'communication_id' => 'int',
-		'land_structure_type_id' => 'int',
-		'land_type_id' => 'int',
-		'land_use_type_id' => 'int',
+		'roof_material_type_id' => 'integer',
+		'fence_type_id' => 'integer',
+		'communication_type_id' => 'integer',
+		'front_with_street_id' => 'integer',
+		'road_way_type_id' => 'integer',
+		'commercial_purpose_type_id' => 'integer',
+		'communication_id' => 'integer',
+		'land_structure_type_id' => 'integer',
+		'land_type_id' => 'integer',
+		'land_use_type_id' => 'integer',
 		'front_length' => 'float',
-		'version' => 'int',
-		'contract_type_id' => 'int',
-		'entrance_door_type_id' => 'int',
-		'entrance_door_position_id' => 'int',
-		'windows_view_id' => 'int',
-		'building_floor_count' => 'int',
-		'house_floors_type_id' => 'int',
+		'version' => 'integer',
+		'contract_type_id' => 'integer',
+		'entrance_door_type_id' => 'integer',
+		'entrance_door_position_id' => 'integer',
+		'windows_view_id' => 'integer',
+		'building_floor_count' => 'integer',
+		'house_floors_type_id' => 'integer',
 		'roof_drainage' => 'bool',
 		'new_doors' => 'bool',
 		'new_windows' => 'bool',
@@ -329,18 +329,18 @@ class Estate extends Model
 		'new_roof' => 'bool',
 		'can_be_used_as_commercial' => 'bool',
 		'is_published' => 'bool',
-		'estate_status_id' => 'int',
-		'status_id_before_archive' => 'int',
-		'buyer_id' => 'int',
-		'agent_id' => 'int',
+		'estate_status_id' => 'integer',
+		'status_id_before_archive' => 'integer',
+		'buyer_id' => 'integer',
+		'agent_id' => 'integer',
 		'selling_price_init' => 'float',
 		'selling_price_final' => 'float',
-		'selling_price_final_currency_id' => 'int',
-		'selling_price_init_currency_id' => 'int',
+		'selling_price_final_currency_id' => 'integer',
+		'selling_price_init_currency_id' => 'integer',
 		'new_construction' => 'bool',
-		'floor' => 'int',
-		'last_modified_by' => 'int',
-		'created_by' => 'int',
+		'floor' => 'integer',
+		'last_modified_by' => 'integer',
+		'created_by' => 'integer',
 		'garage' => 'bool',
 		'cellar' => 'bool',
 		'land' => 'bool',
@@ -359,18 +359,18 @@ class Estate extends Model
 		'hot_water' => 'bool',
 		'washer' => 'bool',
 		'dish_washer' => 'bool',
-		'property_agent_id' => 'int',
-		'ceiling_height_type_id' => 'int',
-		'building_structure_type_id' => 'int',
-		'building_floor_type_id' => 'int',
-		'vitrage_type_id' => 'int',
-		'separate_entrance_type_id' => 'int',
-		'filled_by' => 'int',
-		'verified_by' => 'int',
-		'entrance_type_id' => 'int',
+		'property_agent_id' => 'integer',
+		'ceiling_height_type_id' => 'integer',
+		'building_structure_type_id' => 'integer',
+		'building_floor_type_id' => 'integer',
+		'vitrage_type_id' => 'integer',
+		'separate_entrance_type_id' => 'integer',
+		'filled_by' => 'integer',
+		'verified_by' => 'integer',
+		'entrance_type_id' => 'integer',
 		'has_neighbour' => 'bool',
 		'is_advertised' => 'bool',
-		'info_source_id' => 'int',
+		'info_source_id' => 'integer',
 		'price_usd' => 'float',
 		'estate_latitude' => 'float',
 		'estate_longitude' => 'float',
@@ -381,17 +381,17 @@ class Estate extends Model
 		'is_mansard_floor' => 'bool',
 		'is_duplex' => 'bool',
 		'is_basement' => 'bool',
-		'visits_count' => 'int',
+		'visits_count' => 'integer',
 		'is_from_public' => 'bool',
 		'is_hot_offer' => 'bool',
 		'is_on_main_page' => 'bool',
 		'is_separate_building' => 'bool',
 		'is_estate_commercial_land' => 'bool',
-		'courtyard_improvement_id' => 'int',
-		'distance_public_objects_id' => 'int',
-		'building_window_count_id' => 'int',
-		'temporary_agent_id' => 'int',
-		'temporary_visits_count' => 'int',
+		'courtyard_improvement_id' => 'integer',
+		'distance_public_objects_id' => 'integer',
+		'building_window_count_id' => 'integer',
+		'temporary_agent_id' => 'integer',
+		'temporary_visits_count' => 'integer',
 		'apartment_construction' => 'bool',
 		'is_public_text_generation' => 'bool'
 	];
@@ -704,6 +704,11 @@ class Estate extends Model
 		return $this->belongsTo(CServiceFeeType::class, 'service_fee_type_id');
 	}
 
+    public function service_amount_currency()
+	{
+		return $this->belongsTo(CCurrency::class, 'service_amount_currency_id');
+	}
+
 	public function year()
 	{
 		return $this->belongsTo(CYear::class, 'year_id');
@@ -713,6 +718,11 @@ class Estate extends Model
 	{
 		return $this->belongsTo(Contact::class, 'seller_id');
 	}
+
+    public function seller()
+    {
+        return $this->belongsTo(Contact::class, 'seller_id');
+    }
 
 	public function currency()
 	{
@@ -806,7 +816,12 @@ class Estate extends Model
 
 	public function land_type()
 	{
-		return $this->belongsTo(EstateOptionType::class, 'land_type_id');
+		return $this->belongsTo(CLandType::class, 'land_type_id');
+	}
+
+    public function land_use_type()
+	{
+		return $this->belongsTo(CLandUseType::class, 'land_use_type_id');
 	}
 
     public function contract_type()
@@ -822,6 +837,46 @@ class Estate extends Model
     public function building_project_type()
     {
         return $this->belongsTo(CBuildingProjectType::class, 'building_project_type_id');
+    }
+
+    public function courtyard_improvement()
+    {
+        return $this->belongsTo(CCourtyardImprovement::class, 'courtyard_improvement_id');
+    }
+
+    public function separate_entrance_type()
+    {
+        return $this->belongsTo(CSeparateEntranceType::class, 'separate_entrance_type_id');
+    }
+
+    public function vitrage_type()
+    {
+        return $this->belongsTo(CVitrageType::class, 'vitrage_type_id');
+    }
+
+    public function windows_view()
+    {
+        return $this->belongsTo(CWindowsView::class, 'windows_view_id');
+    }
+
+    public function building_window_count()
+    {
+        return $this->belongsTo(CBuildingWindowCount::class, 'building_window_count_id');
+    }
+
+    public function house_floors_type()
+    {
+        return $this->belongsTo(CHouseFloorsType::class, 'house_floors_type_id');
+    }
+
+    public function entrance_type()
+    {
+        return $this->belongsTo(CEntranceType::class, 'entrance_type_id');
+    }
+
+    public function entrance_door_type()
+    {
+        return $this->belongsTo(CEntranceDoorType::class, 'entrance_door_type_id');
     }
 
     public function estateDocuments()

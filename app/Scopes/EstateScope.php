@@ -17,12 +17,12 @@ class EstateScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $user = backpack_user();
-        $builder->where('main_image_file_path', 'IS NOT', NULL)->where('main_image_file_path_thumb', 'IS NOT', NULL);
-
-        if(!$user) {
-            $builder->whereIn('estate_status_id', [2,3,4]);
-        }
+//        $user = backpack_user();
+//        $builder->where('main_image_file_path', 'IS NOT', NULL)->where('main_image_file_path_thumb', 'IS NOT', NULL);
+//
+//        if(!$user) {
+//            $builder->whereIn('estate_status_id', [2,3,4]);
+//        }
     }
 
 }
