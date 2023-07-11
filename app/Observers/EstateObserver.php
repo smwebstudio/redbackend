@@ -25,7 +25,7 @@ class EstateObserver
      */
     public function creating(Estate $estate): void
     {
-       dd(request()->input('estateDocuments'), $estate);
+//       dd(request()->input('estateDocuments'), $estate);
     }
 
 
@@ -34,9 +34,49 @@ class EstateObserver
      */
     public function created(Estate $estate): void
     {
-        $estate->name_arm = 'name arm';
+        $code = 0;
+        if($estate->contract_type !=null){
+            $code .= $estate->contract_type->id;
+        }else{
+            $code .= "-";
+        }
+        if($estate->estate_type !=null){
+            $code .= $estate->estate_type->id;
+        }else{
+            $code .= "-";
+        }
+
+
+        $estate->code = $code.'-'.$estate->id;
 
         $estate->save();
+    }
+
+    /**
+     * Handle the Estate "updating" event.
+     */
+    public function updating(Estate $estate): void
+    {
+        $code = '';
+        if($estate->contract_type !=null){
+            $code .= $estate->contract_type->id === 1 ? 0 : 1 ;
+        }else{
+            $code .= "-";
+        }
+        if($estate->estate_type !=null){
+            $code .= $estate->estate_type->id;
+        }else{
+            $code .= "-";
+        }
+
+        if ($estate->room_count != null && $estate->room_count != 0) {
+            $code .= $estate->room_count;
+        } else {
+            $code .= "-";
+        }
+
+
+        $estate->code = $code.'-'.$estate->id;
     }
 
     /**
@@ -44,7 +84,26 @@ class EstateObserver
      */
     public function updated(Estate $estate): void
     {
-        //
+        $code = '';
+        if($estate->contract_type !=null){
+            $code .= $estate->contract_type->id === 1 ? 0 : 1 ;
+        }else{
+            $code .= "-";
+        }
+        if($estate->estate_type !=null){
+            $code .= $estate->estate_type->id;
+        }else{
+            $code .= "-";
+        }
+
+        if ($estate->room_count != null && $estate->room_count != 0) {
+            $code .= $estate->room_count;
+        } else {
+            $code .= "-";
+        }
+
+
+        $estate->code = $code.'-'.$estate->id;
     }
 
     /**
@@ -73,20 +132,24 @@ class EstateObserver
 
     public function saved(Estate $estate)
     {
-        $finalPath = "/estate/photos/records/$estate->id";
-        if (request()->has('files')) {
-            $files = request()->input('files');
 
-            if ($files) {
-                event(new EstateDocumentUploaded(
-                        finalPath: $finalPath,
-                        files: $files,
-                        model: $estate->withoutGlobalScopes()->where('id', $estate->id)->first(),
-                        fileService: $this->fileService
-                    )
-                );
-            }
-        }
+
+
+
+//        $finalPath = "/estate/photos/records/$estate->id";
+//        if (request()->has('files')) {
+//            $files = request()->input('files');
+//
+//            if ($files) {
+//                event(new EstateDocumentUploaded(
+//                        finalPath: $finalPath,
+//                        files: $files,
+//                        model: $estate->withoutGlobalScopes()->where('id', $estate->id)->first(),
+//                        fileService: $this->fileService
+//                    )
+//                );
+//            }
+//        }
 
 
     }

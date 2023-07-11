@@ -200,23 +200,35 @@ class EstateCrudController extends CrudController
         CRUD::setValidation(EstateRequest::class);
         Widget::add()->type('script')->content('assets/js/admin/forms/estate.js');
 
-        CRUD::addField([
-            'name' => 'estateDocuments',
-            'label' => 'Photos',
-            'type' => "dropzone",
-            'configuration' => [
-                'parallelUploads' => 2,
-            ],
-            'withFiles' => ([
-                'disk' => 'S3Public', // the disk where file will be stored
-                'path' => 'uploads', // the path inside the disk where file will be stored
-            ]),
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-            'tab' => 'Նկարներ',
+//        CRUD::addField([
+//            'name' => 'estateDocuments',
+//            'label' => 'Photos',
+//            'type' => "dropzone",
+//            'configuration' => [
+//                'parallelUploads' => 2,
+//            ],
+//            'withFiles' => ([
+//                'disk' => 'S3Public', // the disk where file will be stored
+//                'path' => 'uploads', // the path inside the disk where file will be stored
+//            ]),
+//            'wrapper' => [
+//                'class' => 'form-group col-md-12'
+//            ],
+//            'tab' => 'Նկարներ',
+//
+//        ]);
 
+        CRUD::addField([
+            'name' => 'estate_type',
+            'type' => "relationship",
+            'attribute' => "name_arm",
+            'label' => "Գույքի տեսակ",
+            'placeholder' => '-Ընտրել մեկը-',
+            'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
         ]);
+
 
         CRUD::addField([
             'name' => 'contract_type',
@@ -614,6 +626,29 @@ class EstateCrudController extends CrudController
                 'locate' => false,
                 'height' => 400,
             ]
+        ]);
+
+
+        CRUD::addField([
+            'name' => 'name_arm',
+            'type' => "textarea",
+            'row' => 12,
+            'label' => "Մասնագիտական կարծիք, Վերլուծություն",
+            'tab' => 'Մասնագիտական',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'comment_arm',
+            'type' => "textarea",
+            'row' => 12,
+            'label' => "Այլ նոթեր",
+            'tab' => 'Մասնագիտական',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
         ]);
 
 
