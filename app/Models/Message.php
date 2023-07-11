@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,6 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Message extends Model
 {
+    use CrudTrait;
 	protected $table = 'message';
 	public $incrementing = false;
 	public $timestamps = false;
@@ -78,5 +80,10 @@ class Message extends Model
     public function messageServiceName()
     {
         return $this->belongsTo(CServiceType::class, 'service_id');
+    }
+
+    public function recipient()
+    {
+        return $this->belongsTo(RealtorUser::class, 'recipient_id');
     }
 }

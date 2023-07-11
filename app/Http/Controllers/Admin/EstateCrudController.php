@@ -14,6 +14,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
 use Backpack\Pro\Http\Controllers\Operations\FetchOperation;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 /**
  * Class EstateCrudController
@@ -29,7 +30,7 @@ class EstateCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\Pro\Http\Controllers\Operations\DropzoneOperation;
     use FetchOperation;
-
+    use AuthorizesRequests;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -45,8 +46,8 @@ class EstateCrudController extends CrudController
 
     protected function setupShowOperation()
     {
+        $this->authorize('create', Estate::class);
         CRUD::setShowView('redg.estate.show');
-
         Widget::add()->type('script')
             ->content('https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js')
             ->crossorigin('anonymous');
@@ -218,6 +219,7 @@ class EstateCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $this->authorize('create', Estate::class);
         CRUD::setValidation(EstateRequest::class);
         Widget::add()->type('script')->content('assets/js/admin/forms/estate.js');
 

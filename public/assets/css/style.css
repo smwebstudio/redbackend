@@ -1,3 +1,12 @@
+.app-header.bg-light .navbar-brand {
+    color: #73818f;
+    font-size: 1.4rem;
+    justify-content: left;
+    opacity: 1 !important;
+    padding: 0 2.25rem;
+    width: 250px;
+}
+
 table {
     font-size:0.9rem;
 }

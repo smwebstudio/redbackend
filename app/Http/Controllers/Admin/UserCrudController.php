@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\UserRequest;
+use App\Models\CLocationCountry;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 /**
  * Class UserCrudController
@@ -18,6 +20,7 @@ class UserCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use AuthorizesRequests;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -28,7 +31,7 @@ class UserCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\User::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/user');
-        CRUD::setEntityNameStrings('user', 'users');
+        CRUD::setEntityNameStrings('օգտատեր', 'օգտատեր');
     }
 
     /**
@@ -42,6 +45,8 @@ class UserCrudController extends CrudController
         CRUD::column('id');
         CRUD::column('name');
         CRUD::column('email');
+        CRUD::column('updated_at');
+        CRUD::column('created_at');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -58,6 +63,7 @@ class UserCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $this->authorize('create', CLocationCountry::class);
         CRUD::setValidation(UserRequest::class);
 
         CRUD::field('name');

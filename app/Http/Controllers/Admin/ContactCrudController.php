@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ContactRequest;
+use App\Models\Contact;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 /**
  * Class ContactCrudController
@@ -18,7 +20,7 @@ class ContactCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-
+    use AuthorizesRequests;
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -29,7 +31,7 @@ class ContactCrudController extends CrudController
         CRUD::setModel(\App\Models\Contact::class);
         $this->crud->addClause('where', 'contact_type_id', '!=', 6);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/contact');
-        CRUD::setEntityNameStrings('contact', 'contacts');
+        CRUD::setEntityNameStrings('կոնտակտ', 'կոնտակտներ');
     }
 
     /**
@@ -54,20 +56,38 @@ class ContactCrudController extends CrudController
                 return $query->orderBy('contact_type_id', $columnDirection);
             }
         ]);
-        CRUD::column('phone_mobile_1');
-        CRUD::column('last_modified_on');
-        CRUD::column('created_on');
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
+        CRUD::addColumn([
+            'name' => 'phone_mobile_1',
+            'type' => "text",
+            'label' => "Հեռախոս",
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'email',
+            'type' => "text",
+            'label' => "Էլ․ հասցե",
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'created_on',
+            'type' => "text",
+            'label' => "Ստեղծված",
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'last_modified_on',
+            'type' => "text",
+            'label' => "Թարմացված",
+        ]);
+
     }
 
 
     protected function setupShowOperation()
     {
+
+        $this->authorize('create', Contact::class);
         CRUD::addColumn([
             'name' => 'contactType',
             'type' => "relationship",
@@ -84,6 +104,8 @@ class ContactCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(ContactRequest::class);
+
+        $this->authorize('create', Contact::class);
 
         CRUD::field('is_deleted');
         CRUD::field('last_modified_on');

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\CLocationCountryRequest;
+use App\Models\CLocationCountry;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 /**
  * Class CLocationCountryCrudController
@@ -18,7 +20,7 @@ class CLocationCountryCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-
+    use AuthorizesRequests;
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -28,7 +30,7 @@ class CLocationCountryCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\CLocationCountry::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/c-location-country');
-        CRUD::setEntityNameStrings('Erkir', 'Erkrner');
+        CRUD::setEntityNameStrings('երկիր', 'երկրներ');
     }
 
     /**
@@ -39,18 +41,12 @@ class CLocationCountryCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('is_deleted');
-        CRUD::column('last_modified_on');
-        CRUD::column('version');
-        CRUD::column('sort_id');
+        CRUD::column('id');
         CRUD::column('name_arm');
         CRUD::column('name_eng');
         CRUD::column('name_ru');
-        CRUD::column('name_ar');
-        CRUD::column('last_modified_by');
-        CRUD::column('comment');
-        CRUD::column('created_by');
         CRUD::column('created_on');
+        CRUD::column('last_modified_on');
     }
 
     /**
@@ -61,6 +57,7 @@ class CLocationCountryCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $this->authorize('create', CLocationCountry::class);
         CRUD::setValidation(CLocationCountryRequest::class);
 
         CRUD::field('name_arm');
@@ -82,6 +79,11 @@ class CLocationCountryCrudController extends CrudController
      * @return void
      */
     protected function setupUpdateOperation()
+    {
+        $this->setupCreateOperation();
+    }
+
+    protected function setupShowOperation()
     {
         $this->setupCreateOperation();
     }

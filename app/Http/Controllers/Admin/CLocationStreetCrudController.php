@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\CLocationStreetRequest;
+use App\Models\Message;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 /**
  * Class CLocationStreetCrudController
@@ -18,6 +20,7 @@ class CLocationStreetCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use AuthorizesRequests;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -28,7 +31,7 @@ class CLocationStreetCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\CLocationStreet::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/c-location-street');
-        CRUD::setEntityNameStrings('c location street', 'c location streets');
+        CRUD::setEntityNameStrings('փողոց', 'փողոցներ');
     }
 
     /**
@@ -39,22 +42,12 @@ class CLocationStreetCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('is_deleted');
-        CRUD::column('last_modified_on');
-        CRUD::column('version');
-        CRUD::column('sort_id');
-        CRUD::column('parent_id');
+        CRUD::column('id');
         CRUD::column('name_arm');
         CRUD::column('name_eng');
         CRUD::column('name_ru');
-        CRUD::column('name_ar');
-        CRUD::column('last_modified_by');
-        CRUD::column('comment');
-        CRUD::column('created_by');
         CRUD::column('created_on');
-        CRUD::column('community_id');
-        CRUD::column('city_id');
-        CRUD::column('parent_is_community');
+        CRUD::column('last_modified_on');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -71,6 +64,7 @@ class CLocationStreetCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $this->authorize('create', Message::class);
         CRUD::setValidation(CLocationStreetRequest::class);
 
         CRUD::field('is_deleted');
@@ -112,6 +106,11 @@ class CLocationStreetCrudController extends CrudController
      * @return void
      */
     protected function setupUpdateOperation()
+    {
+        $this->setupCreateOperation();
+    }
+
+    protected function setupShowOperation()
     {
         $this->setupCreateOperation();
     }
