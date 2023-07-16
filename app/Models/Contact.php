@@ -201,7 +201,7 @@ class Contact extends Model
 		'viber',
 		'whatsapp'
 	];
-    protected $appends = ['fullName'];
+    protected $appends = ['fullName', 'fullContact'];
 
 
     public function user()

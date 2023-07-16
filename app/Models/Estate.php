@@ -8,6 +8,7 @@ namespace App\Models;
 
 use App\Scopes\EstateScope;
 use App\Traits\ApiMultiLanguage;
+use App\Traits\Models\CustomTimestamps;
 use App\Traits\Models\HasFilePath;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -246,8 +247,7 @@ class Estate extends Model
     use ApiMultiLanguage;
     use HasFilePath;
 	protected $table = 'estate';
-	public $incrementing = false;
-	public $timestamps = false;
+	public $incrementing = true;
 
 	protected $casts = [
 		'id' => 'integer',
@@ -729,6 +729,11 @@ class Estate extends Model
 		return $this->belongsTo(CCurrency::class, 'currency_id');
 	}
 
+    public function estate_status()
+	{
+		return $this->belongsTo(CEstateStatus::class, 'estate_status_id');
+	}
+
 	public function estate_type()
 	{
 		return $this->belongsTo(CEstateType::class, 'estate_type_id');
@@ -904,6 +909,11 @@ class Estate extends Model
     public function propertyAgent()
     {
         return $this->belongsTo(RealtorUser::class, 'property_agent_id');
+    }
+
+    public function infoSource()
+    {
+        return $this->belongsTo(Contact::class, 'info_source_id');
     }
 
     /*Methods*/
