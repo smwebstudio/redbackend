@@ -60,7 +60,7 @@
                             </h2>
                             <ul class="info-list">
 
-                                <li>{{ $estate->location_province->name_arm }}</li>
+                                <li>{{ $estate->location_province?->name_arm }}</li>
                             </ul>
                         </div>
                         <div class="main-container__main--actions-date">
@@ -87,7 +87,7 @@
                         <h3 class="block__item--title">Contacts</h3>
                         <div class="block__item--body">
                             <ul class="block__item--body__info-list">
-                                <li><strong>Տիպ:</strong> {{ $estate->contract_type->name_arm }}</li>
+                                <li><strong>Տիպ:</strong> {{ $estate->contract_type?->name_arm }}</li>
                                 <li><strong>visits count:</strong> {{ $estate->visits_count }}</li>
                                 <li><strong>Կոդ:</strong> {{ $estate->code }}</li>
                                 <li><strong>desc:</strong> {{ $estate->public_text_arm }}</li>
@@ -97,7 +97,7 @@
                                 <li><strong>Ընդհանուր մակերես:</strong> {{ $estate->area_total }}</li>
                                 <li><strong>1քմ արժեք:</strong> {{ $estate->price_per_square }}</li>
                                 <li><strong>Գին:</strong> {{ $estate->full_price }}</li>
-                                <li><strong>Առաստաղի բարձրություն:</strong> {{ $estate->ceiling_height_type->name_arm }}
+                                <li><strong>Առաստաղի բարձրություն:</strong> {{ $estate->ceiling_height_type?->name_arm }}
                                 </li>
                             </ul>
                         </div>
@@ -211,7 +211,7 @@
             opacity: 1;
         }
 
-       
+
 
 
     </style>

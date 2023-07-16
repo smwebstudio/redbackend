@@ -257,7 +257,7 @@ class EstateCrudController extends CrudController
             'wrapper' => [
                 'class' => 'form-group col-md-12'
             ],
-//            'tab' => 'Նկարներ',
+            'tab' => 'Նկարներ',
 
         ]);
         CRUD::addField([
@@ -271,7 +271,7 @@ class EstateCrudController extends CrudController
             ],
             'placeholder' => '-Ընտրել մեկը-',
             'wrapper' => [
-                'class' => 'form-group col-md-3'
+                'class' => 'form-group col-md-3 d-none'
             ],
         ]);
 

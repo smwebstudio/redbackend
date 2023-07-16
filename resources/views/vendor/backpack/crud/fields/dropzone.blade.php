@@ -70,9 +70,11 @@
     data-temp-upload-folder-name="{{ $temporaryDirectory }}"
     data-is-dropzone-active="{{ var_export(($disabled || $readonly) ? false : true) }}">
     <div class="dz-message">
-        <button class="dz-button" type="button">{!! trans('backpack/pro::dropzone.click_or_drop_files') !!}</button>
+        <button class="dz-button" type="button">Սեղմեք կամ քաշեք նկարներն այստեղ վերբեռնելու համար։</button>
     </div>
 </div>
+
+
 
 {{-- HINT --}}
 @if (isset($field['hint']))
@@ -89,9 +91,27 @@
 {{-- FIELD CSS - will be loaded in the after_styles section --}}
 @push('crud_fields_styles')
     {{-- include dropzone css --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/css/lightbox.min.css">
     @basset('https://www.unpkg.com/dropzone@6.0.0-beta.2/dist/dropzone.css')
     @bassetBlock('backpack/pro/fields/dropzone-field.css')
     <style>
+
+        .modal {
+            z-index: 1050; /* Increase the z-index value if necessary */
+            position: fixed;
+        }
+        .modal-backdrop {
+            display: none !important; /* Increase the z-index value if necessary */
+        }
+
+        .modal.show .modal-dialog {
+            position: fixed !important;
+            margin: 0px auto;
+            width: 800px;
+            left: 40%;
+            z-index: 1090;
+        }
 
         .dropzone {
             border: 1px solid rgba(0, 40, 100, 0.2);
@@ -108,6 +128,16 @@
 
         .dropzone .dz-preview {
             visibility: hidden;
+        }
+
+        .dropzone .dz-preview .dz-image {
+            border-radius: 20px;
+            overflow: hidden;
+            width: 200px;
+            height: 200px;
+            position: relative;
+            display: block;
+            z-index: 10;
         }
 
         .dropzone .dz-progress {
@@ -235,8 +265,6 @@
                     });
 
                     const serverFiles = dz.dataset.serverFiles;
-
-                    console.log(serverFiles)
 
                     if (!serverFiles) {
                         return;
@@ -407,9 +435,36 @@
 
                     let files = JSON.parse(serverFiles);
 
-                    files.forEach((file) => {
+
+                    let imageIndex = -1;
+                    files.forEach((file, index) => {
                         if (file.name == e.currentTarget.innerText) {
-                            window.open(file.url, '_blank');
+                            imageIndex = index;
+                            const lightboxImages = files.map((file) => file.url);
+
+                            // Create and show the Bootstrap modal
+                            const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+                            modal.show();
+
+                            // Set the current image in the modal
+                            const modalImage = document.getElementById('modalImage');
+                            modalImage.src = file.url;
+                            modalImage.alt = file.name;
+
+                            // Set the navigation controls
+                            const prevBtn = document.getElementById('prevBtn');
+                            const nextBtn = document.getElementById('nextBtn');
+                            prevBtn.addEventListener('click', function() {
+                                const prevIndex = (imageIndex - 1 + files.length) % files.length;
+                                modalImage.src = lightboxImages[prevIndex];
+                                modalImage.alt = files[prevIndex].name;
+                            });
+                            nextBtn.addEventListener('click', function() {
+                                const nextIndex = (imageIndex + 1) % files.length;
+                                console.log(nextIndex);
+                                modalImage.src = lightboxImages[nextIndex];
+                                modalImage.alt = files[nextIndex].name;
+                            });
                         }
                     });
                 });
@@ -424,3 +479,16 @@
 
 {{-- End of Extra CSS and JS --}}
 {{-- ########################################## --}}
+<div id="imageModal" class="modal fade" data-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img id="modalImage" src="" alt="" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button id="prevBtn" class="btn btn-secondary" type="button">&laquo; Previous</button>
+                <button id="nextBtn" class="btn btn-secondary" type="button">Next &raquo;</button>
+            </div>
+        </div>
+    </div>
+</div>
