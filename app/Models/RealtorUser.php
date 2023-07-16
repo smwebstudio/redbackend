@@ -145,7 +145,7 @@ class RealtorUser extends Model
 
     public function contact()
     {
-        return $this->belongsTo(Contact::class, 'id', 'contact_id');
+        return $this->hasOne(Contact::class, 'id', 'contact_id');
     }
 
     public function locationCommunities()
@@ -172,6 +172,17 @@ class RealtorUser extends Model
     public function getAverageRatingAttribute()
     {
         return ceil($this->messages->avg('overall_rating'));
+    }
+
+    public function getContactFullNameAttribute()
+    {
+
+        if ($this->contact) {
+
+            return $this->contact->full_name;
+        }
+
+        return null;
     }
 
     public function getStoragePathAttribute(): string

@@ -5,7 +5,7 @@
 	class="nav-item {{ Request::get($filter->name)?'active':'' }}">
     <a class=" btn mr-3" href=""
 		parameter="{{ $filter->name }}"
-    	>{{ $filter->label }}</a>
+    	><input type="checkbox" disabled /> {{ $filter->label }}</a>
   </li>
 
 
@@ -52,17 +52,19 @@
 				// mark this filter as active in the navbar-filters
 				if (URI(new_url).hasQuery('{{ $filter->name }}', true)) {
 					$("li[filter-key={{ $filter->key }}]").removeClass('active').addClass('active');
+					$("li[filter-key={{ $filter->key }}]").find('a input').prop('checked', true);
                     $('#remove_filters_button').removeClass('invisible');
 				}
 				else
 				{
 					$("li[filter-key={{ $filter->key }}]").trigger("filter:clear");
+                    $("li[filter-key={{ $filter->key }}]").find('a input').prop('checked', false);
 				}
 			});
 
 			// clear filter event (used here and by the Remove all filters button)
 			$("li[filter-key={{ $filter->key }}]").on('filter:clear', function(e) {
-
+                $("li[filter-key={{ $filter->key }}]").find('a input').prop('checked', false);
 				$("li[filter-key={{ $filter->key }}]").removeClass('active');
 			});
 		});

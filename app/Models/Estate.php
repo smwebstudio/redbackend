@@ -901,6 +901,11 @@ class Estate extends Model
         return $this->belongsTo(RealtorUser::class, 'agent_id');
     }
 
+    public function propertyAgent()
+    {
+        return $this->belongsTo(RealtorUser::class, 'property_agent_id');
+    }
+
     /*Methods*/
 
     public function getFullAddressAttribute(): ?string

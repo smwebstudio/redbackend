@@ -17,7 +17,7 @@
                         }
                     ?>
 					<div class="input-group">
-				        <input class="form-control pull-right from"
+				        <input class="form-control range-input pull-right from"
 				        		type="number"
 									@if($from)
 										value = "{{ $from }}"
@@ -28,7 +28,7 @@
 										placeholder = "min value"
 									@endif
 				        		>
-								<input class="form-control pull-right to"
+								<input class="form-control range-input pull-right to"
 				        		type="number"
 									@if($to)
 										value = "{{ $to }}"
@@ -86,8 +86,7 @@ END OF FILTER JAVSCRIPT CHECKLIST --}}
                 let filter_name_value = $("li[filter-key='{{ $filter->key }}']").find('.nav-link.dropdown-toggle');
                 let filter_name_origin_value = filter_name_value.text();
 
-
-
+                // console.log(from)
 
 				if (from || to) {
 					var range = {
