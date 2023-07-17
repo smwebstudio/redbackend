@@ -15,7 +15,9 @@ class EstateObserver
      */
     public function creating(Estate $estate): void
     {
-        $estate->public_text_arm = $this->setPublicTextGeneratorByApartment($estate);
+        if($estate->is_public_text_generation) {
+            $estate->public_text_arm = $this->setPublicTextGeneratorByApartment($estate);
+        }
     }
 
 
@@ -66,7 +68,9 @@ class EstateObserver
             $estate->estate_longitude = $location->lng;
         }
 
-        $estate->public_text_arm = $this->setPublicTextGeneratorByApartment($estate);
+        if($estate->is_public_text_generation) {
+            $estate->public_text_arm = $this->setPublicTextGeneratorByApartment($estate);
+        }
     }
 
     /**

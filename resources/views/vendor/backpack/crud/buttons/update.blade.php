@@ -1,8 +1,7 @@
 @if ($crud->hasAccess('update'))
 	@if (!$crud->model->translationEnabled())
-
 	{{-- Single edit button --}}
-	<a href="{{ url($crud->route.'/'.$entry->getKey().'/edit') }}" class="btn btn-sm btn-link"><i class="la la-edit"></i></a>
+	<a href="{{ url($crud->route.'/'.$entry->getKey().'/edit?estate_type_id='.$entry->estate_type_id) }}" class="btn btn-sm btn-link"><i class="la la-edit"></i></a>
 
 	@else
 

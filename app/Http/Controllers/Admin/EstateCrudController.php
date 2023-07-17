@@ -651,10 +651,46 @@ class EstateCrudController extends CrudController
         ]);
 
         CRUD::addField([
+            'name' => 'additional_info_arm',
+            'type' => "textarea",
+            'row' => 12,
+            'label' => "Ինչու ես ձեռք չէի բերի այս գույքը",
+            'tab' => 'Մասնագիտական',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+
+        CRUD::addField([
             'name' => 'comment_arm',
             'type' => "textarea",
             'row' => 12,
             'label' => "Այլ նոթեր",
+            'tab' => 'Մասնագիտական',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+
+        CRUD::addField([
+            'name' => 'is_public_text_generation',
+            'type' => "switch",
+            'label' => "Ավտո տեքստ",
+            'tab' => 'Մասնագիտական',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'public_text_arm',
+            'type' => "textarea",
+            'attributes' => [
+                'rows'    => 7,
+            ],
+            'label' => "Հայտարարության տեքստ (հայերեն)",
             'tab' => 'Մասնագիտական',
             'wrapper' => [
                 'class' => 'form-group col-md-12'
