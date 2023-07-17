@@ -1391,6 +1391,12 @@ class EstateCrudController extends CrudController
             });
 
 
+        $this->crud->addFilter([
+            'type' => 'divider',
+            'name' => 'divider_end_filters',
+        ]);
+
+
     }
 
 
