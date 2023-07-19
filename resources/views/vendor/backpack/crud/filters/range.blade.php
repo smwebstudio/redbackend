@@ -3,8 +3,7 @@
     filter-type="{{ $filter->type }}"
     filter-key="{{ $filter->key }}"
 	class="nav-item dropdown rangeFilterWrapper {{ Request::get($filter->name)?'active':'' }} col-{{ $filter->options['col']  ?? ''}}">
-    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ $filter->label }} <span class="caret"></span></a>
-    <div class="dropdown-menu p-0">
+
 
 			<div class="form-group backpack-filter mb-0">
 					<?php
@@ -17,6 +16,8 @@
                         }
                     ?>
 					<div class="input-group">
+
+                        <a href="#" class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ $filter->label }}</a>
 				        <input class="form-control range-input pull-right from"
 				        		type="number"
 									@if($from)
@@ -25,7 +26,7 @@
 									@if(array_key_exists('label_from', $filter->options))
 										placeholder = "{{ $filter->options['label_from'] }}"
 									@else
-										placeholder = "min value"
+										placeholder = "սկսած"
 									@endif
 				        		>
 								<input class="form-control range-input pull-right to"
@@ -36,7 +37,7 @@
 									@if(array_key_exists('label_to', $filter->options))
 										placeholder = "{{ $filter->options['label_to'] }}"
 									@else
-										placeholder = "max value"
+										placeholder = "մինչև"
 									@endif
 				        		>
 				        <div class="input-group-append range-filter-{{ $filter->key }}-clear-button">
@@ -44,7 +45,6 @@
 				        </div>
 				    </div>
 			</div>
-    </div>
   </li>
 
 

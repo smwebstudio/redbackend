@@ -35,8 +35,6 @@ class EstateDocument extends Model
     use HasFilePath;
 
 	protected $table = 'estate_document';
-	public $incrementing = false;
-	public $timestamps = false;
     protected string $identifiableAttribute = 'path';
 
 	protected $casts = [

@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CStructureType extends Model
 {
+    use CrudTrait;
 	protected $table = 'c_structure_type';
 	public $incrementing = false;
 	public $timestamps = false;

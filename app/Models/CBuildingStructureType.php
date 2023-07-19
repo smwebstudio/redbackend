@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use App\Traits\ApiMultiLanguage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CBuildingStructureType extends Model
 {
+    use CrudTrait;
 	protected $table = 'c_building_structure_type';
 	public $incrementing = false;
 	public $timestamps = false;

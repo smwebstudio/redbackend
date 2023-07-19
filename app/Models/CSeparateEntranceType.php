@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CSeparateEntranceType extends Model
 {
+    use CrudTrait;
 	protected $table = 'c_separate_entrance_type';
 	public $incrementing = false;
 	public $timestamps = false;

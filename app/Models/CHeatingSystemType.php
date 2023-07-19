@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use App\Traits\ApiMultiLanguage;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -35,6 +36,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CHeatingSystemType extends Model
 {
+    use CrudTrait;
 	protected $table = 'c_heating_system_type';
 	public $incrementing = false;
 	public $timestamps = false;

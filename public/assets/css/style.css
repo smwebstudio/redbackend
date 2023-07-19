@@ -69,6 +69,9 @@ main .header-operation h1 {
 
 .navbar-filters li.nav-item {
     margin: 0 15px !important;
+    display: flex;
+    justify-content: start;
+    align-items: end;
 }
 
 .navbar-filters li {

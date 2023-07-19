@@ -94,6 +94,7 @@
                                 <li><strong>Շենք:</strong> {{ $estate->address_building }}</li>
                                 <li><strong>Հարկ:</strong> {{ $estate->floor }}/{{ $estate->building_floor_count }}</li>
                                 <li><strong>Սենյակներ:</strong> {{ $estate->room_count }}</li>
+                                <li><strong>Սենյակներ mod:</strong> {{ $estate->room_count_modified }}</li>
                                 <li><strong>Ընդհանուր մակերես:</strong> {{ $estate->area_total }}</li>
                                 <li><strong>1քմ արժեք:</strong> {{ $estate->price_per_square }}</li>
                                 <li><strong>Գին:</strong> {{ $estate->full_price }}</li>

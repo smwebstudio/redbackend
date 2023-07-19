@@ -41,6 +41,7 @@
 					var new_url = URI(current_url).addQuery(parameter, true);
 				}
 
+
 				new_url = normalizeAmpersand(new_url.toString());
 
 				// replace the datatables ajax url with new_url and reload it
@@ -60,6 +61,10 @@
 					$("li[filter-key={{ $filter->key }}]").trigger("filter:clear");
                     $("li[filter-key={{ $filter->key }}]").find('a input').prop('checked', false);
 				}
+
+                if(parameter == 'extended_price' || parameter == 'extended_area') {
+                    location.reload()
+                }
 			});
 
 			// clear filter event (used here and by the Remove all filters button)

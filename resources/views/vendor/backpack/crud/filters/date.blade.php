@@ -6,7 +6,7 @@
 {{--	<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ $filter->label }} </a>--}}
 {{--	<div class="dropdown-menu p-0">--}}
 		<div class="form-group backpack-filter mb-0">
-            <p>{{ $filter->label }}</p>
+            <span>{{ $filter->label }}</span>
 			<div class="input-group date">
                 <span class="input-group-text"><i class="la la-calendar"></i> </span>
 		        <input class="form-control pull-right"

@@ -32,7 +32,6 @@ class RoleCrudController extends CrudController
         CRUD::setModel(\App\Models\Role::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/role');
         CRUD::setEntityNameStrings('role', 'roles');
-        $this->authorize('create', CLocationCountry::class);
     }
 
     /**
@@ -43,6 +42,7 @@ class RoleCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        CRUD::column('id');
         CRUD::column('name');
         CRUD::column('guard_name');
 

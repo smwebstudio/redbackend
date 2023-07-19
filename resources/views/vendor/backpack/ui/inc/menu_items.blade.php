@@ -37,15 +37,40 @@
 <li class="nav-item nav-dropdown mt-3">
     <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon las la-cogs"></i>Կարգավորումներ</a>
     <ul class="nav-dropdown-items">
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('permission-404') }}"><i class="nav-icon la la-cog"></i>Շենքի տեսակ</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('permission-404') }}"><i class="nav-icon la la-cog"></i>Շենքի նախագիծ</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('permission-404') }}"><i class="nav-icon la la-cog"></i>Բակի բարեկարգում</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('permission-404') }}"><i class="nav-icon la la-cog"></i>Ներքին հարդարում</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('permission-404') }}"><i class="nav-icon la la-cog"></i>Մակերես</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('permission-404') }}"><i class="nav-icon la la-cog"></i>Հեռ. հասարակ. օբյեկտներից</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('permission-404') }}"><i class="nav-icon la la-cog"></i>Շենքի</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('permission-404') }}"><i class="nav-icon la la-question"></i> Article types</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('permission-404') }}"><i class="nav-icon la la-question"></i> Estate option types</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('permission-404') }}"><i class="nav-icon la la-question"></i> C contact types</a></li>
+        <x-backpack::menu-item title="Years" icon="las la-cog" :link="backpack_url('c-year')" />
+        <x-backpack::menu-item title="Currencies" icon="las la-cog" :link="backpack_url('c-currency')" />
+        <x-backpack::menu-item title="Commercial purpose types" icon="las la-cog" :link="backpack_url('c-commercial-purpose-type')" />
+        <x-backpack::menu-item title="Land use types" icon="las la-cog" :link="backpack_url('c-land-use-type')" />
+        <x-backpack::menu-item title="Registered rights" icon="las la-cog" :link="backpack_url('c-registered-right')" />
+        <x-backpack::menu-item title="Communication types" icon="las la-cog" :link="backpack_url('c-communication-type')" />
+        <x-backpack::menu-item title="Building types" icon="las la-cog" :link="backpack_url('c-building-type')" />
+        <x-backpack::menu-item title="Elevator types" icon="las la-cog" :link="backpack_url('c-elevator-type')" />
+        <x-backpack::menu-item title="Entrance door positions" icon="las la-cog" :link="backpack_url('c-entrance-door-position')" />
+        <x-backpack::menu-item title="Entrance door types" icon="las la-cog" :link="backpack_url('c-entrance-door-type')" />
+        <x-backpack::menu-item title="Entrance types" icon="las la-cog" :link="backpack_url('c-entrance-type')" />
+        <x-backpack::menu-item title="Exterior design types" icon="las la-cog" :link="backpack_url('c-exterior-design-type')" />
+        <x-backpack::menu-item title="Fence types" icon="las la-cog" :link="backpack_url('c-fence-type')" />
+        <x-backpack::menu-item title="Front with streets" icon="las la-cog" :link="backpack_url('c-front-with-street')" />
+        <x-backpack::menu-item title="Heating system types" icon="las la-cog" :link="backpack_url('c-heating-system-type')" />
+        <x-backpack::menu-item title="House building types" icon="las la-cog" :link="backpack_url('c-house-building-type')" />
+        <x-backpack::menu-item title="Land structure types" icon="las la-cog" :link="backpack_url('c-land-structure-type')" />
+        <x-backpack::menu-item title="Land types" icon="las la-cog" :link="backpack_url('c-land-type')" />
+        <x-backpack::menu-item title="Parking types" icon="las la-cog" :link="backpack_url('c-parking-type')" />
+        <x-backpack::menu-item title="Repairing types" icon="las la-cog" :link="backpack_url('c-repairing-type')" />
+        <x-backpack::menu-item title="Road way types" icon="las la-cog" :link="backpack_url('c-road-way-type')" />
+        <x-backpack::menu-item title="Roof material types" icon="las la-cog" :link="backpack_url('c-roof-material-type')" />
+        <x-backpack::menu-item title="Roof types" icon="las la-cog" :link="backpack_url('c-roof-type')" />
+        <x-backpack::menu-item title="Service fee types" icon="las la-cog" :link="backpack_url('c-service-fee-type')" />
+        <x-backpack::menu-item title="Windows views" icon="las la-cog" :link="backpack_url('c-windows-view')" />
+        <x-backpack::menu-item title="House floors types" icon="las la-cog" :link="backpack_url('c-house-floors-type')" />
+        <x-backpack::menu-item title="Building project types" icon="las la-cog" :link="backpack_url('c-building-project-type')" />
+        <x-backpack::menu-item title="Structure types" icon="las la-cog" :link="backpack_url('c-structure-type')" />
+        <x-backpack::menu-item title="Ceiling height types" icon="las la-cog" :link="backpack_url('c-ceiling-height-type')" />
+        <x-backpack::menu-item title="Building structure types" icon="las la-cog" :link="backpack_url('c-building-structure-type')" />
+        <x-backpack::menu-item title="Building floor types" icon="las la-cog" :link="backpack_url('c-building-floor-type')" />
+        <x-backpack::menu-item title="Vitrage types" icon="las la-cog" :link="backpack_url('c-vitrage-type')" />
+        <x-backpack::menu-item title="Separate entrance types" icon="las la-cog" :link="backpack_url('c-separate-entrance-type')" />
     </ul>
 </li>
+
+

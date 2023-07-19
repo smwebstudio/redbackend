@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Events\EstateDocumentUploaded;
 use App\Models\Estate;
+use App\Models\EstateDocument;
 use App\Services\FileService;
 
 class EstateObserver
@@ -15,9 +16,7 @@ class EstateObserver
      */
     public function creating(Estate $estate): void
     {
-        if($estate->is_public_text_generation) {
-            $estate->public_text_arm = $this->setPublicTextGeneratorByApartment($estate);
-        }
+
     }
 
 
@@ -27,32 +26,17 @@ class EstateObserver
     public function created(Estate $estate): void
     {
 
-        $code = '';
-        if ($estate->contract_type_id != null) {
-            $code .= $estate->contract_type->id === 1 ? 0 : 1;
-        } else {
-            $code .= "-";
-        }
-        if ($estate->estate_type_id != null) {
-            $code .= $estate->estate_type_id;
-        } else {
-            $code .= "-";
+        if($estate->is_public_text_generation) {
+            $estate->public_text_arm = $this->setPublicTextGeneratorByApartment($estate);
         }
 
-        if ($estate->room_count != null && $estate->room_count != 0) {
-            $code .= $estate->room_count;
-        } else {
-            $code .= "-";
-        }
-
-        $estate->code = $code . '-' . $estate->id;
+        $estate->code = $this->setEstateCode($estate);
 
         if (!empty(request()->input('location'))) {
             $location = json_decode(request()->input('location'));
             $estate->estate_latitude = $location->lat;
             $estate->estate_longitude = $location->lng;
         }
-
         $estate->save();
 
     }
@@ -62,6 +46,9 @@ class EstateObserver
      */
     public function updating(Estate $estate): void
     {
+
+        $estate->code = $this->setEstateCode($estate);
+
         if (!empty(request()->input('location'))) {
             $location = json_decode(request()->input('location'));
             $estate->estate_latitude = $location->lat;
@@ -105,35 +92,47 @@ class EstateObserver
         //
     }
 
+    public function saving(Estate $estate)
+    {
+
+    }
+
     public function saved(Estate $estate)
     {
-        $code = '';
-        if ($estate->contract_type_id != null) {
-            $code .= $estate->contract_type->id === 1 ? 0 : 1;
-        } else {
-            $code .= "-";
+
+        $estatePhotos  = json_decode($estate->temporary_photos, true);
+
+        if (!empty($estatePhotos) && is_array($estatePhotos)) {
+
+            $existingPhotos = EstateDocument::where('estate_id', '=', $estate->id)->pluck('path')->toArray();
+            $uniqueFilenames = array_diff($estatePhotos, $existingPhotos);
+
+            $estateDocumentsData = [];
+
+            foreach ($estatePhotos as $photo) {
+                $filename = basename($photo);
+
+                if (in_array($photo, $uniqueFilenames)) {
+                    $estateDocumentsData[] = [
+                        'estate_id' => $estate->id,
+                        'path' => $photo,
+                        'path_thumb' => $photo,
+                        'file_name' => $filename,
+                        'is_public' => 1,
+                    ];
+                }
+
+            }
+            EstateDocument::upsert($estateDocumentsData, [
+                'estate_id',
+                'path',
+                'path_thumb',
+                'is_public'
+            ]);
+            EstateDocument::whereIn('path', array_diff($existingPhotos, $estatePhotos))->delete();
+
+
         }
-        if ($estate->estate_type_id != null) {
-            $code .= $estate->estate_type_id;
-        } else {
-            $code .= "-";
-        }
-
-        if ($estate->room_count != null && $estate->room_count != 0) {
-            $code .= $estate->room_count;
-        } else {
-            $code .= "-";
-        }
-
-
-        $estate->code = $code . '-' . $estate->id;
-
-        if (!empty(request()->input('location'))) {
-            $location = json_decode(request()->input('location'));
-            $estate->estate_latitude = $location->lat;
-            $estate->estate_longitude = $location->lng;
-        }
-
     }
 
 
@@ -315,5 +314,27 @@ class EstateObserver
 
             return $text;
         }
+    }
+
+    private function setEstateCode($estate) {
+        $code = '';
+        if ($estate->contract_type_id != null) {
+            $code .= $estate->contract_type->id === 1 ? 0 : 1;
+        } else {
+            $code .= "-";
+        }
+        if ($estate->estate_type_id != null) {
+            $code .= $estate->estate_type_id;
+        } else {
+            $code .= "-";
+        }
+
+        if ($estate->room_count != null && $estate->room_count != 0) {
+            $code .= $estate->room_count;
+        } else {
+            $code .= "-";
+        }
+
+        return $code . '-' . $estate->id;
     }
 }

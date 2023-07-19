@@ -123,7 +123,7 @@
                     // mark this filter as active in the navbar-filters
                     if (URI(new_url).hasQuery(filterName, true)) {
                         $("li[filter-key="+filterKey+"]").addClass('active');
-                        if($(this)[0].name == 'filter_locationProvince') {
+                        if($(this)[0].name == 'filter_locationProvince' || $(this)[0].name == 'filter_currency') {
                             location.reload()
                         }
                     }

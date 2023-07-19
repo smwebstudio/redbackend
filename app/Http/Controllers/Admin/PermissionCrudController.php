@@ -32,7 +32,6 @@ class PermissionCrudController extends CrudController
         CRUD::setModel(\App\Models\Permission::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/permission');
         CRUD::setEntityNameStrings('permission', 'permissions');
-        $this->authorize('create', CLocationCountry::class);
     }
 
     /**
@@ -64,7 +63,6 @@ class PermissionCrudController extends CrudController
         CRUD::setValidation(PermissionRequest::class);
 
         CRUD::field('name');
-        CRUD::field('guard_name');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
