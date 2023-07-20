@@ -11,10 +11,10 @@
                     <span data-value="create">Ստեղծել նոր</span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="bpSaveButtonsGroup">
-                        <li><a href="/admin/estate/create?estateType=1" class="dropdown-item" ><i class="las la-city"></i>Բնակարան</a></li>
-                        <li><a href="/admin/estate/create?estateType=2" class="dropdown-item" ><i class="las la-home"></i> Առանձնատուն</a></li>
-                        <li><a href="/admin/estate/create?estateType=3" class="dropdown-item" ><i class="las la-university"></i> Կոմերցիալ</a></li>
-                        <li><a href="/admin/estate/create?estateType=4" class="dropdown-item" ><i class="las la-mountain"></i>Հող</a></li>
+                        <li><a href="/admin/estate/create" class="dropdown-item" ><i class="las la-city"></i>Բնակարան</a></li>
+                        <li><a href="/admin/house/create" class="dropdown-item" ><i class="las la-home"></i> Առանձնատուն</a></li>
+                        <li><a href="/admin/commercial/create" class="dropdown-item" ><i class="las la-university"></i> Կոմերցիալ</a></li>
+                        <li><a href="/admin/land/create" class="dropdown-item" ><i class="las la-mountain"></i>Հող</a></li>
                 </ul>
             </div>
 

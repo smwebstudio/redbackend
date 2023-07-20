@@ -71,7 +71,7 @@ main .header-operation h1 {
     margin: 0 15px !important;
     display: flex;
     justify-content: start;
-    align-items: end;
+    align-items: center;
 }
 
 .navbar-filters li {
@@ -119,4 +119,42 @@ main .header-operation h1 {
 
 .range-input {
     min-width: 160px;
+}
+
+
+[bp-field-type="switch"] {
+    display: flex;
+    align-items: center;
+}
+
+.form-group {
+    margin-bottom: 0.5rem !important;
+}
+.create-crud .card  {
+    background: #EEEEEE;
+}
+
+.create-crud .tab-content  {
+    background: #f7f7f7;
+}
+
+.create-crud .form-group label {
+    margin-bottom: 0px; font-size: 12px;
+}
+
+.create-crud .separator{
+    margin-bottom: 0;
+    height: 10px;
+}
+
+
+#remove_filters_button {
+    background: #fff;
+    border: 1px solid #333;
+}
+
+
+.text-input-label {
+    margin-right: 6px;
+    text-wrap: nowrap;
 }

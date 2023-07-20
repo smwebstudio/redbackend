@@ -26,7 +26,7 @@ class EstateObserver
     public function created(Estate $estate): void
     {
 
-        if($estate->is_public_text_generation) {
+        if ($estate->is_public_text_generation) {
             $estate->public_text_arm = $this->setPublicTextGeneratorByApartment($estate);
         }
 
@@ -55,9 +55,10 @@ class EstateObserver
             $estate->estate_longitude = $location->lng;
         }
 
-        if($estate->is_public_text_generation) {
+        if ($estate->is_public_text_generation) {
             $estate->public_text_arm = $this->setPublicTextGeneratorByApartment($estate);
         }
+
     }
 
     /**
@@ -100,39 +101,42 @@ class EstateObserver
     public function saved(Estate $estate)
     {
 
-        $estatePhotos  = json_decode($estate->temporary_photos, true);
+        if (!empty($estate->temporary_photos)) {
 
-        if (!empty($estatePhotos) && is_array($estatePhotos)) {
 
-            $existingPhotos = EstateDocument::where('estate_id', '=', $estate->id)->pluck('path')->toArray();
-            $uniqueFilenames = array_diff($estatePhotos, $existingPhotos);
+            $estatePhotos = json_decode($estate->temporary_photos, true);
+            if (!empty($estatePhotos) && is_array($estatePhotos)) {
+                $existingPhotos = EstateDocument::where('estate_id', '=', $estate->id)->pluck('path')->toArray();
+                $uniqueFilenames = array_diff($estatePhotos, $existingPhotos);
 
-            $estateDocumentsData = [];
+                $estateDocumentsData = [];
 
-            foreach ($estatePhotos as $photo) {
-                $filename = basename($photo);
+                foreach ($estatePhotos as $photo) {
+                    $filename = basename($photo);
 
-                if (in_array($photo, $uniqueFilenames)) {
-                    $estateDocumentsData[] = [
-                        'estate_id' => $estate->id,
-                        'path' => $photo,
-                        'path_thumb' => $photo,
-                        'file_name' => $filename,
-                        'is_public' => 1,
-                    ];
+                    if (in_array($photo, $uniqueFilenames)) {
+                        $estateDocumentsData[] = [
+                            'estate_id' => $estate->id,
+                            'path' => $photo,
+                            'path_thumb' => $photo,
+                            'file_name' => $filename,
+                            'is_public' => 1,
+                        ];
+                    }
+
                 }
-
+                EstateDocument::upsert($estateDocumentsData, [
+                    'estate_id',
+                    'path',
+                    'path_thumb',
+                    'is_public'
+                ]);
+                EstateDocument::whereIn('path', array_diff($existingPhotos, $estatePhotos))->delete();
             }
-            EstateDocument::upsert($estateDocumentsData, [
-                'estate_id',
-                'path',
-                'path_thumb',
-                'is_public'
-            ]);
-            EstateDocument::whereIn('path', array_diff($existingPhotos, $estatePhotos))->delete();
-
-
         }
+
+
+//        dd($estate);
     }
 
 
@@ -302,7 +306,7 @@ class EstateObserver
             $text = '';
             $text = $sale1 . " " . $roomCount . " " . $sale2 . " " . $roomCountModified . " " . $street . " " . $sale3 . " " . $buildingProjectType . " "
                 . $sale4 . " " . $buildingFloorCount . " " . $sale5 . " " . $buildingType . " " . $sale5One . " "
-                . $floor . " " . $sale6 .  $sale7 . $sale7One . " " . $entranceType . " "
+                . $floor . " " . $sale6 . $sale7 . $sale7One . " " . $entranceType . " "
                 . $sale8 . $sale8One . $sale9 . " " . $entranceDoorType
                 . " " . $sale10 . " " . $ceilingHeightType . $sale11
                 . " " . $buildingWindowCount . " " . $sale12 . "\n"
@@ -316,7 +320,8 @@ class EstateObserver
         }
     }
 
-    private function setEstateCode($estate) {
+    private function setEstateCode($estate)
+    {
         $code = '';
         if ($estate->contract_type_id != null) {
             $code .= $estate->contract_type->id === 1 ? 0 : 1;

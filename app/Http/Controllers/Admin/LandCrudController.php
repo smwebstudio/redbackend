@@ -11,7 +11,6 @@ use App\Models\CLocationStreet;
 use App\Models\Contact;
 use App\Models\Estate;
 use App\Models\RealtorUser;
-use App\Traits\Controllers\AddEstateFetchMethods;
 use App\Traits\Controllers\AddEstateListColumns;
 use App\Traits\Controllers\HasEstateFilters;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -25,7 +24,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class EstateCrudController extends CrudController
+class LandCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -38,7 +37,6 @@ class EstateCrudController extends CrudController
     use AuthorizesRequests;
     use HasEstateFilters;
     use AddEstateListColumns;
-    use AddEstateFetchMethods;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -48,7 +46,7 @@ class EstateCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(Estate::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/estate');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/commercial');
         CRUD::setEntityNameStrings('estate', 'Անշարժ գույք');
     }
 
@@ -107,19 +105,10 @@ class EstateCrudController extends CrudController
         });
 
         Widget::add()->type('script')->content('assets/js/admin/forms/estate.js');
-//        if(empty(request()->estateType)) {
-//            abort(403);
-//        }
 
-        $estateType = $this->crud->getRequest()->get('estateType');
 
-        $isApartment = request()->estateType === 1;
-        $isHouse = request()->estateType === 2;
-        $isCommercial = request()->estateType === 3;
-        $isLand = request()->estateType === 4;
 
-        $this->addApartmentFields();
-        $this->addCreateCommonFields($estateType);
+        $this->addCreateCommonFields();
 
     }
 
@@ -155,7 +144,147 @@ class EstateCrudController extends CrudController
     }
 
 
-    private function addCreateCommonFields($estateType): void
+    public function fetchAgent()
+    {
+        return $this->fetch([
+            'model' => Contact::class,
+            'searchable_attributes' => [],
+            'paginate' => 30, // items to show per page
+            'query' => function ($model) {
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->where('contact_type_id', '=', 1)->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
+                } else {
+                    return $model->where('contact_type_id', '=', 1);
+                }
+            }
+        ]);
+    }
+
+    public function fetchSeller()
+    {
+        return $this->fetch([
+            'model' => Contact::class,
+            'searchable_attributes' => [],
+            'paginate' => 30, // items to show per page
+            'query' => function ($model) {
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->where('contact_type_id', '=', 1)->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
+                } else {
+                    return $model->where('contact_type_id', '=', 1);
+                }
+            }
+        ]);
+    }
+
+    public function fetchPropertyAgent()
+    {
+        return $this->fetch([
+            'model' => Contact::class,
+            'searchable_attributes' => [],
+            'paginate' => 30, // items to show per page
+            'searchOperator' => 'LIKE',
+            'query' => function ($model) {
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->where('contact_type_id', '=', 3)->whereRaw('CONCAT(`name_arm`," ",`last_name_arm`) LIKE "%' . $search . '%"');
+                } else {
+                    return $model->where('contact_type_id', '=', 3);
+                }
+            }
+        ]);
+    }
+
+
+    public function fetchInfoSource()
+    {
+        return $this->fetch([
+            'model' => Contact::class,
+            'searchable_attributes' => [],
+            'paginate' => 30, // items to show per page
+            'searchOperator' => 'LIKE',
+            'query' => function ($model) {
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->where('contact_type_id', '=', 3)->whereRaw('CONCAT(`name_arm`," ",`last_name_arm`) LIKE "%' . $search . '%"');
+                } else {
+                    return $model->where('contact_type_id', '=', 3);
+                }
+            }
+        ]);
+    }
+
+    public function fetchLocationCity()
+    {
+        return $this->fetch([
+            'model' => CLocationCity::class,
+            'searchable_attributes' => [],
+            'paginate' => 30, // items to show per page
+            'searchOperator' => 'LIKE',
+            'query' => function ($model) {
+                $params = collect(request()->input('form'))->pluck('value', 'name');
+                $provinceId = $params['location_province'];
+
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->where('parent_id', '=', $provinceId)->whereRaw('CONCAT(`name_eng`," ",`name_arm`) LIKE "%' . $search . '%"');
+                } else {
+                    return $model->where('parent_id', '=', $provinceId);
+                }
+            }
+        ]);
+    }
+
+    public function fetchLocationCommunity()
+    {
+        return $this->fetch([
+            'model' => CLocationCommunity::class,
+            'searchable_attributes' => [],
+            'paginate' => 30, // items to show per page
+            'searchOperator' => 'LIKE',
+            'query' => function ($model) {
+                $params = collect(request()->input('form'))->pluck('value', 'name');
+                $provinceId = $params['location_province'];
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->where('parent_id', '=', $provinceId)->whereRaw('CONCAT(`name_eng`," ",`name_arm`) LIKE "%' . $search . '%"');
+                } else {
+                    return $model->where('parent_id', '=', $provinceId);
+                }
+            }
+        ]);
+    }
+
+    public function fetchLocationStreet()
+    {
+        return $this->fetch([
+            'model' => CLocationStreet::class,
+            'searchable_attributes' => [],
+            'paginate' => 30, // items to show per page
+            'searchOperator' => 'LIKE',
+            'query' => function ($model) {
+                $params = collect(request()->input('form'))->pluck('value', 'name');
+                $cityId = $params['location_city'];
+                $communityId = $params['location_community'];
+                $search = request()->input('q') ?? false;
+                if ($search && $communityId) {
+                    return $model->where('parent_is_community', true)->where('community_id', '=', $communityId)->whereRaw('CONCAT(`name_eng`," ",`name_arm`) LIKE "%' . $search . '%"');
+                } elseif ($search && $cityId) {
+                    return $model->where('parent_is_community', false)->where('parent_id', '=', $cityId)->whereRaw('CONCAT(`name_eng`," ",`name_arm`) LIKE "%' . $search . '%"');
+                } elseif ($communityId) {
+                    return $model->where('parent_is_community', true)->where('community_id', '=', $communityId);
+                } elseif ($cityId) {
+                    return $model->where('parent_is_community', false)->where('parent_id', '=', $cityId);
+                } else {
+                    return $model->where('id', '<', 0);
+                }
+            }
+        ]);
+    }
+
+
+    private function addCreateCommonFields(): void
     {
 
         /*Basic fields*/
@@ -165,7 +294,7 @@ class EstateCrudController extends CrudController
             'type' => "relationship",
             'attribute' => "name_arm",
             'label' => "Գույքի տեսակ",
-            'default' => $estateType,
+            'default' => 3,
             'attributes' => [
                 'readonly' => 'readonly',
             ],
@@ -264,53 +393,25 @@ class EstateCrudController extends CrudController
             ],
         ]);
 
-        CRUD::addField([
-            'name' => 'address_apartment',
-            'type' => "text",
-            'label' => "Բնակարան",
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
 
-        CRUD::addField([
-            'name' => 'floor_separator',
-            'type' => 'custom_html',
-            'value' => '<br/>',
-            'wrapper' => [
-                'class' => 'form-group col-md-12 separator'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'floor',
-            'type' => "number",
-            'label' => "Հարկ",
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'building_floor_count',
-            'type' => "number",
-            'label' => "Շենքի հարկ",
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
+            CRUD::addField([
+                'name' => 'is_separate_building',
+                'type' => "switch",
+                'label' => "Առանձին շինություն",
+                'wrapper' => [
+                    'class' => 'form-group col-md-2'
+                ],
+            ]);
 
 
-        CRUD::addField([
-            'name' => 'ceiling_height_type',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "Առաստաղի բարձրություն",
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
+            CRUD::addField([
+                'name' => 'address_apartment',
+                'type' => "text",
+                'label' => "Տարածքի համար",
+                'wrapper' => [
+                    'class' => 'form-group col-md-3'
+                ],
+            ]);
 
 
         CRUD::addField([
@@ -323,34 +424,38 @@ class EstateCrudController extends CrudController
         ]);
 
 
-        CRUD::addField([
-            'name' => 'room_count',
-            'type' => "number",
-            'label' => "Սենյակներ",
-            'wrapper' => [
-                'class' => 'form-group col-md-2'
-            ],
-        ]);
 
 
-        CRUD::addField([
-            'name' => 'room_count_modified',
-            'type' => "number",
-            'label' => "Սենյակներ (mod)",
-            'wrapper' => [
-                'class' => 'form-group col-md-2'
-            ],
-        ]);
+
+            CRUD::addField([
+                'name' => 'room_count',
+                'type' => "number",
+                'label' => "Սրահներ",
+                'wrapper' => [
+                    'class' => 'form-group col-md-2'
+                ],
+            ]);
 
 
-        CRUD::addField([
-            'name' => 'area_total',
-            'type' => "number",
-            'label' => "Ընդհանուր մակերես",
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
+            CRUD::addField([
+                'name' => 'room_count_modified',
+                'type' => "number",
+                'label' => "Սրահներ (mod)",
+                'wrapper' => [
+                    'class' => 'form-group col-md-2'
+                ],
+            ]);
+
+
+
+            CRUD::addField([
+                'name' => 'area_total',
+                'type' => "number",
+                'label' => "Ընդհանուր մակերես",
+                'wrapper' => [
+                    'class' => 'form-group col-md-3'
+                ],
+            ]);
 
 
         CRUD::addField([
@@ -616,6 +721,8 @@ class EstateCrudController extends CrudController
 
     private function addApartmentFields(): void
     {
+
+
         /*Apartment building attribute*/
 
         $building_attributes = [
@@ -768,6 +875,7 @@ class EstateCrudController extends CrudController
                 'class' => 'form-group col-md-12'
             ],
         ]);
+
 
         CRUD::addFields($addAppartmentFeaturesList);
     }

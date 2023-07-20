@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ContactRequest;
 use App\Models\Contact;
+use App\Traits\Controllers\HasContactFilters;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -21,6 +22,7 @@ class ContactCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use AuthorizesRequests;
+    use HasContactFilters;
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -42,8 +44,29 @@ class ContactCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('id');
-        CRUD::column('full_name');
+
+        CRUD::enableExportButtons();
+
+        CRUD::addColumn([
+            'name' => 'id',
+            'type' => "text",
+            'label' => "Կոդ",
+            'orderable'  => true,
+            'orderLogic' => function ($query, $column, $columnDirection) {
+                return $query->orderBy('contact_type_id', $columnDirection);
+            }
+        ]);
+
+
+        CRUD::addColumn([
+            'name' => 'full_contact',
+            'type' => "text",
+            'label' => "Անուն",
+            'attribute' => "full_contact",
+            'limit' => 100,
+            'orderable'  => true,
+        ]);
+
 
         CRUD::addColumn([
             'name' => 'contact_type',
@@ -80,6 +103,8 @@ class ContactCrudController extends CrudController
             'type' => "text",
             'label' => "Թարմացված",
         ]);
+
+        $this->addListFilters();
 
     }
 

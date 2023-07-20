@@ -25,6 +25,9 @@ Route::group([
     Route::crud('role-has-permission', 'RoleHasPermissionCrudController');
     Route::crud('c-building-project-type', 'CBuildingProjectTypeCrudController');
     Route::crud('estate', 'EstateCrudController');
+    Route::crud('house', 'HouseCrudController');
+    Route::crud('commercial', 'CommercialCrudController');
+    Route::crud('land', 'LandCrudController');
     Route::crud('c-location-country', 'CLocationCountryCrudController');
     Route::crud('c-location-province', 'CLocationProvinceCrudController');
     Route::crud('c-location-street', 'CLocationStreetCrudController');
