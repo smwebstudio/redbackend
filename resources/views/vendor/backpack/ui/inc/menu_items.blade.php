@@ -3,6 +3,7 @@
 
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('estate') }}"><i class="nav-icon la la-home"></i>Անշարժ Գույք</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('contact') }}"><i class="nav-icon la la-user"></i>Հաճախորդներ</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('professional') }}"><i class="nav-icon la la-user"></i>Մասնագետներ</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('message') }}"><i class="nav-icon la la-envelope"></i>Նամակներ</a></li>
 <li class="nav-item nav-dropdown">
     <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon las la-search-location"></i>Տարածաշրջան</a>
@@ -70,5 +71,6 @@
         <x-backpack::menu-item title="Separate entrance types" icon="las la-cog" :link="backpack_url('c-separate-entrance-type')" />
     </ul>
 </li>
+
 
 
