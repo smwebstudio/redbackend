@@ -14,10 +14,10 @@ return [
     */
 
     // Forms
-    'save_action_save_and_new'         => 'Save and new item',
-    'save_action_save_and_edit'        => 'Save and edit this item',
-    'save_action_save_and_back'        => 'Save and back',
-    'save_action_save_and_preview'     => 'Save and preview',
+    'save_action_save_and_new'         => 'Պահպանել և ավելացնել նորը',
+    'save_action_save_and_edit'        => 'Պահպանել',
+    'save_action_save_and_back'        => 'Պահպանել և հետ',
+    'save_action_save_and_preview'     => 'Պահպանել և դիտել',
     'save_action_changed_notification' => 'Default behaviour after saving has been changed.',
 
     // Create form
