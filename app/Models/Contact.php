@@ -87,8 +87,6 @@ class Contact extends Model
     use CrudTrait;
 
 	protected $table = 'contact';
-	public $incrementing = false;
-	public $timestamps = false;
 
     use ApiMultiLanguage;
     protected array $multi_lang = [
@@ -214,15 +212,64 @@ class Contact extends Model
         return $this->belongsTo(CContactType::class, 'contact_type_id');
     }
 
+    public function contact_status()
+    {
+        return $this->belongsTo(CContactStatus::class, 'contact_status_id');
+    }
+
+    public function estate_type()
+    {
+        return $this->belongsTo(CEstateType::class, 'estate_type_id');
+    }
+
+    public function estate_contract_type()
+    {
+        return $this->belongsTo(CContractType::class, 'estate_contract_type_id');
+    }
+
+    public function infoSource()
+    {
+        return $this->belongsTo(Contact::class, 'info_source_id');
+    }
+
+    public function broker()
+    {
+        return $this->belongsTo(Contact::class, 'broker_id');
+    }
 	public function announcements()
 	{
 		return $this->hasMany(Announcement::class, 'seller_id');
 	}
 
+    public function currency()
+    {
+        return $this->belongsTo(CCurrency::class, 'currency_id');
+    }
+
 	public function estates()
 	{
 		return $this->hasMany(Estate::class, 'seller_id');
 	}
+
+    public function location_province()
+    {
+        return $this->belongsTo(CLocationProvince::class, 'location_province_id');
+    }
+
+    public function location_street()
+    {
+        return $this->belongsTo(CLocationStreet::class, 'location_street_id');
+    }
+
+    public function location_city()
+    {
+        return $this->belongsTo(CLocationCity::class, 'location_city_id');
+    }
+
+    public function location_community()
+    {
+        return $this->belongsTo(CLocationCommunity::class, 'location_community_id');
+    }
 
 
     public function getFullNameAttribute()

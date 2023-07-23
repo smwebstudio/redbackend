@@ -33,6 +33,11 @@ Route::group([
     Route::crud('c-location-street', 'CLocationStreetCrudController');
     Route::crud('c-location-community', 'CLocationCommunityCrudController');
     Route::crud('contact', 'ContactCrudController');
+    Route::crud('buyer', 'BuyerCrudController');
+    Route::crud('seller', 'SellerCrudController');
+    Route::crud('owner', 'OwnerCrudController');
+    Route::crud('agent', 'AgentCrudController');
+    Route::crud('renter', 'RenterCrudController');
     Route::crud('c-contact-type', 'CContactTypeCrudController');
     Route::crud('c-article-type', 'CArticleTypeCrudController');
     Route::crud('article', 'ArticleCrudController');

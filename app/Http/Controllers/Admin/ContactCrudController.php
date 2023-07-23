@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ContactRequest;
 use App\Models\Contact;
+use App\Traits\Controllers\AddContactListColumns;
 use App\Traits\Controllers\HasContactFilters;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -23,6 +24,7 @@ class ContactCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use AuthorizesRequests;
     use HasContactFilters;
+    use AddContactListColumns;
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -44,68 +46,7 @@ class ContactCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
-        CRUD::enableExportButtons();
-
-        CRUD::addColumn([
-            'name' => 'id',
-            'type' => "text",
-            'label' => "Կոդ",
-            'orderable'  => true,
-            'orderLogic' => function ($query, $column, $columnDirection) {
-                return $query->orderBy('contact_type_id', $columnDirection);
-            }
-        ]);
-
-
-        CRUD::addColumn([
-            'name' => 'full_contact',
-            'type' => "text",
-            'label' => "Անուն",
-            'attribute' => "full_contact",
-            'limit' => 100,
-            'orderable'  => true,
-        ]);
-
-
-        CRUD::addColumn([
-            'name' => 'contact_type',
-            'type' => "relationship",
-            'label' => "Կոնտակտի տեսակը",
-            'attribute' => "name_arm",
-            'limit' => 100,
-            'orderable'  => true,
-            'orderLogic' => function ($query, $column, $columnDirection) {
-                return $query->orderBy('contact_type_id', $columnDirection);
-            }
-        ]);
-
-        CRUD::addColumn([
-            'name' => 'phone_mobile_1',
-            'type' => "text",
-            'label' => "Հեռախոս",
-        ]);
-
-        CRUD::addColumn([
-            'name' => 'email',
-            'type' => "text",
-            'label' => "Էլ․ հասցե",
-        ]);
-
-        CRUD::addColumn([
-            'name' => 'created_on',
-            'type' => "text",
-            'label' => "Ստեղծված",
-        ]);
-
-        CRUD::addColumn([
-            'name' => 'last_modified_on',
-            'type' => "text",
-            'label' => "Թարմացված",
-        ]);
-
-        $this->addListFilters();
-
+        $this->addListColumns();
     }
 
 
@@ -130,7 +71,7 @@ class ContactCrudController extends CrudController
     {
         CRUD::setValidation(ContactRequest::class);
 
-        $this->authorize('create', Contact::class);
+//        $this->authorize('create', Contact::class);
 
         CRUD::field('is_deleted');
         CRUD::field('last_modified_on');

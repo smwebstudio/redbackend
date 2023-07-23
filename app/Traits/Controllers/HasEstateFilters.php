@@ -202,42 +202,42 @@ trait HasEstateFilters
             $this->crud->addClause('where', 'currency_id', $value);
         });
 
-//        if (request('currency') && !request('extended_price')) {
-//            $currency = request('currency');
-//            if (!empty($currency)) {
-//                $this->crud->addFilter([
-//                    'name' => 'price_range',
-//                    'type' => 'select2_multiple_red',
-//                    'label' => 'Գնային միջակայք',
-//                ], function () use ($currency) {
-//                    if ($currency == 1) {
-//                        return \App\Models\CSellPriceInUsd::all()->pluck('name_arm', 'id')->toArray();
-//                    }
-//                    if ($currency == 2) {
-//                        return \App\Models\CSellPriceInRur::all()->pluck('name_arm', 'id')->toArray();
-//                    }
-//                    if ($currency == 3) {
-//                        return \App\Models\CSellPriceInAmd::all()->pluck('name_arm', 'id')->toArray();
-//                    }
-//                }, function ($values) {
-//                    $this->crud->addClause('whereIn', 'location_community_id', json_decode($values));
-//                });
-//            }
-//
-//
-//        }
+        if (request('currency') && !request('extended_price')) {
+            $currency = request('currency');
+            if (!empty($currency)) {
+                $this->crud->addFilter([
+                    'name' => 'price_range',
+                    'type' => 'select2_multiple_red',
+                    'label' => 'Գնային միջակայք',
+                ], function () use ($currency) {
+                    if ($currency == 1) {
+                        return \App\Models\CSellPriceInUsd::all()->pluck('name_arm', 'id')->toArray();
+                    }
+                    if ($currency == 2) {
+                        return \App\Models\CSellPriceInRur::all()->pluck('name_arm', 'id')->toArray();
+                    }
+                    if ($currency == 3) {
+                        return \App\Models\CSellPriceInAmd::all()->pluck('name_arm', 'id')->toArray();
+                    }
+                }, function ($values) {
+                    $this->crud->addClause('whereIn', 'location_community_id', json_decode($values));
+                });
+            }
 
-//        $this->crud->addFilter([
-//            'type' => 'simple',
-//            'name' => 'extended_price',
-//            'label' => 'Ընդլայնված',
-//        ],
-//            false,
-//            function () {
-//                //For frontend purposes, DO NOT REMOVE
-//            });
 
-//        if (request('extended_price')) {
+        }
+
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'extended_price',
+            'label' => 'Ընդլայնված',
+        ],
+            false,
+            function () {
+                //For frontend purposes, DO NOT REMOVE
+            });
+
+        if (request('extended_price')) {
 
             $this->crud->addFilter([
                 'name' => 'price',
@@ -254,7 +254,7 @@ trait HasEstateFilters
                         $this->crud->addClause('where', 'price', '<=', (float)$range->to);
                     }
                 });
-//        }
+        }
 
         $this->crud->addFilter([
             'name' => 'price_sqm',
