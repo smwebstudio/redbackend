@@ -874,6 +874,11 @@ class Estate extends Model
         return $this->belongsTo(CHouseFloorsType::class, 'house_floors_type_id');
     }
 
+    public function commercial_purpose_type()
+    {
+        return $this->belongsTo(CCommercialPurposeType::class, 'commercial_purpose_type_id');
+    }
+
     public function entrance_type()
     {
         return $this->belongsTo(CEntranceType::class, 'entrance_type_id');
@@ -913,7 +918,7 @@ class Estate extends Model
 
     public function infoSource()
     {
-        return $this->belongsTo(Contact::class, 'info_source_id');
+        return $this->belongsTo(RealtorUser::class, 'info_source_id');
     }
 
     /*Methods*/

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class CRole
- * 
+ *
  * @property int $id
  * @property bool|null $is_deleted
  * @property Carbon|null $last_modified_on
@@ -32,8 +32,6 @@ use Illuminate\Database\Eloquent\Model;
 class CRole extends Model
 {
 	protected $table = 'c_role';
-	public $incrementing = false;
-	public $timestamps = false;
 
 	protected $casts = [
 		'id' => 'int',

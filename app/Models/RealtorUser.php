@@ -133,10 +133,17 @@ class RealtorUser extends Model
 		'permission_menu_location_province_id'
 	];
 
+    protected $appends = ['contactFullName'];
+
 	public function realtor_user_roles()
 	{
 		return $this->hasMany(RealtorUserRole::class, 'user_id');
 	}
+
+    public function roles()
+    {
+        return $this->hasManyThrough(CRole::class, RealtorUserRole::class, 'user_id', 'id', 'id', 'role_id');
+    }
 
     public function professions()
     {

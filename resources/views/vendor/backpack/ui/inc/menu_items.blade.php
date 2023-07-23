@@ -1,6 +1,4 @@
 {{-- This file is used to store sidebar items, inside the Backpack admin panel --}}
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('estate') }}"><i class="la la-home nav-icon"></i>Գլխավոր</a></li>
-
 @includeWhen(class_exists(\Backpack\DevTools\DevToolsServiceProvider::class), 'backpack.devtools::buttons.sidebar_item')
 
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('estate') }}"><i class="nav-icon la la-home"></i>Անշարժ Գույք</a></li>

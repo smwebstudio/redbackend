@@ -6,6 +6,8 @@ use App\Models\CLocationCity;
 use App\Models\CLocationCommunity;
 use App\Models\CLocationStreet;
 use App\Models\Contact;
+use App\Models\RealtorUser;
+use Illuminate\Database\Eloquent\Builder;
 
 trait AddEstateFetchMethods
 {
@@ -65,16 +67,21 @@ trait AddEstateFetchMethods
     public function fetchInfoSource()
     {
         return $this->fetch([
-            'model' => Contact::class,
+            'model' => RealtorUser::class,
             'searchable_attributes' => [],
             'paginate' => 30, // items to show per page
             'searchOperator' => 'LIKE',
             'query' => function ($model) {
                 $search = request()->input('q') ?? false;
                 if ($search) {
-                    return $model->where('contact_type_id', '=', 3)->whereRaw('CONCAT(`name_arm`," ",`last_name_arm`) LIKE "%' . $search . '%"');
+                    return $model->with('contact')
+                        ->whereHas('contact', function (Builder $query) use ($search) {
+                            $query->whereRaw('CONCAT(`name_arm`," ",`last_name_arm`) LIKE "%' . $search . '%"');
+                        });
                 } else {
-                    return $model->where('contact_type_id', '=', 3);
+                    return $model->with('contact')->whereHas('roles', function (Builder $query) {
+                        $query->whereIn('c_role.id', [1, 4],);
+                    });
                 }
             }
         ]);
@@ -146,4 +153,5 @@ trait AddEstateFetchMethods
                 }
             }
         ]);
-    }}
+    }
+}

@@ -4,6 +4,7 @@ namespace App\Traits\Controllers;
 
 use App\Models\Contact;
 use App\Models\RealtorUser;
+use Illuminate\Database\Eloquent\Builder;
 
 trait HasEstateFilters
 {
@@ -414,9 +415,6 @@ trait HasEstateFilters
             'label' => 'Գործակալ',
         ], function () {
 
-
-
-
             return RealtorUser::join('contact', 'contact.id', '=', 'realtor_user.contact_id')
 //                ->join('professional_profession', 'professional_profession.user_id', '=', 'realtor_user.id')
                 ->join('realtor_user_role', 'realtor_user_role.user_id', '=', 'realtor_user.id')
@@ -426,7 +424,7 @@ trait HasEstateFilters
 //                ->whereIn('professional_profession.profession_id', [-2, -3])
                 ->select('realtor_user.*')
                 ->get()
-                ->pluck('contact.full_name', 'id')
+                ->pluck('contact.fullName', 'id')
                 ->toArray();
 
 
@@ -440,7 +438,9 @@ trait HasEstateFilters
             'type' => 'select2',
             'label' => 'Ինֆորմացիայի աղբյուր',
         ], function () {
-            return Contact::with('user')->where('contact_type_id', 3)->whereNotNull('name_arm')->get()->pluck('full_name', 'user.id')->toArray();
+            return RealtorUser::whereHas('contact', function (Builder $query) {
+                $query->whereNotNull(['name_arm']);
+            })->with('contact')->get()->pluck('contact.fullName', 'id')->toArray();
         }, function ($value) {
             $this->crud->addClause('where', 'info_source_id', $value);
         });
@@ -450,7 +450,9 @@ trait HasEstateFilters
             'type' => 'select2',
             'label' => 'Տեղազննող Գործակալ',
         ], function () {
-            return Contact::with('user')->where('contact_type_id', 3)->whereNotNull('name_arm')->get()->pluck('full_name', 'user.id')->toArray();
+            return RealtorUser::whereHas('contact', function (Builder $query) {
+                $query->whereNotNull(['name_arm']);
+            })->with('contact')->get()->pluck('contact.fullName', 'id')->toArray();
         }, function ($value) {
             $this->crud->addClause('where', 'property_agent_id', $value);
         });

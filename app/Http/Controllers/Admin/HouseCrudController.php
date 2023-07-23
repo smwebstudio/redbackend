@@ -11,6 +11,7 @@ use App\Models\CLocationStreet;
 use App\Models\Contact;
 use App\Models\Estate;
 use App\Models\RealtorUser;
+use App\Traits\Controllers\AddEstateFetchMethods;
 use App\Traits\Controllers\AddEstateListColumns;
 use App\Traits\Controllers\HasEstateFilters;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -37,6 +38,7 @@ class HouseCrudController extends CrudController
     use AuthorizesRequests;
     use HasEstateFilters;
     use AddEstateListColumns;
+    use AddEstateFetchMethods;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -325,119 +327,6 @@ class HouseCrudController extends CrudController
             ]);
         }
 
-    }
-
-
-    public function fetchAgent()
-    {
-        return $this->fetch([
-            'model' => Contact::class,
-            'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
-            'query' => function ($model) {
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->where('contact_type_id', '=', 1)->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
-                } else {
-                    return $model->where('contact_type_id', '=', 1);
-                }
-            }
-        ]);
-    }
-
-    public function fetchSeller()
-    {
-        return $this->fetch([
-            'model' => Contact::class,
-            'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
-            'query' => function ($model) {
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->where('contact_type_id', '=', 1)->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
-                } else {
-                    return $model->where('contact_type_id', '=', 1);
-                }
-            }
-        ]);
-    }
-
-    public function fetchPropertyAgent()
-    {
-        return $this->fetch([
-            'model' => Contact::class,
-            'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
-            'searchOperator' => 'LIKE',
-            'query' => function ($model) {
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->where('contact_type_id', '=', 3)->whereRaw('CONCAT(`name_arm`," ",`last_name_arm`) LIKE "%' . $search . '%"');
-                } else {
-                    return $model->where('contact_type_id', '=', 3);
-                }
-            }
-        ]);
-    }
-
-
-    public function fetchInfoSource()
-    {
-        return $this->fetch([
-            'model' => Contact::class,
-            'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
-            'searchOperator' => 'LIKE',
-            'query' => function ($model) {
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->where('contact_type_id', '=', 3)->whereRaw('CONCAT(`name_arm`," ",`last_name_arm`) LIKE "%' . $search . '%"');
-                } else {
-                    return $model->where('contact_type_id', '=', 3);
-                }
-            }
-        ]);
-    }
-
-    public function fetchLocationCity()
-    {
-        return $this->fetch([
-            'model' => CLocationCity::class,
-            'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
-            'searchOperator' => 'LIKE',
-            'query' => function ($model) {
-                $params = collect(request()->input('form'))->pluck('value', 'name');
-                $provinceId = $params['location_province'];
-
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->where('parent_id', '=', $provinceId)->whereRaw('CONCAT(`name_eng`," ",`name_arm`) LIKE "%' . $search . '%"');
-                } else {
-                    return $model->where('parent_id', '=', $provinceId);
-                }
-            }
-        ]);
-    }
-
-    public function fetchLocationCommunity()
-    {
-        return $this->fetch([
-            'model' => CLocationCommunity::class,
-            'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
-            'searchOperator' => 'LIKE',
-            'query' => function ($model) {
-                $params = collect(request()->input('form'))->pluck('value', 'name');
-                $provinceId = $params['location_province'];
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->where('parent_id', '=', $provinceId)->whereRaw('CONCAT(`name_eng`," ",`name_arm`) LIKE "%' . $search . '%"');
-                } else {
-                    return $model->where('parent_id', '=', $provinceId);
-                }
-            }
-        ]);
     }
 
     public function fetchLocationStreet()
@@ -780,7 +669,7 @@ class HouseCrudController extends CrudController
             'type' => "relationship",
             'ajax' => true,
             'minimum_input_length' => 0,
-            'attribute' => "name_arm",
+            'attribute' => "fullContact",
             'label' => "Տեղազննող գործակալ",
             'tab' => 'Լրացուցիչ',
             'placeholder' => '-Ընտրել մեկը-',
@@ -795,7 +684,7 @@ class HouseCrudController extends CrudController
             'type' => "relationship",
             'ajax' => true,
             'minimum_input_length' => 0,
-            'attribute' => "name_arm",
+            'attribute' => "contactFullName",
             'label' => "Ինֆորմացիայի աղբյուր",
             'tab' => 'Լրացուցիչ',
             'placeholder' => '-Ընտրել մեկը-',

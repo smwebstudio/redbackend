@@ -511,7 +511,7 @@ class EstateCrudController extends CrudController
             'type' => "relationship",
             'ajax' => true,
             'minimum_input_length' => 0,
-            'attribute' => "name_arm",
+            'attribute' => "contactFullName",
             'label' => "Ինֆորմացիայի աղբյուր",
             'tab' => 'Լրացուցիչ',
             'placeholder' => '-Ընտրել մեկը-',

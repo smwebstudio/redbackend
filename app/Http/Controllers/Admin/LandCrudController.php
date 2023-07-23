@@ -726,6 +726,7 @@ class LandCrudController extends CrudController
         /*Apartment building attribute*/
 
         $building_attributes = [
+            'commercial_purpose_type',
             'building_structure_type',
             'building_type',
             'building_project_type',
