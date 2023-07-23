@@ -699,6 +699,8 @@ class CommercialCrudController extends CrudController
 
 
         $land_attributes = [
+            'land_type',
+            'land_use_type',
             'land_structure_type',
             'communication_type',
             'fence_type',

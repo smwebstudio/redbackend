@@ -11,6 +11,7 @@ use App\Models\CLocationStreet;
 use App\Models\Contact;
 use App\Models\Estate;
 use App\Models\RealtorUser;
+use App\Traits\Controllers\AddEstateFetchMethods;
 use App\Traits\Controllers\AddEstateListColumns;
 use App\Traits\Controllers\HasEstateFilters;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -37,6 +38,7 @@ class LandCrudController extends CrudController
     use AuthorizesRequests;
     use HasEstateFilters;
     use AddEstateListColumns;
+    use AddEstateFetchMethods;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -107,8 +109,9 @@ class LandCrudController extends CrudController
         Widget::add()->type('script')->content('assets/js/admin/forms/estate.js');
 
 
-
+        $this->addLandFields();
         $this->addCreateCommonFields();
+
 
     }
 
@@ -142,147 +145,6 @@ class LandCrudController extends CrudController
         }
 
     }
-
-
-    public function fetchAgent()
-    {
-        return $this->fetch([
-            'model' => Contact::class,
-            'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
-            'query' => function ($model) {
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->where('contact_type_id', '=', 1)->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
-                } else {
-                    return $model->where('contact_type_id', '=', 1);
-                }
-            }
-        ]);
-    }
-
-    public function fetchSeller()
-    {
-        return $this->fetch([
-            'model' => Contact::class,
-            'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
-            'query' => function ($model) {
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->where('contact_type_id', '=', 1)->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
-                } else {
-                    return $model->where('contact_type_id', '=', 1);
-                }
-            }
-        ]);
-    }
-
-    public function fetchPropertyAgent()
-    {
-        return $this->fetch([
-            'model' => Contact::class,
-            'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
-            'searchOperator' => 'LIKE',
-            'query' => function ($model) {
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->where('contact_type_id', '=', 3)->whereRaw('CONCAT(`name_arm`," ",`last_name_arm`) LIKE "%' . $search . '%"');
-                } else {
-                    return $model->where('contact_type_id', '=', 3);
-                }
-            }
-        ]);
-    }
-
-
-    public function fetchInfoSource()
-    {
-        return $this->fetch([
-            'model' => Contact::class,
-            'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
-            'searchOperator' => 'LIKE',
-            'query' => function ($model) {
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->where('contact_type_id', '=', 3)->whereRaw('CONCAT(`name_arm`," ",`last_name_arm`) LIKE "%' . $search . '%"');
-                } else {
-                    return $model->where('contact_type_id', '=', 3);
-                }
-            }
-        ]);
-    }
-
-    public function fetchLocationCity()
-    {
-        return $this->fetch([
-            'model' => CLocationCity::class,
-            'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
-            'searchOperator' => 'LIKE',
-            'query' => function ($model) {
-                $params = collect(request()->input('form'))->pluck('value', 'name');
-                $provinceId = $params['location_province'];
-
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->where('parent_id', '=', $provinceId)->whereRaw('CONCAT(`name_eng`," ",`name_arm`) LIKE "%' . $search . '%"');
-                } else {
-                    return $model->where('parent_id', '=', $provinceId);
-                }
-            }
-        ]);
-    }
-
-    public function fetchLocationCommunity()
-    {
-        return $this->fetch([
-            'model' => CLocationCommunity::class,
-            'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
-            'searchOperator' => 'LIKE',
-            'query' => function ($model) {
-                $params = collect(request()->input('form'))->pluck('value', 'name');
-                $provinceId = $params['location_province'];
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->where('parent_id', '=', $provinceId)->whereRaw('CONCAT(`name_eng`," ",`name_arm`) LIKE "%' . $search . '%"');
-                } else {
-                    return $model->where('parent_id', '=', $provinceId);
-                }
-            }
-        ]);
-    }
-
-    public function fetchLocationStreet()
-    {
-        return $this->fetch([
-            'model' => CLocationStreet::class,
-            'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
-            'searchOperator' => 'LIKE',
-            'query' => function ($model) {
-                $params = collect(request()->input('form'))->pluck('value', 'name');
-                $cityId = $params['location_city'];
-                $communityId = $params['location_community'];
-                $search = request()->input('q') ?? false;
-                if ($search && $communityId) {
-                    return $model->where('parent_is_community', true)->where('community_id', '=', $communityId)->whereRaw('CONCAT(`name_eng`," ",`name_arm`) LIKE "%' . $search . '%"');
-                } elseif ($search && $cityId) {
-                    return $model->where('parent_is_community', false)->where('parent_id', '=', $cityId)->whereRaw('CONCAT(`name_eng`," ",`name_arm`) LIKE "%' . $search . '%"');
-                } elseif ($communityId) {
-                    return $model->where('parent_is_community', true)->where('community_id', '=', $communityId);
-                } elseif ($cityId) {
-                    return $model->where('parent_is_community', false)->where('parent_id', '=', $cityId);
-                } else {
-                    return $model->where('id', '<', 0);
-                }
-            }
-        ]);
-    }
-
 
     private function addCreateCommonFields(): void
     {
@@ -387,7 +249,7 @@ class LandCrudController extends CrudController
         CRUD::addField([
             'name' => 'address_building',
             'type' => "text",
-            'label' => "Շենք",
+            'label' => "Հող",
             'wrapper' => [
                 'class' => 'form-group col-md-3'
             ],
@@ -395,19 +257,9 @@ class LandCrudController extends CrudController
 
 
             CRUD::addField([
-                'name' => 'is_separate_building',
-                'type' => "switch",
-                'label' => "Առանձին շինություն",
-                'wrapper' => [
-                    'class' => 'form-group col-md-2'
-                ],
-            ]);
-
-
-            CRUD::addField([
                 'name' => 'address_apartment',
                 'type' => "text",
-                'label' => "Տարածքի համար",
+                'label' => "Վկայական",
                 'wrapper' => [
                     'class' => 'form-group col-md-3'
                 ],
@@ -422,29 +274,6 @@ class LandCrudController extends CrudController
                 'class' => 'form-group col-md-12 separator'
             ],
         ]);
-
-
-
-
-
-            CRUD::addField([
-                'name' => 'room_count',
-                'type' => "number",
-                'label' => "Սրահներ",
-                'wrapper' => [
-                    'class' => 'form-group col-md-2'
-                ],
-            ]);
-
-
-            CRUD::addField([
-                'name' => 'room_count_modified',
-                'type' => "number",
-                'label' => "Սրահներ (mod)",
-                'wrapper' => [
-                    'class' => 'form-group col-md-2'
-                ],
-            ]);
 
 
 
@@ -719,42 +548,35 @@ class LandCrudController extends CrudController
 
     }
 
-    private function addApartmentFields(): void
+    private function addLandFields(): void
     {
 
 
-        /*Apartment building attribute*/
-
-        $building_attributes = [
-            'commercial_purpose_type',
-            'building_structure_type',
-            'building_type',
-            'building_project_type',
-            'building_floor_type',
-            'exterior_design_type',
-            'courtyard_improvement',
-            'distance_public_objects',
-            'elevator_type',
-            'year',
-            'parking_type',
-            'entrance_type',
-            'entrance_door_position',
-            'entrance_door_type',
-            'windows_view',
-            'building_window_count',
-            'repairing_type',
-            'heating_system_type',
-            'service_fee_type',
+        CRUD::addField([
+            'name' => 'separator_building_land',
+            'type' => 'custom_html',
+            'value' => '<h4>Հող</h4>',
+            'tab' => 'Հիմնական',
+            'wrapper' => [
+                'class' => 'form-group col-md-12 separator'
+            ],
+        ]);
+        $land_attributes = [
+            'land_type',
+            'land_use_type',
+            'land_structure_type',
+            'communication_type',
+            'fence_type',
+            'road_way_type',
+            'front_with_street',
         ];
 
-        $addApartmentBuildingList = [];
-
-        foreach ($building_attributes as $buildingAttribute) {
-            $addApartmentBuildingList[] = [
-                'name' => $buildingAttribute,
+        foreach ($land_attributes as $landAttribute) {
+            $addLandList[] = [
+                'name' => $landAttribute,
                 'type' => 'relationship',
                 'attribute' => "name_arm",
-                'label' => trans('estate.' . $buildingAttribute),
+                'label' => trans('estate.' . $landAttribute),
                 'placeholder' => '-Ընտրել մեկը-',
                 'tab' => 'Հիմնական',
                 'wrapper' => [
@@ -763,122 +585,17 @@ class LandCrudController extends CrudController
             ];
         }
 
-
-        $apartmentFeaturesList = [
-            "new_construction",
-            "apartment_construction",
-            "exclusive_design",
-            "possible_extension",
-            "new_roof",
-            "separate_room",
-            "balcony",
-            "oriel",
-            "open_balcony",
-            "uninhabited",
-            "new_water_tubes",
-            "new_wiring",
-            "new_windows",
-            "new_doors",
-            "new_floor",
-            "laminat",
-            "parquet",
-            "heating_ground",
-            "new_bathroom",
-            "jacuzzi",
-            "persistent_water",
-            "natural_gas",
-            "gas_heater",
-            "refrigirator",
-            "washer",
-            "dish_washer",
-            "tv",
-            "conditioner",
-            "cable_tv",
-            "internet",
-            "kitchen_furniture",
-            "furniture",
-            "pantry",
-            "niche",
-            "cellar",
-            "garage",
-            "land",
-            "has_intercom",
-            "sunny",
-            "is_basement",
-            "is_duplex",
-            "is_mansard_floor",
-            "can_be_used_as_commercial",
-            "is_exchangeable"
-        ];
-        $addAppartmentFeaturesList = [];
-
-
-        foreach ($apartmentFeaturesList as $feature) {
-            $addAppartmentFeaturesList[] = [
-                'name' => $feature,
-                'type' => 'switch',
-                'label' => trans('estate.' . $feature),
-                'tab' => 'Հիմնական',
-                'wrapper' => [
-                    'class' => 'form-group col-md-3'
-                ],
-            ];
-        }
-
+        CRUD::addFields($addLandList);
 
         CRUD::addField([
-            'name' => 'separator12',
-            'type' => 'custom_html',
-            'value' => '<h4>Շենք/Բնակարան</h4>',
-            'tab' => 'Հիմնական',
-        ]);
-
-        CRUD::addFields($addApartmentBuildingList);
-
-        CRUD::addField([
-            'name' => 'service_amount',
+            'name' => 'front_length',
             'type' => "number",
-            'label' => "Սպասարկման վճար",
+            'label' => "Ճակատային դիրքի երկարություն",
             'tab' => 'Հիմնական',
             'wrapper' => [
-                'class' => 'form-group col-md-2 apartment_building_attribute'
+                'class' => 'form-group col-md-3 apartment_building_attribute'
             ],
         ]);
-
-        CRUD::addField([
-            'name' => 'service_amount_currency',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "<br/>",
-            'allows_null' => false,
-            'default' => 1,
-            'placeholder' => '-Ընտրել մեկը-',
-            'tab' => 'Հիմնական',
-            'wrapper' => [
-                'class' => 'form-group col-md-1 apartment_building_attribute'
-            ],
-        ]);
-        CRUD::addField([
-            'name' => 'separator1',
-            'type' => 'custom_html',
-            'value' => '<hr>',
-            'tab' => 'Հիմնական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-        CRUD::addField([
-            'name' => 'separator',
-            'type' => 'custom_html',
-            'value' => '<h4>Կոմունալ հարմարություններ</h4>',
-            'tab' => 'Հիմնական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-
-        CRUD::addFields($addAppartmentFeaturesList);
     }
 
 }
