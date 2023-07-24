@@ -61,8 +61,6 @@ class RealtorUser extends Model
     use HasFilePath;
 
 	protected $table = 'realtor_user';
-	public $incrementing = false;
-	public $timestamps = false;
 
 	protected $casts = [
 		'id' => 'int',
@@ -144,7 +142,12 @@ class RealtorUser extends Model
 
     public function roles()
     {
-        return $this->hasManyThrough(CRole::class, RealtorUserRole::class, 'user_id', 'id', 'id', 'role_id');
+        return $this->belongsToMany(CRole::class, 'realtor_user_role', 'user_id', 'role_id', 'id', 'id');
+    }
+
+    public function inner_roles()
+    {
+        return $this->belongsToMany(CRole::class, 'realtor_user_role', 'user_id', 'role_id', 'id', 'id');
     }
 
     public function professions()

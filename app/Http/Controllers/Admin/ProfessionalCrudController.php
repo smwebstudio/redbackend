@@ -7,6 +7,7 @@ use App\Models\CProfessionType;
 use App\Models\CRole;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\CRUD\app\Library\Widget;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,8 +32,8 @@ class ProfessionalCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\RealtorUser::class);
-        $this->crud->addClause('whereHas', 'contact');
-        $this->crud->addClause('whereHas', 'professions');
+//        $this->crud->addClause('whereHas', 'contact');
+//        $this->crud->addClause('whereHas', 'professions');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/professional');
         CRUD::setEntityNameStrings('Մասնագետ', 'Մասնագետներ');
     }
@@ -52,13 +53,10 @@ class ProfessionalCrudController extends CrudController
             'label' => 'Դեր',
         ], function() { // the options that show up in the select2
             return CRole::all()->pluck('name_arm', 'id')->toArray();
-        }, function($values) { // if the filter is active
-//            foreach (json_decode($values) as $key => $value) {
-
+        }, function($values) {
                 $this->crud->query = $this->crud->query->whereHas('roles', function ($query) use ($values) {
                     $query->whereIn('role_id', json_decode($values));
                 })->whereHas('contact');
-//            }
         });
 
         $this->crud->addFilter([
@@ -178,15 +176,7 @@ class ProfessionalCrudController extends CrudController
             'limit' => 100,
         ]);
 
-//        CRUD::addColumn([
-//            'name' => 'contact',
-//            'entity' => 'contact',
-//            'type' => "select",
-//            'model' => "App\Models\Contact",
-//            'attribute' => "full_contact",
-//            'label' => "Մասնագետներ",
-//            'limit' => 150,
-//        ]);
+
 
         CRUD::addColumn([
             'name' => 'professions',
@@ -236,18 +226,6 @@ class ProfessionalCrudController extends CrudController
             'limit' => 150,
         ]);
 
-
-
-//        CRUD::column('profile_picture_name');
-//        CRUD::column('profile_picture_path');
-//        CRUD::column('view_count');
-//        CRUD::column('screened_count');
-
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
     }
 
     /**
@@ -259,9 +237,187 @@ class ProfessionalCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(RealtorUserRequest::class);
+        Widget::add()->type('script')->content('assets/js/admin/forms/estate.js');
+        $this->crud->setCreateContentClass('col-md-8');
 
+        CRUD::addField([
+            'name' => 'is_organization',
+            'type' => "switch",
+            'label' => "Կազմակերպություն",
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
 
-        
+        CRUD::addField([
+            'name' => 'name_arm',
+            'type' => "text",
+            'label' => "Անուն",
+            'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'last_name_arm',
+            'type' => "text",
+            'label' => "Ազգանուն",
+            'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'organization',
+            'type' => "text",
+            'label' => "Կազմակերպության անվանում",
+            'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'separator1',
+            'type' => 'custom_html',
+            'value' => '<br/>',
+            'wrapper' => [
+                'class' => 'form-group col-md-12 separator'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'email',
+            'type' => "text",
+            'label' => "Էլ. հասցե",
+            'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'password',
+            'type' => "password",
+            'label' => "Գաղտնաբառ",
+            'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'separator2',
+            'type' => 'custom_html',
+            'value' => '<br/>',
+            'wrapper' => [
+                'class' => 'form-group col-md-12 separator'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'phone_mobile_1',
+            'type' => "text",
+            'label' => "Բջջ. հեռ. 1",
+            'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'phone_mobile_2',
+            'type' => "text",
+            'label' => "Բջջ. հեռ. 2",
+            'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'phone_office',
+            'type' => "text",
+            'label' => "Գրասենյակի հեռ.",
+            'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'viber',
+            'type' => "text",
+            'label' => "Viber",
+            'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'whatsapp',
+            'type' => "text",
+            'label' => "WhatsApp",
+            'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'separator3',
+            'type' => 'custom_html',
+            'value' => '<br/>',
+            'wrapper' => [
+                'class' => 'form-group col-md-12 separator'
+            ],
+        ]);
+
+        CRUD::addField([   // Checklist
+            'label'     => 'Մասնագիտության տեսակը',
+            'type'      => 'checklist',
+            'name'      => 'professions',
+            'entity'    => 'professions',
+            'attribute' => 'name_arm',
+            'model'     => "App\Models\CProfessionType",
+            'pivot'     => true,
+             'number_of_columns' => 3,
+        ]);
+
+        CRUD::addField([
+            'name' => 'separator4',
+            'type' => 'custom_html',
+            'value' => '<br/>',
+            'wrapper' => [
+                'class' => 'form-group col-md-12 separator'
+            ],
+        ]);
+
+        CRUD::addField([   // Checklist
+            'label'     => 'Դեր',
+            'type'      => 'select_multiple',
+            'name'      => 'inner_roles',
+            'entity'    => 'roles',
+            'attribute' => 'name_arm',
+            'model'     => "App\Models\CRole",
+            'pivot'     => true,
+            'options'   => (function ($query) {
+                return $query->whereIn('id', [1,2,4,5])->get();
+            }),
+        ]);
+
+        CRUD::addField([
+            'name' => 'separator5',
+            'type' => 'custom_html',
+            'value' => '<br/>',
+            'wrapper' => [
+                'class' => 'form-group col-md-12 separator'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'profile_picture_path',
+            'label'        => "Profile Image",
+            'filename'     => "image_filename", // set to null if not needed
+            'type'         => 'base64_image',
+            'aspect_ratio' => 1, // set to 0 to allow any aspect ratio
+            'crop'         => true, // set to true to allow cropping, false to disable
+            'src'          => NULL,
+        ]);
+
     }
 
     /**
@@ -272,6 +428,7 @@ class ProfessionalCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        $this->crud->setCreateContentClass('col-md-8');
         $this->setupCreateOperation();
     }
 }
