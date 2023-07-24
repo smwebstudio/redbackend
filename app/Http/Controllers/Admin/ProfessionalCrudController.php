@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\RealtorUserRequest;
+use App\Models\Contact;
 use App\Models\CProfessionType;
 use App\Models\CRole;
+use App\Traits\Controllers\AddContactListColumns;
+use App\Traits\Controllers\HasContactFilters;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,7 +27,7 @@ class ProfessionalCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-
+    use AuthorizesRequests;
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -36,6 +40,18 @@ class ProfessionalCrudController extends CrudController
         $this->crud->addClause('whereHas', 'professions');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/professional');
         CRUD::setEntityNameStrings('Մասնագետ', 'Մասնագետներ');
+    }
+
+    protected function setupShowOperation()
+    {
+
+        $this->authorize('create', Contact::class);
+        CRUD::addColumn([
+            'name' => 'contactType',
+            'type' => "relationship",
+            'label' => "Կոնտակտի տեսակը",
+            'attribute' => "name_arm",
+        ]);
     }
 
     /**

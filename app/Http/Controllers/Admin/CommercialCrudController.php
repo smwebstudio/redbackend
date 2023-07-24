@@ -54,7 +54,7 @@ class CommercialCrudController extends CrudController
 
     protected function setupShowOperation()
     {
-//        $this->authorize('create', Estate::class);
+        $this->authorize('create', Estate::class);
         CRUD::setShowView('redg.estate.show');
         Widget::add()->type('script')
             ->content('https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js')
