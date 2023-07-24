@@ -32,8 +32,8 @@ class ProfessionalCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\RealtorUser::class);
-//        $this->crud->addClause('whereHas', 'contact');
-//        $this->crud->addClause('whereHas', 'professions');
+        $this->crud->addClause('whereHas', 'contact');
+        $this->crud->addClause('whereHas', 'professions');
         CRUD::setRoute(config('backpack.base.route_prefix') . '/professional');
         CRUD::setEntityNameStrings('Մասնագետ', 'Մասնագետներ');
     }
@@ -411,11 +411,14 @@ class ProfessionalCrudController extends CrudController
         CRUD::addField([
             'name' => 'profile_picture_path',
             'label'        => "Profile Image",
-            'filename'     => "image_filename", // set to null if not needed
-            'type'         => 'base64_image',
+            'type'         => 'image',
+            'disk'         => 'S3',
             'aspect_ratio' => 1, // set to 0 to allow any aspect ratio
             'crop'         => true, // set to true to allow cropping, false to disable
-            'src'          => NULL,
+            'withFiles' => ([
+                'disk' => 'S3',
+                'path' => 'professionals/',
+            ]),
         ]);
 
     }
