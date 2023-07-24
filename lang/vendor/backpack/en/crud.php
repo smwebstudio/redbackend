@@ -158,8 +158,8 @@ return [
     // CRUD filters navbar view
     'filters'        => 'Filters',
     'toggle_filters' => 'Toggle filters',
-    'remove_filters' => 'Remove filters',
-    'apply' => 'Apply',
+    'remove_filters' => 'Մաքրել',
+    'apply' => 'Կիրառել',
 
     //filters language strings
     'today' => 'Today',
