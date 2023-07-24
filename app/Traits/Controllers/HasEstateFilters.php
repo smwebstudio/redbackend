@@ -200,28 +200,93 @@ trait HasEstateFilters
         ], function () {
             return \App\Models\CCurrency::all()->pluck('name_arm', 'id')->toArray();
         }, function ($value) {
-            $this->crud->addClause('where', 'currency_id', $value);
+//            $this->crud->addClause('where', 'currency_id', $value);
         });
 
         if (request('currency') && !request('extended_price')) {
             $currency = request('currency');
+            $contractType = request('contract_type');
             if (!empty($currency)) {
                 $this->crud->addFilter([
                     'name' => 'price_range',
-                    'type' => 'select2_multiple_red',
+                    'type' => 'select2',
                     'label' => 'Գնային միջակայք',
-                ], function () use ($currency) {
+                ], function () use ($currency,$contractType) {
                     if ($currency == 1) {
-                        return \App\Models\CSellPriceInUsd::all()->pluck('name_arm', 'id')->toArray();
+                        if($contractType == 2) {
+                            return \App\Models\CRentPriceInUsd::all()->pluck('name_arm', 'name_eng')->toArray();
+                        }
+                        if($contractType == 3) {
+                            return \App\Models\CDailyPriceInUsd::all()->pluck('name_arm', 'name_eng')->toArray();
+                        }
+                        return \App\Models\CSellPriceInUsd::all()->pluck('name_arm', 'name_eng')->toArray();
                     }
                     if ($currency == 2) {
-                        return \App\Models\CSellPriceInRur::all()->pluck('name_arm', 'id')->toArray();
+                        if($contractType == 2) {
+                            return \App\Models\CRentPriceInRur::all()->pluck('name_arm', 'name_eng')->toArray();
+                        }
+                        if($contractType == 3) {
+                            return \App\Models\CDailyPriceInRur::all()->pluck('name_arm', 'name_eng')->toArray();
+                        }
+                        return \App\Models\CSellPriceInRur::all()->pluck('name_arm', 'name_eng')->toArray();
                     }
                     if ($currency == 3) {
-                        return \App\Models\CSellPriceInAmd::all()->pluck('name_arm', 'id')->toArray();
+                        if($contractType == 2) {
+                            return \App\Models\CRentPriceInAmd::all()->pluck('name_arm', 'name_eng')->toArray();
+                        }
+                        if($contractType == 3) {
+                            return \App\Models\CDailyPriceInAmd::all()->pluck('name_arm', 'name_eng')->toArray();
+                        }
+                        return \App\Models\CSellPriceInAmd::all()->pluck('name_arm', 'name_eng')->toArray();
                     }
                 }, function ($values) {
-                    $this->crud->addClause('whereIn', 'location_community_id', json_decode($values));
+                    $currency = request('currency');
+
+                    preg_match('/(\d+)/', $values, $matches);
+
+                    if (strpos($values, 'Up to') !== false) {
+                        $range = [null, (int) $matches[1]];
+                    } elseif (strpos($values, 'and more') !== false) {
+                        $range = [(int) $matches[1], null];
+                    } else {
+                        if ($currency == 3) {
+                            preg_match('/(\d+) million/', $values, $matches);
+                            $range = [(int) $matches[0]* 1000000, (int) $matches[1] * 1000000];
+                        } else {
+                            preg_match('/(\d+)-(\d+)/', $values, $matches);
+                            $range = [(int) $matches[1], (int) $matches[2]];
+                        }
+
+                    }
+
+                    if ($currency == 1) {
+                        if ($range[0]) {
+                            $this->crud->addClause('where', 'price', '>=', (float)$range[0]);
+                        }
+                        if ($range[1]) {
+                            $this->crud->addClause('where', 'price', '<=', (float)$range[1]);
+                        }
+                    }
+
+                    if ($currency == 2) {
+                        if ($range[0]) {
+                            $this->crud->addClause('where', 'price', '>=', (float)$range[0] * 90);
+                        }
+                        if ($range[1]) {
+                            $this->crud->addClause('where', 'price', '<=', (float)$range[1] * 90);
+                        }
+                    }
+
+                    if ($currency == 3) {
+                        if ($range[0]) {
+                            $this->crud->addClause('where', 'price', '>=', (float)$range[0] * 390);
+                        }
+                        if ($range[1]) {
+                            $this->crud->addClause('where', 'price', '<=', (float)$range[1] * 390);
+                        }
+                    }
+
+
                 });
             }
 
