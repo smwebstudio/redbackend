@@ -390,7 +390,6 @@ class EstateObserver
             $watermarkedImagePath = storage_path('app/public/watermarked.jpg');
             $watermarkedImage->save($watermarkedImagePath);
 
-            dd(78);
             // Upload the watermarked image back to S3
             $newImageContents = file_get_contents($watermarkedImagePath);
             Storage::disk('S3Public')->put($imagePath, $newImageContents, $filename);  // Update the path
