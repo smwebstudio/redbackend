@@ -6,6 +6,11 @@ use App\Events\EstateDocumentUploaded;
 use App\Models\Estate;
 use App\Models\EstateDocument;
 use App\Services\FileService;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Prologue\Alerts\Facades\Alert;
+use Spatie\Image\Image;
+use Spatie\Image\Manipulations;
 
 class EstateObserver
 {
@@ -115,6 +120,7 @@ class EstateObserver
                     $filename = basename($photo);
 
                     if (in_array($photo, $uniqueFilenames)) {
+                        $this->watermarkImage($photo, $filename);
                         $estateDocumentsData[] = [
                             'estate_id' => $estate->id,
                             'path' => $photo,
@@ -135,8 +141,6 @@ class EstateObserver
             }
         }
 
-
-//        dd($estate);
     }
 
 
@@ -341,5 +345,64 @@ class EstateObserver
         }
 
         return $code . '-' . $estate->id;
+    }
+
+    public function watermarkImage($imagePath, $filename)
+    {
+
+        try {
+            $imageContents = Storage::disk('S3Public')->get($imagePath);
+
+            // Save the image locally temporarily
+            $localImagePath = storage_path('app/public/temp.jpg');
+            file_put_contents($localImagePath, $imageContents);
+
+            // Apply watermark
+            $watermarkPath = public_path('watermark.png');  // Updated to use public_path helper function
+            $watermarkedImage = Image::load($localImagePath)
+                ->watermark($watermarkPath)
+                ->watermarkPosition(Manipulations::POSITION_CENTER)
+                ->watermarkHeight(15, Manipulations::UNIT_PERCENT)
+                ->watermarkWidth(15, Manipulations::UNIT_PERCENT)
+                ->apply()
+                ->watermark($watermarkPath)
+                ->watermarkPosition(Manipulations::POSITION_TOP_LEFT)
+                ->watermarkHeight(15, Manipulations::UNIT_PERCENT)
+                ->watermarkWidth(15, Manipulations::UNIT_PERCENT)
+                ->apply()
+                ->watermark($watermarkPath)
+                ->watermarkPosition(Manipulations::POSITION_TOP_RIGHT)
+                ->watermarkHeight(15, Manipulations::UNIT_PERCENT)
+                ->watermarkWidth(15, Manipulations::UNIT_PERCENT)
+                ->apply()
+                ->watermark($watermarkPath)
+                ->watermarkPosition(Manipulations::POSITION_BOTTOM_LEFT)
+                ->watermarkHeight(15, Manipulations::UNIT_PERCENT)
+                ->watermarkWidth(15, Manipulations::UNIT_PERCENT)
+                ->apply()
+                ->watermark($watermarkPath)
+                ->watermarkPosition(Manipulations::POSITION_BOTTOM_RIGHT)
+                ->watermarkHeight(15, Manipulations::UNIT_PERCENT)
+                ->watermarkWidth(15, Manipulations::UNIT_PERCENT);
+
+
+            // Save the watermarked image
+            $watermarkedImagePath = storage_path('app/public/watermarked.jpg');
+            $watermarkedImage->save($watermarkedImagePath);
+
+            dd(78);
+            // Upload the watermarked image back to S3
+            $newImageContents = file_get_contents($watermarkedImagePath);
+            Storage::disk('S3Public')->put($imagePath, $newImageContents, $filename);  // Update the path
+
+            unlink($localImagePath);
+            unlink($watermarkedImagePath);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            Alert::error('An error occured uploading files. Check log files.')->flash();
+        }
+
+
+        return true;
     }
 }

@@ -53,6 +53,7 @@ class RedAjaxUploader extends AjaxUploader
                 Log::error($this->getPath().$name);
 
                 $move = Storage::disk($this->getDisk())->put($this->getPath().$name, Storage::disk($temporaryDisk)->get($value), $name );
+                $moveOriginals = Storage::disk('S3')->put($this->getPath().$name, Storage::disk($temporaryDisk)->get($value), $name );
 
 
                 if ($move) {
