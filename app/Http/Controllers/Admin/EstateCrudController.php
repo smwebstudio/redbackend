@@ -54,15 +54,14 @@ class EstateCrudController extends CrudController
 
     protected function setupShowOperation()
     {
-        $this->authorize('create', Estate::class);
-        CRUD::setShowView('redg.estate.show');
+        CRUD::setShowView('redg.estate.showTabs');
         Widget::add()->type('script')
             ->content('https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js')
             ->crossorigin('anonymous');
         $estate = $this->crud->getCurrentEntry();
 
+        $this->addApartmentColumns();
         $this->crud->data['estate'] = $estate;
-
 
     }
 
@@ -770,6 +769,165 @@ class EstateCrudController extends CrudController
         ]);
 
         CRUD::addFields($addAppartmentFeaturesList);
+    }
+
+    private function addApartmentColumns(): void
+    {
+        $this->crud->setOperationSetting('tabsType', 'vertical');
+        /*Apartment building attribute*/
+
+        $building_attributes = [
+            'building_structure_type',
+            'building_type',
+            'building_project_type',
+            'building_floor_type',
+            'exterior_design_type',
+            'courtyard_improvement',
+            'distance_public_objects',
+            'elevator_type',
+            'year',
+            'parking_type',
+            'entrance_type',
+            'entrance_door_position',
+            'entrance_door_type',
+            'windows_view',
+            'building_window_count',
+            'repairing_type',
+            'heating_system_type',
+            'service_fee_type',
+        ];
+
+        $addApartmentBuildingList = [];
+
+        foreach ($building_attributes as $buildingAttribute) {
+            $addApartmentBuildingList[] = [
+                'name' => $buildingAttribute,
+                'type' => 'relationship',
+                'attribute' => "name_arm",
+                'label' => trans('estate.' . $buildingAttribute),
+                'placeholder' => '-Ընտրել մեկը-',
+                'tab' => 'test',
+//                'wrapper' => [
+//                    'class' => 'form-group col-md-3 apartment_building_attribute'
+//                ],
+            ];
+        }
+
+
+        $apartmentFeaturesList = [
+            "new_construction",
+            "apartment_construction",
+            "exclusive_design",
+            "possible_extension",
+            "new_roof",
+            "separate_room",
+            "balcony",
+            "oriel",
+            "open_balcony",
+            "uninhabited",
+            "new_water_tubes",
+            "new_wiring",
+            "new_windows",
+            "new_doors",
+            "new_floor",
+            "laminat",
+            "parquet",
+            "heating_ground",
+            "new_bathroom",
+            "jacuzzi",
+            "persistent_water",
+            "natural_gas",
+            "gas_heater",
+            "refrigirator",
+            "washer",
+            "dish_washer",
+            "tv",
+            "conditioner",
+            "cable_tv",
+            "internet",
+            "kitchen_furniture",
+            "furniture",
+            "pantry",
+            "niche",
+            "cellar",
+            "garage",
+            "land",
+            "has_intercom",
+            "sunny",
+            "is_basement",
+            "is_duplex",
+            "is_mansard_floor",
+            "can_be_used_as_commercial",
+            "is_exchangeable"
+        ];
+        $addAppartmentFeaturesList = [];
+
+
+        foreach ($apartmentFeaturesList as $feature) {
+            $addAppartmentFeaturesList[] = [
+                'name' => $feature,
+                'type' => 'switch',
+                'label' => trans('estate.' . $feature),
+                'tab' => 'Հիմնական',
+                'wrapper' => [
+                    'class' => 'form-group col-md-3'
+                ],
+            ];
+        }
+
+
+        CRUD::addColumn([
+            'name' => 'separator12',
+            'type' => 'custom_html',
+            'value' => '<h4>Շենք/Բնակարան</h4>',
+            'tab' => 'Հիմնական',
+        ]);
+
+        CRUD::addColumns($addApartmentBuildingList);
+
+        CRUD::addColumn([
+            'name' => 'service_amount',
+            'type' => "number",
+            'label' => "Սպասարկման վճար",
+            'tab' => 'Հիմնական',
+            'wrapper' => [
+                'class' => 'form-group col-md-2 apartment_building_attribute'
+            ],
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'service_amount_currency',
+            'type' => "relationship",
+            'attribute' => "name_arm",
+            'label' => "<br/>",
+            'allows_null' => false,
+            'default' => 1,
+            'placeholder' => '-Ընտրել մեկը-',
+            'tab' => 'Հիմնական',
+            'wrapper' => [
+                'class' => 'form-group col-md-1 apartment_building_attribute'
+            ],
+        ]);
+        CRUD::addColumn([
+            'name' => 'separator1',
+            'type' => 'custom_html',
+            'value' => '<hr>',
+            'tab' => 'Հիմնական',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+        CRUD::addColumn([
+            'name' => 'separator',
+            'type' => 'custom_html',
+            'value' => '<h4>Կոմունալ հարմարություններ</h4>',
+            'tab' => 'Հիմնական',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+        CRUD::addColumns($addAppartmentFeaturesList);
     }
 
 }

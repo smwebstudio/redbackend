@@ -606,6 +606,7 @@ class Estate extends Model
 		'is_public_text_generation'
 	];
 
+    protected $appends = ['shortDescription'];
 
     protected array $multi_lang = [
         'name',
@@ -923,7 +924,7 @@ class Estate extends Model
 
     /*Methods*/
 
-    public function getFullAddressAttribute(): ?string
+    public function getFullAddressAttribute($onlyStreet = false): ?string
     {
         $fullAddress = null;
         if($this->getProvince()) {
@@ -935,10 +936,10 @@ class Estate extends Model
         if($this->getStreet()) {
             $fullAddress .= ', '.$this->getStreet();
         }
-        if($this->address_building) {
+        if($this->address_building && !$onlyStreet) {
             $fullAddress .= ', '.$this->address_building;
         }
-        if($this->address_apartment) {
+        if($this->address_apartment && !$onlyStreet) {
             $fullAddress .= ', '.$this->address_apartment;
         }
         return $fullAddress;
@@ -990,6 +991,30 @@ class Estate extends Model
     public function getFullCodeAttribute()
     {
         return $this->estate_type?->name_arm . '<br/>'. $this->code  . '<br/>'.   $this->contract_type?->name_arm;
+    }
+
+    public function getShortDescriptionAttribute()
+    {
+
+        $shortDescription = '';
+        $contractType = '';
+        $street = $this->getFullAddressAttribute(true) != null ? $this->getFullAddressAttribute(true) : "...";
+
+        if ($this->contract_type_id === 1) {
+            $contractType = trans('estate.' . "label.generating.text.apartment.sale.1");
+        } else if ($this->contract_type_id === 2) {
+            $contractType = trans('estate.' . "label.generating.text.apartment.rent.1");
+        } else if ($this->contract_type_id === 3) {
+            $contractType = trans('estate.' . "label.generating.text.apartment.fee.1");
+        }
+
+
+
+        if($this->estate_type_id === 1) {
+                $shortDescription = $contractType.' '.$street;
+        }
+
+        return $shortDescription;
     }
 
 

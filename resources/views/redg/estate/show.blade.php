@@ -15,6 +15,12 @@
 @endphp
 
 @section('after_styles')
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            important: true,
+        }
+    </script>
     <link rel="stylesheet" href="{{ asset('assets/css/views.css') }}">
 @endsection
 
@@ -23,28 +29,33 @@
         <div class="main-container">
             <section class="main-container__main b-shadow">
                 <div class="row">
-                    <div class="col-md-4 main-container__main--left slider-container">
+                    <div class="col-md-12">
+                        {{ $estate->short_description }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 main-container__main--left slider-container">
                         <div class="swiper EstatesSlider">
                             <!-- Slider main container -->
                             <div class="swiper-wrapper">
                                 @foreach($images as $image)
                                     <div class="swiper-slide">
                                         <div class="swiper-zoom-container">
-                                        <img src="{{ Storage::disk('S3')->url('/estate/photos/'.$image->path) }}">
+                                        <img src="{{ Storage::disk('S3Public')->url('/estate/photos/'.$image->path) }}">
                                             </div>
                                     </div>
                                 @endforeach
                             </div>
                             <div class="swiper-pagination"></div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next bg-light"></div>
+                            <div class="swiper-button-prev bg-light"></div>
                         </div>
 
                         <div class="swiper SwiperThumbs">
                             <div class="swiper-wrapper">
                                 @foreach($images as $image)
-                                    <div class="swiper-slide">
-                                        <img src="{{ Storage::disk('S3')->url('/estate/photos/'.$image->path_thumb) }}">
+                                    <div class="swiper-slide mr-2">
+                                        <img src="{{ Storage::disk('S3Public')->url('/estate/photos/'.$image->path_thumb) }}">
                                     </div>
                                 @endforeach
                             </div>
