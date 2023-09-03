@@ -19,6 +19,7 @@
 
     if (is_array($field['value'])) {
         $serverFiles = [];
+        $newPaths = [];
 
         foreach ($field['value'] as $key => $path) {
             $disk = strpos($path, $temporaryDirectory) !== false ? $temporaryDisk : $field['disk'];
@@ -126,6 +127,22 @@
             cursor: move;
         }
 
+        .actionsDropzone {
+            display: flex;
+            gap: 12px;
+            padding: 8px;
+            justify-content: center;
+        }
+
+        .actionsDropzone div {
+            font-size: 24px !important;
+        }
+
+        .dropzone .actionsDropzone div:hover i {
+            cursor: pointer;
+            color:#00bb00;
+        }
+
         .dropzone .dz-preview {
             visibility: hidden;
         }
@@ -189,10 +206,7 @@
             object-fit: cover;
         }
 
-        .dropzone .dz-remove i {
-            border: 1px solid;
-            border-radius: 50%;
-        }
+
 
         .dropzone .dz-remove i::before {
             padding-top: 2px;
@@ -247,19 +261,24 @@
             if (!$dropzoneConfig.init) {
                 $dropzoneConfig.init = function () {
                     this.on('addedfile', function (file) {
-                        var removeButton = Dropzone.createElement('<div class="dz-remove" data-dz-remove=""><i class="la la-remove"></i></div>');
+                        var actionsDropzone = Dropzone.createElement('<div class="actionsDropzone flex justify-center "></div>');
+                        var removeButton = Dropzone.createElement('<div class="dz-remove" data-dz-remove=""><i class="la la-trash"></i></div>');
+                        var publishButton = Dropzone.createElement('<div class="dz-publish" ><i class="las la-eye-slash"></i></div>');
+                        var mainButton = Dropzone.createElement('<div class="dz-main" ><i class="lar la-star"></i></div>');
                         var _this = this;
 
                         removeButton.addEventListener('click', function (e) {
                             e.preventDefault();
                             e.stopPropagation();
-
                             if (isDropzoneActive) {
                                 _this.removeFile(file);
                             }
                         });
 
-                        file.previewElement.appendChild(removeButton);
+                        file.previewElement.appendChild(actionsDropzone);
+                        actionsDropzone.appendChild(publishButton);
+                        actionsDropzone.appendChild(removeButton);
+                        actionsDropzone.appendChild(mainButton);
 
                         input.dispatchEvent(new Event('change', {bubbles: true}));
                     });
@@ -349,14 +368,17 @@
                 let inputFiles = input.value;
                 let files = inputFiles ? JSON.parse(inputFiles) : [];
 
+                console.log(78)
+                console.log(filePath)
+                console.log(tempUploadFolderName)
                 if (!filePath.path && filePath.includes(tempUploadFolderName)) {
+
                     $.ajax({
                         url: '{{ backpack_url($crud->entity_name . '/dropzone/delete') }}',
                             type: 'POST',
                             data: `file=${filePath}`,
                             success: function (data) {
                                 if (data.success) {
-
                                     file.previewElement?.remove();
                                     files.splice(files.findIndex(obj => (obj === filePath)), 1);
                                     input.value = JSON.stringify(files);

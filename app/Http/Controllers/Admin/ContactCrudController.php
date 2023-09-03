@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\ContactRequest;
 use App\Models\Contact;
 use App\Traits\Controllers\AddContactListColumns;
+use App\Traits\Controllers\AddContactShowColumns;
 use App\Traits\Controllers\HasContactFilters;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -25,6 +26,7 @@ class ContactCrudController extends CrudController
     use AuthorizesRequests;
     use HasContactFilters;
     use AddContactListColumns;
+    use AddContactShowColumns;
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -52,14 +54,8 @@ class ContactCrudController extends CrudController
 
     protected function setupShowOperation()
     {
+        $this->addShowColumns();
 
-        $this->authorize('create', Contact::class);
-        CRUD::addColumn([
-            'name' => 'contactType',
-            'type' => "relationship",
-            'label' => "Կոնտակտի տեսակը",
-            'attribute' => "name_arm",
-        ]);
     }
     /**
      * Define what happens when the Create operation is loaded.

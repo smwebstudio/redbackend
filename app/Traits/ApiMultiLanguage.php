@@ -14,7 +14,7 @@ trait ApiMultiLanguage
     {
 
 
-        Log::error('test + '.App::getLocale());
+//        Log::error('test + '.App::getLocale());
 
         if (isset($this->multi_lang) && in_array($key, $this->multi_lang)) {
             $key = $key . '_' . App::getLocale();

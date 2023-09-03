@@ -108,28 +108,37 @@ class EstateObserver
 
         if (!empty($estate->temporary_photos)) {
 
-
             $estatePhotos = json_decode($estate->temporary_photos, true);
+
+
             if (!empty($estatePhotos) && is_array($estatePhotos)) {
+
                 $existingPhotos = EstateDocument::where('estate_id', '=', $estate->id)->pluck('path')->toArray();
+
                 $uniqueFilenames = array_diff($estatePhotos, $existingPhotos);
 
                 $estateDocumentsData = [];
 
                 foreach ($estatePhotos as $photo) {
-                    $filename = basename($photo);
+                    if (str_starts_with($photo, 'uploads/tmp/')) {
+                        $filename = basename($photo);
 
-                    if (in_array($photo, $uniqueFilenames)) {
-                        $this->watermarkImage($photo, $filename);
-                        $estateDocumentsData[] = [
-                            'estate_id' => $estate->id,
-                            'path' => $photo,
-                            'path_thumb' => $photo,
-                            'file_name' => $filename,
-                            'is_public' => 1,
-                        ];
+                        if (in_array($photo, $uniqueFilenames)) {
+
+                            $this->transferOriginalImage($estate, $photo, $filename);
+
+                            $newImagePath = $estate->id . '/' . $filename;
+
+                            $this->watermarkImage($estate, $photo, $filename);
+                            $estateDocumentsData[] = [
+                                'estate_id' => $estate->id,
+                                'path' => $newImagePath,
+                                'path_thumb' => $newImagePath,
+                                'file_name' => $filename,
+                                'is_public' => 1,
+                            ];
+                        }
                     }
-
                 }
                 EstateDocument::upsert($estateDocumentsData, [
                     'estate_id',
@@ -137,8 +146,22 @@ class EstateObserver
                     'path_thumb',
                     'is_public'
                 ]);
-                EstateDocument::whereIn('path', array_diff($existingPhotos, $estatePhotos))->delete();
+
+
+//                EstateDocument::whereIn('path', array_diff($existingPhotos, $estatePhotos))->delete();
+                Log::error('deleting exisitng');
             }
+
+            $temporaryPhotos = [];
+            $updatedTemporaryPhotos = EstateDocument::where('estate_id', $estate->id)->get();
+
+            foreach ($updatedTemporaryPhotos as $updatedTemporaryPhoto) {
+                $temporaryPhotos[] = 'estate/photos/' . $updatedTemporaryPhoto->path;
+            }
+
+            $estate->unsetEventDispatcher();
+            $estate->temporary_photos = json_encode($temporaryPhotos);
+            $estate->saveQuietly();
         }
 
     }
@@ -347,7 +370,7 @@ class EstateObserver
         return $code . '-' . $estate->id;
     }
 
-    public function watermarkImage($imagePath, $filename)
+    public function watermarkImage($estate, $imagePath, $filename)
     {
 
         try {
@@ -392,10 +415,14 @@ class EstateObserver
 
             // Upload the watermarked image back to S3
             $newImageContents = file_get_contents($watermarkedImagePath);
-            Storage::disk('S3Public')->put($imagePath, $newImageContents, $filename);  // Update the path
+
+            $newImagePath = 'estate/photos/' . $estate->id . '/' . $filename;
+
+            Storage::disk('S3Public')->put($newImagePath, $newImageContents, $filename);  // Update the path
 
             unlink($localImagePath);
             unlink($watermarkedImagePath);
+
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             Alert::error('An error occured uploading files. Check log files.')->flash();
@@ -404,4 +431,19 @@ class EstateObserver
 
         return true;
     }
+
+    public function transferOriginalImage($estate, $imagePath, $filename)
+    {
+        try {
+            Storage::disk('S3')->writeStream('estate/photos/' . $estate->id . '/' . $filename, Storage::disk('S3Public')->readStream($imagePath));
+
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            Alert::error('An error occured uploading files. Check log files.')->flash();
+        }
+
+
+        return true;
+    }
+
 }

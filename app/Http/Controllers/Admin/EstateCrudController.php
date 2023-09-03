@@ -63,6 +63,28 @@ class EstateCrudController extends CrudController
         $this->addApartmentColumns();
         $this->crud->data['estate'] = $estate;
 
+
+
+        CRUD::addColumn([
+            'name' => 'full_code',
+            'type' => "markdown",
+            'value' => function ($entry) {
+                return '<div style="text-align: center"><a href="/admin/estate/' . $entry->id . '/show">' . $entry->full_code . '</a></div>';
+            },
+            'tab' => 'General',
+            'label' => "Կոդ",
+            'limit' => 100,
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'full_address',
+            'type' => "text",
+            'label' => "Հասցե",
+            'tab' => 'Genersdfal',
+            'limit' => 500,
+        ]);
+
+
     }
 
     /**
@@ -400,7 +422,7 @@ class EstateCrudController extends CrudController
             ],
             'withFiles' => ([
                 'disk' => 'S3Public',
-                'path' => 'uploads/photos',
+                'path' => 'uploads/tmp',
                 'uploader' => 'App\Services\RedAjaxUploader',
             ]),
             'wrapper' => [
@@ -722,6 +744,9 @@ class EstateCrudController extends CrudController
             'type' => 'custom_html',
             'value' => '<h4>Շենք/Բնակարան</h4>',
             'tab' => 'Հիմնական',
+            'wrapper' => [
+                'class' => 'form-group col-md-2 apartment_building_attribute'
+            ],
         ]);
 
         CRUD::addFields($addApartmentBuildingList);
@@ -773,7 +798,7 @@ class EstateCrudController extends CrudController
 
     private function addApartmentColumns(): void
     {
-        $this->crud->setOperationSetting('tabsType', 'vertical');
+
         /*Apartment building attribute*/
 
         $building_attributes = [
@@ -805,11 +830,8 @@ class EstateCrudController extends CrudController
                 'type' => 'relationship',
                 'attribute' => "name_arm",
                 'label' => trans('estate.' . $buildingAttribute),
-                'placeholder' => '-Ընտրել մեկը-',
-                'tab' => 'test',
-//                'wrapper' => [
-//                    'class' => 'form-group col-md-3 apartment_building_attribute'
-//                ],
+                'tab' => 'Հիմնական',
+                'className' => 'form-group col-md-6 apartment_building_attribute',
             ];
         }
 
@@ -866,21 +888,20 @@ class EstateCrudController extends CrudController
         foreach ($apartmentFeaturesList as $feature) {
             $addAppartmentFeaturesList[] = [
                 'name' => $feature,
-                'type' => 'switch',
+                'type' => 'check',
                 'label' => trans('estate.' . $feature),
                 'tab' => 'Հիմնական',
-                'wrapper' => [
-                    'class' => 'form-group col-md-3'
-                ],
+                 'className' => 'form-group col-md-3'
             ];
         }
 
 
         CRUD::addColumn([
-            'name' => 'separator12',
+            'name' => '<h4>Շենք/Բնակարան</h4>',
             'type' => 'custom_html',
-            'value' => '<h4>Շենք/Բնակարան</h4>',
+            'value' => ' ',
             'tab' => 'Հիմնական',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
         ]);
 
         CRUD::addColumns($addApartmentBuildingList);
@@ -890,9 +911,7 @@ class EstateCrudController extends CrudController
             'type' => "number",
             'label' => "Սպասարկման վճար",
             'tab' => 'Հիմնական',
-            'wrapper' => [
-                'class' => 'form-group col-md-2 apartment_building_attribute'
-            ],
+            'className' => 'form-group col-md-3'
         ]);
 
         CRUD::addColumn([
@@ -904,27 +923,15 @@ class EstateCrudController extends CrudController
             'default' => 1,
             'placeholder' => '-Ընտրել մեկը-',
             'tab' => 'Հիմնական',
-            'wrapper' => [
-                'class' => 'form-group col-md-1 apartment_building_attribute'
-            ],
+            'className' => 'form-group col-md-3'
         ]);
+
         CRUD::addColumn([
-            'name' => 'separator1',
+            'name' => '<h4>Կոմունալ հարմարություններ</h4>',
             'type' => 'custom_html',
-            'value' => '<hr>',
+            'value' => ' ',
             'tab' => 'Հիմնական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-        CRUD::addColumn([
-            'name' => 'separator',
-            'type' => 'custom_html',
-            'value' => '<h4>Կոմունալ հարմարություններ</h4>',
-            'tab' => 'Հիմնական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
+            'className' => 'col-md-12 mt-4 pt-4 mb-4 border-solid  border-t-4  '
         ]);
 
         CRUD::addColumns($addAppartmentFeaturesList);

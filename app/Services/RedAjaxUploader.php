@@ -48,12 +48,9 @@ class RedAjaxUploader extends AjaxUploader
         foreach ($uploadedFiles as $key => $value) {
             try {
                 $name = substr($value, strrpos($value, '/') + 1);
-                Log::error($name);
-                Log::error($value);
-                Log::error($this->getPath().$name);
 
                 $move = Storage::disk($this->getDisk())->put($this->getPath().$name, Storage::disk($temporaryDisk)->get($value), $name );
-                $moveOriginals = Storage::disk('S3')->put($this->getPath().$name, Storage::disk($temporaryDisk)->get($value), $name );
+//                $moveOriginals = Storage::disk('S3')->put($this->getPath().$name, Storage::disk($temporaryDisk)->get($value), $name );
 
 
                 if ($move) {

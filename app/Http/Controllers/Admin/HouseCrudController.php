@@ -574,7 +574,7 @@ class HouseCrudController extends CrudController
             ],
             'withFiles' => ([
                 'disk' => 'S3Public',
-                'path' => 'uploads/photos',
+                'path' => 'uploads/tmp',
                 'uploader' => 'App\Services\RedAjaxUploader',
             ]),
             'wrapper' => [

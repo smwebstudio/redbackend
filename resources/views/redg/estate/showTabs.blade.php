@@ -30,7 +30,7 @@
 @endsection
 
 @section('content')
-    <section class="main-container__main b-shadow">
+    <section class="main-container__main b-shadow bg-white p-4 mb-4">
         <div class="row">
             <div class="col-md-12">
                 {{ $estate->short_description }}
@@ -65,32 +65,7 @@
                 </div>
 
             </div>
-            <div class="col-md-4">
-                <div class="main-container__main--info">
-                    <h2 class="hospital-name">
-                        {{  $estate->name_prefix ?? $estate->refer }}
-                        {{  $estate->full_name }}
-                        <span>ID: {{ $estate->id }}</span>
-                    </h2>
-                    <ul class="info-list">
 
-                        <li>{{ $estate->location_province?->name_arm }}</li>
-                    </ul>
-                </div>
-                <div class="main-container__main--actions-date">
-                    Created: {{ $estate->created_at }}
-                </div>
-                <div class="main-container__main--status">
-                    @can('expert.create')
-                        Status: <span
-                            class="{{ $estate->published ? 'text-green' : 'text-orange' }}">{{ $estate->published ? 'Published' : 'Draft' }}</span>
-                    @endcan
-                </div>
-                <div class="main-container__main--actions-wrapper">
-
-
-                </div>
-            </div>
         </div>
     </section>
     <div class="row" bp-section="crud-operation-show">
@@ -142,6 +117,8 @@
                 },
             });
             var SwiperThumbs = new Swiper(".EstatesSlider", {
+
+                effect: 'fade',
                 spaceBetween: 10,
                 loop: true,
                 navigation: {
@@ -163,7 +140,15 @@
 
     </script>
 @endpush
-
+@section('after_styles')
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            important: true,
+        }
+    </script>
+    <link rel="stylesheet" href="{{ asset('assets/css/views.css') }}">
+@endsection
 @push('after_styles')
     <style>
 
