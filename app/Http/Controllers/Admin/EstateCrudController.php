@@ -61,6 +61,8 @@ class EstateCrudController extends CrudController
         $estate = $this->crud->getCurrentEntry();
 
         $this->addApartmentColumns();
+        $this->addProfessinalTabColumns();
+        $this->addAdditionalTabColumns();
         $this->crud->data['estate'] = $estate;
     }
 
@@ -892,6 +894,150 @@ class EstateCrudController extends CrudController
         ]);
 
         CRUD::addColumns($addAppartmentFeaturesList);
+    }
+
+    private function addProfessinalTabColumns(): void
+    {
+
+        /*Մասնագիտական tab fields*/
+
+        CRUD::addColumn([
+            'name' => 'name_arm',
+            'type' => "textarea",
+            'row' => 12,
+            'label' => "Մասնագիտական կարծիք, Վերլուծություն",
+            'tab' => 'Մասնագիտական',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'additional_info_arm',
+            'type' => "textarea",
+            'row' => 12,
+            'label' => "Ինչու ես ձեռք չէի բերի այս գույքը",
+            'tab' => 'Մասնագիտական',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+
+        CRUD::addColumn([
+            'name' => 'comment_arm',
+            'type' => "text",
+            'row' => 12,
+            'label' => "Այլ նոթեր",
+            'tab' => 'Մասնագիտական',
+            'limit' => 10000,
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+
+        CRUD::addColumn([
+            'name' => 'is_public_text_generation',
+            'type' => "switch",
+            'label' => "Ավտո տեքստ",
+            'tab' => 'Մասնագիտական',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'public_text_arm',
+            'type' => "text",
+            'label' => "Հայտարարության տեքստ (հայերեն)",
+            'tab' => 'Մասնագիտական',
+            'limit' => 10000,
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+    }
+
+    private function addAdditionalTabColumns(): void
+    {
+
+        /*Լրացուցիչ tab fields*/
+
+        CRUD::addColumn([
+            'name' => 'propertyAgent',
+            'entity' => 'propertyAgent',
+            'type' => "relationship",
+            'ajax' => true,
+            'minimum_input_length' => 0,
+            'attribute' => "name_arm",
+            'label' => "Տեղազննող գործակալ",
+            'tab' => 'Լրացուցիչ',
+            'placeholder' => '-Ընտրել մեկը-',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+
+        CRUD::addColumn([
+            'name' => 'infoSource',
+            'type' => "relationship",
+            'ajax' => true,
+            'minimum_input_length' => 0,
+            'attribute' => "contactFullName",
+            'label' => "Ինֆորմացիայի աղբյուր",
+            'tab' => 'Լրացուցիչ',
+            'placeholder' => '-Ընտրել մեկը-',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'intercom',
+            'type' => "text",
+            'label' => "Դոմոֆոն",
+            'tab' => 'Լրացուցիչ',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'is_advertised',
+            'type' => 'switch',
+            'label' => 'Գովազդված',
+            'tab' => 'Լրացուցիչ',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'is_urgent',
+            'type' => 'switch',
+            'label' => 'Շտապ',
+            'tab' => 'Լրացուցիչ',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'is_hot_offer',
+            'type' => 'switch',
+            'label' => 'Թոփ առաջարկներ',
+            'tab' => 'Լրացուցիչ',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'estate_status',
+            'type' => "relationship",
+            'attribute' => "name_arm",
+            'label' => "Կարգավիճակ",
+            'tab' => 'Լրացուցիչ',
+            'placeholder' => '-Ընտրել մեկը-',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+        
+
+        CRUD::addColumn([
+            'name' => 'meta_title_arm',
+            'type' => "textarea",
+            'label' => "Վերնագիր SEO",
+            'tab' => 'Լրացուցիչ',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'meta_description_arm',
+            'type' => "textarea",
+            'label' => "Նկարագրություն SEO",
+            'tab' => 'Լրացուցիչ',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
     }
 
 }
