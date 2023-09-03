@@ -62,37 +62,6 @@ class EstateCrudController extends CrudController
 
         $this->addApartmentColumns();
         $this->crud->data['estate'] = $estate;
-
-
-
-        CRUD::addColumn([
-            'name' => 'full_code',
-            'type' => "markdown",
-            'value' => function ($entry) {
-                return '<div style="text-align: center"><a href="/admin/estate/' . $entry->id . '/show">' . $entry->full_code . '</a></div>';
-            },
-            'tab' => 'General',
-            'label' => "Կոդ",
-            'limit' => 100,
-        ]);
-
-        CRUD::addColumn([
-            'name' => 'full_price',
-            'type' => "text",
-            'label' => "Gin",
-            'tab' => 'Genersdfal',
-            'limit' => 500,
-        ]);
-
-        CRUD::addColumn([
-            'name' => 'full_address',
-            'type' => "text",
-            'label' => "Հասցե",
-            'tab' => 'Genersdfal',
-            'limit' => 500,
-        ]);
-
-
     }
 
     /**
@@ -127,7 +96,6 @@ class EstateCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-//        $this->authorize('create', Estate::class);
         CRUD::setValidation(EstateRequest::class);
 
         CRUD::setOperationSetting('strippedRequest', function ($request) {
@@ -136,16 +104,8 @@ class EstateCrudController extends CrudController
         });
 
         Widget::add()->type('script')->content('assets/js/admin/forms/estate.js');
-//        if(empty(request()->estateType)) {
-//            abort(403);
-//        }
 
         $estateType = $this->crud->getRequest()->get('estateType');
-
-        $isApartment = request()->estateType === 1;
-        $isHouse = request()->estateType === 2;
-        $isCommercial = request()->estateType === 3;
-        $isLand = request()->estateType === 4;
 
         $this->addApartmentFields();
         $this->addCreateCommonFields($estateType);
@@ -190,15 +150,14 @@ class EstateCrudController extends CrudController
         /*Basic fields*/
 
         CRUD::addField([
-            'name' => 'estate_type',
-            'type' => "relationship",
+            'name' => 'estate_type_id',
+            'type' => 'number',
             'attribute' => "name_arm",
             'label' => "Գույքի տեսակ",
-            'default' => $estateType,
+            'default' => 1,
             'attributes' => [
                 'readonly' => 'readonly',
             ],
-            'placeholder' => '-Ընտրել մեկը-',
             'wrapper' => [
                 'class' => 'form-group col-md-3 d-none'
             ],
@@ -906,7 +865,7 @@ class EstateCrudController extends CrudController
 
 
         CRUD::addColumn([
-            'name' => '<h4>Շենք/Բնակարան</h4>',
+            'name' => '<h2 class="text-xl">Շենք/Բնակարան</h2>',
             'type' => 'custom_html',
             'value' => ' ',
             'tab' => 'Հիմնական',
@@ -923,20 +882,9 @@ class EstateCrudController extends CrudController
             'className' => 'form-group col-md-3'
         ]);
 
-        CRUD::addColumn([
-            'name' => 'service_amount_currency',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "<br/>",
-            'allows_null' => false,
-            'default' => 1,
-            'placeholder' => '-Ընտրել մեկը-',
-            'tab' => 'Հիմնական',
-            'className' => 'form-group col-md-3'
-        ]);
 
         CRUD::addColumn([
-            'name' => '<h4>Կոմունալ հարմարություններ</h4>',
+            'name' => '<h2 class="text-xl">Կոմունալ հարմարություններ</h4>',
             'type' => 'custom_html',
             'value' => ' ',
             'tab' => 'Հիմնական',

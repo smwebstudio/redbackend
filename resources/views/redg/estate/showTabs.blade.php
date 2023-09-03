@@ -12,16 +12,22 @@
     $images = $estate->estateDocuments;
     // if breadcrumbs aren't defined in the CrudController, use the default breadcrumbs
     $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
+
 @endphp
 
 @section('header')
     <div class="container-fluid d-flex justify-content-between my-3">
-        <section class="header-operation animated fadeIn d-flex mb-2 align-items-end d-print-none" bp-section="page-header">
-            <h1 class="text-capitalize mb-0" bp-section="page-heading">{!! $crud->getHeading() ?? $crud->entity_name_plural !!}</h1>
-            <p class="ms-2 ml-2 mb-0" bp-section="page-subheading">{!! $crud->getSubheading() ?? mb_ucfirst(trans('backpack::crud.preview')).' '.$crud->entity_name !!}</p>
+        <section class="header-operation animated fadeIn d-flex mb-2 align-items-end d-print-none"
+                 bp-section="page-header">
+            <h1 class="text-capitalize mb-0"
+                bp-section="page-heading">{!! $crud->getHeading() ?? $crud->entity_name_plural !!}</h1>
+            <p class="ms-2 ml-2 mb-0"
+               bp-section="page-subheading">{!! $crud->getSubheading() ?? mb_ucfirst(trans('backpack::crud.preview')).' '.$crud->entity_name !!}</p>
             @if ($crud->hasAccess('list'))
                 <p class="ms-2 ml-2 mb-0" bp-section="page-subheading-back-button">
-                    <small><a href="{{ url($crud->route) }}" class="font-sm"><i class="la la-angle-double-left"></i> {{ trans('backpack::crud.back_to_all') }} <span>{{ $crud->entity_name_plural }}</span></a></small>
+                    <small><a href="{{ url($crud->route) }}" class="font-sm"><i
+                                class="la la-angle-double-left"></i> {{ trans('backpack::crud.back_to_all') }}
+                            <span>{{ $crud->entity_name_plural }}</span></a></small>
                 </p>
             @endif
         </section>
@@ -33,7 +39,7 @@
     <section class="main-container__main b-shadow bg-white p-4 mb-4">
         <div class="row">
             <div class="col-md-12">
-                {{ $estate->short_description }}
+                <h1 class="text-2xl">{{ $estate->short_description ?? '' }}</h1>
             </div>
         </div>
         <div class="row">
@@ -66,6 +72,48 @@
 
             </div>
 
+            <div class="col-md-5 pt-16">
+                <p class="text-xl mb-12">
+                    <span
+                        class="bg-green text-white p-4">{{ isset($estate->contract_type) ? $estate->contract_type->name_arm : '' }}</span>
+                    <span>{{ isset($estate->code) ? $estate->code : '' }}</span>
+                </p>
+                <p class="text-sm">{{ isset($estate->public_text_arm) ? $estate->public_text_arm : '' }}</p>
+                <div class="flex justify-content-left mt-10 flex-row">
+                    <div class="p-2 bg-slate-100">
+                        Շենք: {{ isset($estate->address_building) ? $estate->address_building : '' }}</div>
+                    <div class="p-2 ml-2 bg-slate-100">Հարկ: {{ isset($estate->floor) ? $estate->floor : '' }}
+                        /{{ isset($estate->building_floor_count) ? $estate->building_floor_count : '' }}</div>
+                    <div class="p-2 ml-2 bg-slate-100">
+                        Սենյակներ: {{ isset($estate->room_count) ? $estate->room_count : '' }}</div>
+                </div>
+                <div class="flex justify-content-left mt-2 flex-row">
+                    <div class="p-2 bg-slate-100">Առաստաղի
+                        բարձրություն: {{ isset($estate->ceiling_height_type) ? $estate->ceiling_height_type->name_arm : '' }}</div>
+                    <div class="p-2 ml-2 bg-slate-100">Ընդհանուր
+                        մակերես: {{ isset($estate->area_total) ? $estate->area_total : '' }}</div>
+                </div>
+                <div class="flex justify-content-left mt-2 flex-row">
+                    <div class="p-2 bg-slate-100">1քմ
+                        արժեք: {{ isset($estate->price_per_square) ? $estate->price_per_square : '' }}</div>
+                    <div class="p-2 ml-2 bg-slate-100">
+                        Գին: {{ isset($estate->full_price) ? $estate->full_price : '' }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-2 pt-16 border-2 border-solid">
+                <p class="text-sm ">{{ isset($estate->agent->contact) ? $estate->agent->contact->fullName : '' }}</p>
+                <p class="text-sm mt-4 mb-4 "><img width="150px"
+                                                   src="{{
+    isset($estate->agent->profile_picture_path) ? Storage::disk('S3Public')->url('/estate/photos/'.$estate->agent->profile_picture_path) : ''
+    }}"/>
+                </p>
+                <p class="text-sm ">{{ isset($estate->agent->contact) ? $estate->agent->contact->email : '' }}</p>
+                <p class="text-sm ">{{ isset($estate->agent->contact) ? $estate->agent->contact->phone_mobile_1 : '' }}</p>
+
+            </div>
+
+
         </div>
     </section>
     <div class="row" bp-section="crud-operation-show">
@@ -78,12 +126,17 @@
                         <div class="col-md-12 mb-2">
                             {{-- Change translation button group --}}
                             <div class="btn-group float-right">
-                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{trans('backpack::crud.language')}}: {{ $crud->model->getAvailableLocales()[request()->input('_locale')?request()->input('_locale'):App::getLocale()] }} &nbsp; <span class="caret"></span>
+                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                        data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                    {{trans('backpack::crud.language')}}
+                                    : {{ $crud->model->getAvailableLocales()[request()->input('_locale')?request()->input('_locale'):App::getLocale()] }}
+                                    &nbsp; <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
                                     @foreach ($crud->model->getAvailableLocales() as $key => $locale)
-                                        <a class="dropdown-item" href="{{ url($crud->route.'/'.$entry->getKey().'/show') }}?_locale={{ $key }}">{{ $locale }}</a>
+                                        <a class="dropdown-item"
+                                           href="{{ url($crud->route.'/'.$entry->getKey().'/show') }}?_locale={{ $key }}">{{ $locale }}</a>
                                     @endforeach
                                 </ul>
                             </div>
@@ -155,6 +208,7 @@
         .slider-container {
             flex-direction: column;
         }
+
         .swiper-slide {
             text-align: center;
             font-size: 18px;
@@ -197,7 +251,7 @@
         }
 
         .EstatesSlider {
-            height:500px;
+            height: 500px;
             box-sizing: border-box;
             padding: 10px 0;
         }
@@ -211,8 +265,6 @@
         .Swiper .swiper-slide-thumb-active {
             opacity: 1;
         }
-
-
 
 
     </style>

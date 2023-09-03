@@ -109,7 +109,7 @@ trait AddEstateListColumns
             'name' => 'price_per_square',
             'type' => "text",
             'label' => "$/S",
-            'suffix' => ' $',
+            'suffix' => session('currency') ?  ' '.session('currency') : ' AMD',
         ]);
 
         CRUD::addColumn([
@@ -126,7 +126,7 @@ trait AddEstateListColumns
             'label' => 'Նկար', // Table column heading
             'type' => 'image',
             'prefix' => '/estate/photos/',
-            'disk' => 'S3',
+            'disk' => 'S3Public',
             'height' => '70px',
             'width' => '90px',
         ]);

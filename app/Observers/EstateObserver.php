@@ -54,6 +54,8 @@ class EstateObserver
 
         $estate->code = $this->setEstateCode($estate);
 
+
+
         if (!empty(request()->input('location'))) {
             $location = json_decode(request()->input('location'));
             $estate->estate_latitude = $location->lat;
@@ -172,6 +174,7 @@ class EstateObserver
 
     private function setPublicTextGeneratorByApartment($estate)
     {
+
         if ($estate->estate_type_id === 1) {
 
             $sale1 = "";

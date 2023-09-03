@@ -614,6 +614,7 @@ class Estate extends Model
         'name',
     ];
     /*Apply scopes*/
+
     /**
      * The "booted" method of the model.
      *
@@ -987,10 +988,20 @@ class Estate extends Model
 
     public function getPricePerSquareAttribute(): ?float
     {
-        if (!$this->area_total) {
+        if (!$this->area_total || !$this->price_amd) {
             return null;
         }
-        return ceil($this->price / $this->area_total);
+
+        $currency = session('currency') ?  session('currency') : 'AMD';
+        $price = $this->price_amd;
+
+        if ($currency === 'USD') {
+            $price = $this->price_amd / 387;
+        } else if($currency === 'RUB') {
+            $price = $this->price_amd / 4;
+        }
+
+        return ceil($price / $this->area_total);
     }
 
     public function getProvince(): ?string
@@ -1031,7 +1042,7 @@ class Estate extends Model
 
 
         if ($this->estate_type_id === 1) {
-            $shortDescription = $contractType . ' ' . $street;
+            $shortDescription = $contractType .' '. $this->room_count .' '. trans('estate.' . "label.generating.text.apartment.sale.2") .' '. $street;
         }
 
         return $shortDescription;
