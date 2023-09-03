@@ -246,365 +246,367 @@ class Estate extends Model
     use \Backpack\CRUD\app\Models\Traits\CrudTrait;
     use ApiMultiLanguage;
     use HasFilePath;
-	protected $table = 'estate';
-	public $incrementing = true;
 
-	protected $casts = [
-		'id' => 'integer',
-		'location_country_id' => 'integer',
-		'location_province_id' => 'integer',
-		'location_city_id' => 'integer',
-		'location_community_id' => 'integer',
-		'location_street_id' => 'integer',
-		'estate_type_id' => 'integer',
-		'area_total' => 'float',
-		'old_price' => 'float',
-		'price' => 'float',
-		'currency_id' => 'integer',
-		'seller_id' => 'integer',
-		'area_residential' => 'float',
-		'registered_right_id' => 'integer',
-		'repairing_type_id' => 'integer',
-		'room_count' => 'integer',
-		'building_type_id' => 'integer',
-		'building_project_type_id' => 'integer',
-		'conditioner' => 'bool',
-		'room_count_modified' => 'integer',
-		'exterior_design_type_id' => 'integer',
-		'elevator_type_id' => 'integer',
-		'year_id' => 'integer',
-		'heating_system_type_id' => 'integer',
-		'parking_type_id' => 'integer',
-		'service_fee_type_id' => 'integer',
-		'service_amount' => 'float',
-		'service_amount_currency_id' => 'integer',
-		'furniture' => 'bool',
-		'kitchen_furniture' => 'bool',
-		'gas_heater' => 'bool',
-		'persistent_water' => 'bool',
-		'natural_gas' => 'bool',
-		'gas_possibility' => 'bool',
-		'internet' => 'bool',
-		'satellite_tv' => 'bool',
-		'cable_tv' => 'bool',
-		'sunny' => 'bool',
-		'exclusive_design' => 'bool',
-		'expanding_possible' => 'bool',
-		'open_balcony' => 'bool',
-		'oriel' => 'bool',
-		'new_wiring' => 'bool',
-		'new_water_tubes' => 'bool',
-		'heating_ground' => 'bool',
-		'plastic_windows' => 'bool',
-		'parquet' => 'bool',
-		'laminat' => 'bool',
-		'equipped' => 'bool',
-		'roof_type_id' => 'integer',
-		'floor_count_id' => 'integer',
-		'house_building_type_id' => 'integer',
-		'roof_repaired' => 'bool',
-		'roof_material_type_id' => 'integer',
-		'fence_type_id' => 'integer',
-		'communication_type_id' => 'integer',
-		'front_with_street_id' => 'integer',
-		'road_way_type_id' => 'integer',
-		'commercial_purpose_type_id' => 'integer',
-		'communication_id' => 'integer',
-		'land_structure_type_id' => 'integer',
-		'land_type_id' => 'integer',
-		'land_use_type_id' => 'integer',
-		'front_length' => 'float',
-		'version' => 'integer',
-		'contract_type_id' => 'integer',
-		'entrance_door_type_id' => 'integer',
-		'entrance_door_position_id' => 'integer',
-		'windows_view_id' => 'integer',
-		'building_floor_count' => 'integer',
-		'house_floors_type_id' => 'integer',
-		'roof_drainage' => 'bool',
-		'new_doors' => 'bool',
-		'new_windows' => 'bool',
-		'new_bathroom' => 'bool',
-		'new_floor' => 'bool',
-		'new_roof' => 'bool',
-		'can_be_used_as_commercial' => 'bool',
-		'is_published' => 'bool',
-		'estate_status_id' => 'integer',
-		'status_id_before_archive' => 'integer',
-		'buyer_id' => 'integer',
-		'agent_id' => 'integer',
-		'selling_price_init' => 'float',
-		'selling_price_final' => 'float',
-		'selling_price_final_currency_id' => 'integer',
-		'selling_price_init_currency_id' => 'integer',
-		'new_construction' => 'bool',
-		'floor' => 'integer',
-		'last_modified_by' => 'integer',
-		'created_by' => 'integer',
-		'garage' => 'bool',
-		'cellar' => 'bool',
-		'land' => 'bool',
-		'niche' => 'bool',
-		'pantry' => 'bool',
-		'jacuzzi' => 'bool',
-		'possible_extension' => 'bool',
-		'separate_room' => 'bool',
-		'exchange' => 'bool',
-		'has_intercom' => 'bool',
-		'uninhabited' => 'bool',
-		'balcony' => 'bool',
-		'tv' => 'bool',
-		'computer' => 'bool',
-		'refrigirator' => 'bool',
-		'hot_water' => 'bool',
-		'washer' => 'bool',
-		'dish_washer' => 'bool',
-		'property_agent_id' => 'integer',
-		'ceiling_height_type_id' => 'integer',
-		'building_structure_type_id' => 'integer',
-		'building_floor_type_id' => 'integer',
-		'vitrage_type_id' => 'integer',
-		'separate_entrance_type_id' => 'integer',
-		'filled_by' => 'integer',
-		'verified_by' => 'integer',
-		'entrance_type_id' => 'integer',
-		'has_neighbour' => 'bool',
-		'is_advertised' => 'bool',
-		'info_source_id' => 'integer',
-		'price_usd' => 'float',
-		'estate_latitude' => 'float',
-		'estate_longitude' => 'float',
-		'is_urgent' => 'bool',
-		'is_exchangeable' => 'bool',
-		'is_first_floor' => 'bool',
-		'is_last_floor' => 'bool',
-		'is_mansard_floor' => 'bool',
-		'is_duplex' => 'bool',
-		'is_basement' => 'bool',
-		'visits_count' => 'integer',
-		'is_from_public' => 'bool',
-		'is_hot_offer' => 'bool',
-		'is_on_main_page' => 'bool',
-		'is_separate_building' => 'bool',
-		'is_estate_commercial_land' => 'bool',
-		'courtyard_improvement_id' => 'integer',
-		'distance_public_objects_id' => 'integer',
-		'building_window_count_id' => 'integer',
-		'temporary_agent_id' => 'integer',
-		'temporary_visits_count' => 'integer',
-		'apartment_construction' => 'bool',
-		'is_public_text_generation' => 'bool'
-	];
+    protected $table = 'estate';
+    public $incrementing = true;
 
-	protected $dates = [
-		'status_changed_on',
-		'created_on',
-		'last_modified_on',
-		'appointment_date_start',
-		'appointment_date_end',
-		'filled_on',
-		'verified_on',
-		'archive_till_date',
-		'urgent_start_date',
-		'hot_offer_start_date',
-		'on_main_page_start_date',
-		'temporary_agent_date',
-		'price_down_on'
-	];
+    protected $casts = [
+        'id' => 'integer',
+        'location_country_id' => 'integer',
+        'location_province_id' => 'integer',
+        'location_city_id' => 'integer',
+        'location_community_id' => 'integer',
+        'location_street_id' => 'integer',
+        'estate_type_id' => 'integer',
+        'area_total' => 'float',
+        'old_price' => 'float',
+        'price' => 'float',
+        'currency_id' => 'integer',
+        'seller_id' => 'integer',
+        'area_residential' => 'float',
+        'registered_right_id' => 'integer',
+        'repairing_type_id' => 'integer',
+        'room_count' => 'integer',
+        'building_type_id' => 'integer',
+        'building_project_type_id' => 'integer',
+        'conditioner' => 'bool',
+        'room_count_modified' => 'integer',
+        'exterior_design_type_id' => 'integer',
+        'elevator_type_id' => 'integer',
+        'year_id' => 'integer',
+        'heating_system_type_id' => 'integer',
+        'parking_type_id' => 'integer',
+        'service_fee_type_id' => 'integer',
+        'service_amount' => 'float',
+        'service_amount_currency_id' => 'integer',
+        'furniture' => 'bool',
+        'kitchen_furniture' => 'bool',
+        'gas_heater' => 'bool',
+        'persistent_water' => 'bool',
+        'natural_gas' => 'bool',
+        'gas_possibility' => 'bool',
+        'internet' => 'bool',
+        'satellite_tv' => 'bool',
+        'cable_tv' => 'bool',
+        'sunny' => 'bool',
+        'exclusive_design' => 'bool',
+        'expanding_possible' => 'bool',
+        'open_balcony' => 'bool',
+        'oriel' => 'bool',
+        'new_wiring' => 'bool',
+        'new_water_tubes' => 'bool',
+        'heating_ground' => 'bool',
+        'plastic_windows' => 'bool',
+        'parquet' => 'bool',
+        'laminat' => 'bool',
+        'equipped' => 'bool',
+        'roof_type_id' => 'integer',
+        'floor_count_id' => 'integer',
+        'house_building_type_id' => 'integer',
+        'roof_repaired' => 'bool',
+        'roof_material_type_id' => 'integer',
+        'fence_type_id' => 'integer',
+        'communication_type_id' => 'integer',
+        'front_with_street_id' => 'integer',
+        'road_way_type_id' => 'integer',
+        'commercial_purpose_type_id' => 'integer',
+        'communication_id' => 'integer',
+        'land_structure_type_id' => 'integer',
+        'land_type_id' => 'integer',
+        'land_use_type_id' => 'integer',
+        'front_length' => 'float',
+        'version' => 'integer',
+        'contract_type_id' => 'integer',
+        'entrance_door_type_id' => 'integer',
+        'entrance_door_position_id' => 'integer',
+        'windows_view_id' => 'integer',
+        'building_floor_count' => 'integer',
+        'house_floors_type_id' => 'integer',
+        'roof_drainage' => 'bool',
+        'new_doors' => 'bool',
+        'new_windows' => 'bool',
+        'new_bathroom' => 'bool',
+        'new_floor' => 'bool',
+        'new_roof' => 'bool',
+        'can_be_used_as_commercial' => 'bool',
+        'is_published' => 'bool',
+        'estate_status_id' => 'integer',
+        'status_id_before_archive' => 'integer',
+        'buyer_id' => 'integer',
+        'agent_id' => 'integer',
+        'selling_price_init' => 'float',
+        'selling_price_final' => 'float',
+        'selling_price_final_currency_id' => 'integer',
+        'selling_price_init_currency_id' => 'integer',
+        'new_construction' => 'bool',
+        'floor' => 'integer',
+        'last_modified_by' => 'integer',
+        'created_by' => 'integer',
+        'garage' => 'bool',
+        'cellar' => 'bool',
+        'land' => 'bool',
+        'niche' => 'bool',
+        'pantry' => 'bool',
+        'jacuzzi' => 'bool',
+        'possible_extension' => 'bool',
+        'separate_room' => 'bool',
+        'exchange' => 'bool',
+        'has_intercom' => 'bool',
+        'uninhabited' => 'bool',
+        'balcony' => 'bool',
+        'tv' => 'bool',
+        'computer' => 'bool',
+        'refrigirator' => 'bool',
+        'hot_water' => 'bool',
+        'washer' => 'bool',
+        'dish_washer' => 'bool',
+        'property_agent_id' => 'integer',
+        'ceiling_height_type_id' => 'integer',
+        'building_structure_type_id' => 'integer',
+        'building_floor_type_id' => 'integer',
+        'vitrage_type_id' => 'integer',
+        'separate_entrance_type_id' => 'integer',
+        'filled_by' => 'integer',
+        'verified_by' => 'integer',
+        'entrance_type_id' => 'integer',
+        'has_neighbour' => 'bool',
+        'is_advertised' => 'bool',
+        'info_source_id' => 'integer',
+        'price_usd' => 'float',
+        'estate_latitude' => 'float',
+        'estate_longitude' => 'float',
+        'is_urgent' => 'bool',
+        'is_exchangeable' => 'bool',
+        'is_first_floor' => 'bool',
+        'is_last_floor' => 'bool',
+        'is_mansard_floor' => 'bool',
+        'is_duplex' => 'bool',
+        'is_basement' => 'bool',
+        'visits_count' => 'integer',
+        'is_from_public' => 'bool',
+        'is_hot_offer' => 'bool',
+        'is_on_main_page' => 'bool',
+        'is_separate_building' => 'bool',
+        'is_estate_commercial_land' => 'bool',
+        'courtyard_improvement_id' => 'integer',
+        'distance_public_objects_id' => 'integer',
+        'building_window_count_id' => 'integer',
+        'temporary_agent_id' => 'integer',
+        'temporary_visits_count' => 'integer',
+        'apartment_construction' => 'bool',
+        'is_public_text_generation' => 'bool'
+    ];
 
-	protected $fillable = [
-		'location_country_id',
-		'location_province_id',
-		'location_city_id',
-		'location_community_id',
-		'location_street_id',
-		'estate_type_id',
-		'area_total',
-		'old_price',
-		'price',
-		'currency_id',
-		'seller_id',
-		'area_residential',
-		'registered_right_id',
-		'repairing_type_id',
-		'room_count',
-		'building_type_id',
-		'building_project_type_id',
-		'conditioner',
-		'room_count_modified',
-		'exterior_design_type_id',
-		'elevator_type_id',
-		'year_id',
-		'heating_system_type_id',
-		'parking_type_id',
-		'service_fee_type_id',
-		'service_amount',
-		'service_amount_currency_id',
-		'furniture',
-		'kitchen_furniture',
-		'gas_heater',
-		'persistent_water',
-		'natural_gas',
-		'gas_possibility',
-		'internet',
-		'satellite_tv',
-		'cable_tv',
-		'sunny',
-		'exclusive_design',
-		'expanding_possible',
-		'open_balcony',
-		'oriel',
-		'new_wiring',
-		'new_water_tubes',
-		'heating_ground',
-		'plastic_windows',
-		'parquet',
-		'laminat',
-		'equipped',
-		'roof_type_id',
-		'floor_count_id',
-		'house_building_type_id',
-		'roof_repaired',
-		'roof_material_type_id',
-		'fence_type_id',
-		'communication_type_id',
-		'front_with_street_id',
-		'road_way_type_id',
-		'commercial_purpose_type_id',
-		'communication_id',
-		'land_structure_type_id',
-		'land_type_id',
-		'land_use_type_id',
-		'front_length',
-		'version',
-		'address_building',
-		'address_apartment',
-		'contract_type_id',
-		'entrance_door_type_id',
-		'entrance_door_position_id',
-		'windows_view_id',
-		'building_floor_count',
-		'house_floors_type_id',
-		'roof_drainage',
-		'new_doors',
-		'new_windows',
-		'new_bathroom',
-		'new_floor',
-		'new_roof',
-		'can_be_used_as_commercial',
-		'is_published',
-		'estate_status_id',
-		'status_changed_on',
-		'status_id_before_archive',
-		'buyer_id',
-		'agent_id',
-		'selling_price_init',
-		'selling_price_final',
-		'selling_price_final_currency_id',
-		'selling_price_init_currency_id',
-		'created_on',
-		'new_construction',
-		'floor',
-		'comment_arm',
-		'comment_eng',
-		'comment_ru',
-		'last_modified_by',
-		'additional_info_arm',
-		'additional_info_eng',
-		'additional_info_ru',
-		'name_arm',
-		'name_eng',
-		'name_ru',
-		'name_ar',
-		'selling_comment_arm',
-		'selling_comment_eng',
-		'selling_comment_ru',
-		'last_modified_on',
-		'created_by',
-		'garage',
-		'cellar',
-		'land',
-		'niche',
-		'pantry',
-		'jacuzzi',
-		'possible_extension',
-		'separate_room',
-		'exchange',
-		'has_intercom',
-		'uninhabited',
-		'balcony',
-		'tv',
-		'computer',
-		'refrigirator',
-		'hot_water',
-		'washer',
-		'dish_washer',
-		'property_agent_id',
-		'code',
-		'appointment_date_start',
-		'appointment_date_end',
-		'appointment_comment_arm',
-		'appointment_comment_eng',
-		'appointment_comment_ru',
-		'ceiling_height_type_id',
-		'building_structure_type_id',
-		'building_floor_type_id',
-		'vitrage_type_id',
-		'separate_entrance_type_id',
-		'intercom',
-		'filled_by',
-		'filled_on',
-		'verified_by',
-		'verified_on',
-		'entrance_type_id',
-		'has_neighbour',
-		'is_advertised',
-		'info_source_id',
-		'price_usd',
-		'archive_till_date',
-		'archive_comment_arm',
-		'archive_comment_eng',
-		'archive_comment_ru',
-		'public_text_arm',
-		'public_text_eng',
-		'public_text_rus',
-		'estate_latitude',
-		'estate_longitude',
-		'is_urgent',
-		'urgent_start_date',
-		'is_exchangeable',
-		'is_first_floor',
-		'is_last_floor',
-		'main_image_file_name',
-		'main_image_file_path',
-		'main_image_file_path_thumb',
-		'is_mansard_floor',
-		'is_duplex',
-		'is_basement',
-		'visits_count',
-		'is_from_public',
-		'is_hot_offer',
-		'hot_offer_start_date',
-		'is_on_main_page',
-		'on_main_page_start_date',
-		'is_separate_building',
-		'is_estate_commercial_land',
-		'courtyard_improvement_id',
-		'distance_public_objects_id',
-		'building_window_count_id',
-		'temporary_agent_id',
-		'temporary_agent_date',
-		'temporary_visits_count',
-		'apartment_construction',
-		'meta_description_eng',
-		'meta_description_arm',
-		'meta_description_ru',
-		'meta_title_eng',
-		'meta_title_arm',
-		'meta_title_ru',
-		'price_down_on',
-		'is_public_text_generation'
-	];
+    protected $dates = [
+        'status_changed_on',
+        'created_on',
+        'last_modified_on',
+        'appointment_date_start',
+        'appointment_date_end',
+        'filled_on',
+        'verified_on',
+        'archive_till_date',
+        'urgent_start_date',
+        'hot_offer_start_date',
+        'on_main_page_start_date',
+        'temporary_agent_date',
+        'price_down_on'
+    ];
+
+    protected $fillable = [
+        'location_country_id',
+        'location_province_id',
+        'location_city_id',
+        'location_community_id',
+        'location_street_id',
+        'estate_type_id',
+        'area_total',
+        'old_price',
+        'price',
+        'currency_id',
+        'seller_id',
+        'area_residential',
+        'registered_right_id',
+        'repairing_type_id',
+        'room_count',
+        'building_type_id',
+        'building_project_type_id',
+        'conditioner',
+        'room_count_modified',
+        'exterior_design_type_id',
+        'elevator_type_id',
+        'year_id',
+        'heating_system_type_id',
+        'parking_type_id',
+        'service_fee_type_id',
+        'service_amount',
+        'service_amount_currency_id',
+        'furniture',
+        'kitchen_furniture',
+        'gas_heater',
+        'persistent_water',
+        'natural_gas',
+        'gas_possibility',
+        'internet',
+        'satellite_tv',
+        'cable_tv',
+        'sunny',
+        'exclusive_design',
+        'expanding_possible',
+        'open_balcony',
+        'oriel',
+        'new_wiring',
+        'new_water_tubes',
+        'heating_ground',
+        'plastic_windows',
+        'parquet',
+        'laminat',
+        'equipped',
+        'roof_type_id',
+        'floor_count_id',
+        'house_building_type_id',
+        'roof_repaired',
+        'roof_material_type_id',
+        'fence_type_id',
+        'communication_type_id',
+        'front_with_street_id',
+        'road_way_type_id',
+        'commercial_purpose_type_id',
+        'communication_id',
+        'land_structure_type_id',
+        'land_type_id',
+        'land_use_type_id',
+        'front_length',
+        'version',
+        'address_building',
+        'address_apartment',
+        'contract_type_id',
+        'entrance_door_type_id',
+        'entrance_door_position_id',
+        'windows_view_id',
+        'building_floor_count',
+        'house_floors_type_id',
+        'roof_drainage',
+        'new_doors',
+        'new_windows',
+        'new_bathroom',
+        'new_floor',
+        'new_roof',
+        'can_be_used_as_commercial',
+        'is_published',
+        'estate_status_id',
+        'status_changed_on',
+        'status_id_before_archive',
+        'buyer_id',
+        'agent_id',
+        'selling_price_init',
+        'selling_price_final',
+        'selling_price_final_currency_id',
+        'selling_price_init_currency_id',
+        'created_on',
+        'new_construction',
+        'floor',
+        'comment_arm',
+        'comment_eng',
+        'comment_ru',
+        'last_modified_by',
+        'additional_info_arm',
+        'additional_info_eng',
+        'additional_info_ru',
+        'name_arm',
+        'name_eng',
+        'name_ru',
+        'name_ar',
+        'selling_comment_arm',
+        'selling_comment_eng',
+        'selling_comment_ru',
+        'last_modified_on',
+        'created_by',
+        'garage',
+        'cellar',
+        'land',
+        'niche',
+        'pantry',
+        'jacuzzi',
+        'possible_extension',
+        'separate_room',
+        'exchange',
+        'has_intercom',
+        'uninhabited',
+        'balcony',
+        'tv',
+        'computer',
+        'refrigirator',
+        'hot_water',
+        'washer',
+        'dish_washer',
+        'property_agent_id',
+        'code',
+        'appointment_date_start',
+        'appointment_date_end',
+        'appointment_comment_arm',
+        'appointment_comment_eng',
+        'appointment_comment_ru',
+        'ceiling_height_type_id',
+        'building_structure_type_id',
+        'building_floor_type_id',
+        'vitrage_type_id',
+        'separate_entrance_type_id',
+        'intercom',
+        'filled_by',
+        'filled_on',
+        'verified_by',
+        'verified_on',
+        'entrance_type_id',
+        'has_neighbour',
+        'is_advertised',
+        'info_source_id',
+        'price_usd',
+        'price_amd',
+        'archive_till_date',
+        'archive_comment_arm',
+        'archive_comment_eng',
+        'archive_comment_ru',
+        'public_text_arm',
+        'public_text_eng',
+        'public_text_rus',
+        'estate_latitude',
+        'estate_longitude',
+        'is_urgent',
+        'urgent_start_date',
+        'is_exchangeable',
+        'is_first_floor',
+        'is_last_floor',
+        'main_image_file_name',
+        'main_image_file_path',
+        'main_image_file_path_thumb',
+        'is_mansard_floor',
+        'is_duplex',
+        'is_basement',
+        'visits_count',
+        'is_from_public',
+        'is_hot_offer',
+        'hot_offer_start_date',
+        'is_on_main_page',
+        'on_main_page_start_date',
+        'is_separate_building',
+        'is_estate_commercial_land',
+        'courtyard_improvement_id',
+        'distance_public_objects_id',
+        'building_window_count_id',
+        'temporary_agent_id',
+        'temporary_agent_date',
+        'temporary_visits_count',
+        'apartment_construction',
+        'meta_description_eng',
+        'meta_description_arm',
+        'meta_description_ru',
+        'meta_title_eng',
+        'meta_title_arm',
+        'meta_title_ru',
+        'price_down_on',
+        'is_public_text_generation'
+    ];
 
     protected $appends = ['shortDescription'];
 
@@ -636,7 +638,6 @@ class Estate extends Model
     {
 
 
-
         $request_coords = json_decode($coordinates);
 
 
@@ -656,179 +657,180 @@ class Estate extends Model
     public function scopeTextSearch(Builder $query, $searchText): Builder
     {
         return $query->where('id', '=', $searchText)
-            ->orWhere('code', 'like', '%'.$searchText.'%')
-            ->orWhereHas('location_city', function ($query) use($searchText){
-            $query->where('name_arm', 'LIKE',  '%' . $searchText . '%');
-                })
-            ->orWhereHas('location_street', function ($query) use($searchText){
-                $query->where('name_arm', 'LIKE',  '%' . $searchText . '%');
+            ->orWhere('code', 'like', '%' . $searchText . '%')
+            ->orWhereHas('location_city', function ($query) use ($searchText) {
+                $query->where('name_arm', 'LIKE', '%' . $searchText . '%');
             })
-            ->orWhereHas('location_community', function ($query) use($searchText){
-                $query->where('name_arm', 'LIKE',  '%' . $searchText . '%');
+            ->orWhereHas('location_street', function ($query) use ($searchText) {
+                $query->where('name_arm', 'LIKE', '%' . $searchText . '%');
+            })
+            ->orWhereHas('location_community', function ($query) use ($searchText) {
+                $query->where('name_arm', 'LIKE', '%' . $searchText . '%');
             });
     }
 
     /*Scopes end*/
 
-	public function building_type()
-	{
-		return $this->belongsTo(CBuildingType::class, 'building_type_id');
-	}
+    public function building_type()
+    {
+        return $this->belongsTo(CBuildingType::class, 'building_type_id');
+    }
+
     public function building_floor_type()
     {
         return $this->belongsTo(CBuildingFloorType::class, 'building_floor_type_id');
     }
 
 
-	public function elevator_type()
-	{
-		return $this->belongsTo(CElevatorType::class, 'elevator_type_id');
-	}
+    public function elevator_type()
+    {
+        return $this->belongsTo(CElevatorType::class, 'elevator_type_id');
+    }
 
-	public function heating_system_type()
-	{
-		return $this->belongsTo(CHeatingSystemType::class, 'heating_system_type_id');
-	}
+    public function heating_system_type()
+    {
+        return $this->belongsTo(CHeatingSystemType::class, 'heating_system_type_id');
+    }
 
-	public function parking_type()
-	{
-		return $this->belongsTo(CParkingType::class, 'parking_type_id');
-	}
+    public function parking_type()
+    {
+        return $this->belongsTo(CParkingType::class, 'parking_type_id');
+    }
 
-	public function repairing_type()
-	{
-		return $this->belongsTo(CRepairingType::class, 'repairing_type_id');
-	}
+    public function repairing_type()
+    {
+        return $this->belongsTo(CRepairingType::class, 'repairing_type_id');
+    }
 
-	public function service_fee_type()
-	{
-		return $this->belongsTo(CServiceFeeType::class, 'service_fee_type_id');
-	}
+    public function service_fee_type()
+    {
+        return $this->belongsTo(CServiceFeeType::class, 'service_fee_type_id');
+    }
 
     public function service_amount_currency()
-	{
-		return $this->belongsTo(CCurrency::class, 'service_amount_currency_id');
-	}
+    {
+        return $this->belongsTo(CCurrency::class, 'service_amount_currency_id');
+    }
 
-	public function year()
-	{
-		return $this->belongsTo(CYear::class, 'year_id');
-	}
+    public function year()
+    {
+        return $this->belongsTo(CYear::class, 'year_id');
+    }
 
-	public function contact()
-	{
-		return $this->belongsTo(Contact::class, 'seller_id');
-	}
+    public function contact()
+    {
+        return $this->belongsTo(Contact::class, 'seller_id');
+    }
 
     public function seller()
     {
         return $this->belongsTo(Contact::class, 'seller_id');
     }
 
-	public function currency()
-	{
-		return $this->belongsTo(CCurrency::class, 'currency_id');
-	}
+    public function currency()
+    {
+        return $this->belongsTo(CCurrency::class, 'currency_id');
+    }
 
     public function estate_status()
-	{
-		return $this->belongsTo(CEstateStatus::class, 'estate_status_id');
-	}
+    {
+        return $this->belongsTo(CEstateStatus::class, 'estate_status_id');
+    }
 
-	public function estate_type()
-	{
-		return $this->belongsTo(CEstateType::class, 'estate_type_id');
-	}
+    public function estate_type()
+    {
+        return $this->belongsTo(CEstateType::class, 'estate_type_id');
+    }
 
-	public function location_city()
-	{
-		return $this->belongsTo(CLocationCity::class, 'location_city_id');
-	}
+    public function location_city()
+    {
+        return $this->belongsTo(CLocationCity::class, 'location_city_id');
+    }
 
-	public function location_community()
-	{
-		return $this->belongsTo(CLocationCommunity::class, 'location_community_id');
-	}
+    public function location_community()
+    {
+        return $this->belongsTo(CLocationCommunity::class, 'location_community_id');
+    }
 
-	public function location_country()
-	{
-		return $this->belongsTo(CLocationCountry::class, 'location_country_id');
-	}
+    public function location_country()
+    {
+        return $this->belongsTo(CLocationCountry::class, 'location_country_id');
+    }
 
-	public function location_province()
-	{
-		return $this->belongsTo(CLocationProvince::class, 'location_province_id');
-	}
+    public function location_province()
+    {
+        return $this->belongsTo(CLocationProvince::class, 'location_province_id');
+    }
 
-	public function location_street()
-	{
-		return $this->belongsTo(CLocationStreet::class, 'location_street_id');
-	}
+    public function location_street()
+    {
+        return $this->belongsTo(CLocationStreet::class, 'location_street_id');
+    }
 
-	public function registered_right()
-	{
-		return $this->belongsTo(CRegisteredRight::class, 'registered_right_id');
-	}
+    public function registered_right()
+    {
+        return $this->belongsTo(CRegisteredRight::class, 'registered_right_id');
+    }
 
-	public function communication_type()
-	{
-		return $this->belongsTo(CCommunicationType::class, 'communication_id');
-	}
+    public function communication_type()
+    {
+        return $this->belongsTo(CCommunicationType::class, 'communication_id');
+    }
 
-	public function exterior_design_type()
-	{
-		return $this->belongsTo(CExteriorDesignType::class, 'exterior_design_type_id');
-	}
+    public function exterior_design_type()
+    {
+        return $this->belongsTo(CExteriorDesignType::class, 'exterior_design_type_id');
+    }
 
     public function distance_public_objects()
     {
         return $this->belongsTo(CDistancePublicObject::class, 'distance_public_objects_id');
     }
 
-	public function fence_type()
-	{
-		return $this->belongsTo(CFenceType::class, 'fence_type_id');
-	}
+    public function fence_type()
+    {
+        return $this->belongsTo(CFenceType::class, 'fence_type_id');
+    }
 
-	public function front_with_street()
-	{
-		return $this->belongsTo(CFrontWithStreet::class, 'front_with_street_id');
-	}
+    public function front_with_street()
+    {
+        return $this->belongsTo(CFrontWithStreet::class, 'front_with_street_id');
+    }
 
-	public function house_building_type()
-	{
-		return $this->belongsTo(CHouseBuildingType::class, 'house_building_type_id');
-	}
+    public function house_building_type()
+    {
+        return $this->belongsTo(CHouseBuildingType::class, 'house_building_type_id');
+    }
 
-	public function road_way_type()
-	{
-		return $this->belongsTo(CRoadWayType::class, 'road_way_type_id');
-	}
+    public function road_way_type()
+    {
+        return $this->belongsTo(CRoadWayType::class, 'road_way_type_id');
+    }
 
-	public function roof_material_type()
-	{
-		return $this->belongsTo(CRoofMaterialType::class, 'roof_material_type_id');
-	}
+    public function roof_material_type()
+    {
+        return $this->belongsTo(CRoofMaterialType::class, 'roof_material_type_id');
+    }
 
-	public function roof_type()
-	{
-		return $this->belongsTo(CRoofType::class, 'roof_type_id');
-	}
+    public function roof_type()
+    {
+        return $this->belongsTo(CRoofType::class, 'roof_type_id');
+    }
 
-	public function land_structure_type()
-	{
-		return $this->belongsTo(CLandStructureType::class, 'land_structure_type_id');
-	}
+    public function land_structure_type()
+    {
+        return $this->belongsTo(CLandStructureType::class, 'land_structure_type_id');
+    }
 
-	public function land_type()
-	{
-		return $this->belongsTo(CLandType::class, 'land_type_id');
-	}
+    public function land_type()
+    {
+        return $this->belongsTo(CLandType::class, 'land_type_id');
+    }
 
     public function land_use_type()
-	{
-		return $this->belongsTo(CLandUseType::class, 'land_use_type_id');
-	}
+    {
+        return $this->belongsTo(CLandUseType::class, 'land_use_type_id');
+    }
 
     public function contract_type()
     {
@@ -896,7 +898,6 @@ class Estate extends Model
     }
 
 
-
     public function entrance_door_position()
     {
         return $this->belongsTo(CEntranceDoorPosition::class, 'entrance_door_position_id');
@@ -927,70 +928,90 @@ class Estate extends Model
     public function getFullAddressAttribute($onlyStreet = false): ?string
     {
         $fullAddress = null;
-        if($this->getProvince()) {
+        if ($this->getProvince()) {
             $fullAddress = $this->getProvince();
         }
-        if($this->getCommunity()) {
-            $fullAddress .= ', '.$this->getCommunity();
+        if ($this->getCommunity()) {
+            $fullAddress .= ', ' . $this->getCommunity();
         }
-        if($this->getStreet()) {
-            $fullAddress .= ', '.$this->getStreet();
+        if ($this->getStreet()) {
+            $fullAddress .= ', ' . $this->getStreet();
         }
-        if($this->address_building && !$onlyStreet) {
-            $fullAddress .= ', '.$this->address_building;
+        if ($this->address_building && !$onlyStreet) {
+            $fullAddress .= ', ' . $this->address_building;
         }
-        if($this->address_apartment && !$onlyStreet) {
-            $fullAddress .= ', '.$this->address_apartment;
+        if ($this->address_apartment && !$onlyStreet) {
+            $fullAddress .= ', ' . $this->address_apartment;
         }
         return $fullAddress;
     }
 
     public function getFullPriceAttribute(): ?string
     {
-        return $this->getFormattedPrice().' '.$this->currency->name_arm;
+        $currency = session('currency') ?  session('currency') : 'AMD';
+
+        return $this->getFormattedPrice() . ' ' . $currency;
     }
 
     public function getFullPriceWithChangeAttribute(): ?string
     {
 
+
         $fullPrice = $this->fullPrice;
-        if($this->price && $this->old_price && $this->price < $this->old_price) {
-            $fullPrice = $fullPrice.'<i class="las la-arrow-down" style="color: green; font-size: 28px"></i>';
+
+        if ($this->price && $this->old_price && $this->price < $this->old_price) {
+            $fullPrice = $fullPrice . '<i class="las la-arrow-down" style="color: green; font-size: 28px"></i>';
         } elseif ($this->price && $this->old_price && $this->price > $this->old_price) {
-            $fullPrice =  $fullPrice.'<i class="las la-arrow-up" style="color: red; font-size: 28px"></i>';
+            $fullPrice = $fullPrice . '<i class="las la-arrow-up" style="color: red; font-size: 28px"></i>';
         }
-        return '<span style="background: #fff; display: inline-block; padding: 5px; border:1px solid #888; width: 100%">'.$fullPrice.'</span>';
+        return '<span style="background: #fff; display: inline-block; padding: 5px; border:1px solid #888; width: 100%">' . $fullPrice . '</span>';
     }
 
     public function getFormattedPrice(): ?float
     {
-        return $this->price ?? 0;
+        $currency = session('currency') ?  session('currency') : 'AMD';
+
+        $price = $this->price_amd;
+
+        if ($currency === 'USD') {
+            $price = $this->price_amd / 387;
+        } else if($currency === 'RUB') {
+            $price = $this->price_amd / 4;
+        }
+
+
+
+        return $price;
     }
+
 
     public function getPricePerSquareAttribute(): ?float
     {
-        if(!$this->area_total) {
+        if (!$this->area_total) {
             return null;
         }
-        return ceil($this->price / $this->area_total );
+        return ceil($this->price / $this->area_total);
     }
 
-    public function getProvince(): ?string {
+    public function getProvince(): ?string
+    {
         return $this->location_province->name_arm ?? '';
     }
 
-    public function getCommunity(): ?string {
+    public function getCommunity(): ?string
+    {
         return $this->location_community->name_arm ?? '';
     }
 
-    public function getStreet(): ?string {
+    public function getStreet(): ?string
+    {
         return $this->location_street->name_arm ?? '';
     }
 
 
     public function getFullCodeAttribute()
     {
-        return $this->estate_type?->name_arm . '<br/>'. $this->code  . '<br/>'.   $this->contract_type?->name_arm;
+        return $this->estate_type?->name_arm . '<br/>' . $this->code . '<br/>' . $this->contract_type?->name_arm;
     }
 
     public function getShortDescriptionAttribute()
@@ -1009,9 +1030,8 @@ class Estate extends Model
         }
 
 
-
-        if($this->estate_type_id === 1) {
-                $shortDescription = $contractType.' '.$street;
+        if ($this->estate_type_id === 1) {
+            $shortDescription = $contractType . ' ' . $street;
         }
 
         return $shortDescription;

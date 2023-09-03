@@ -151,18 +151,21 @@ class EstateObserver
 //                EstateDocument::whereIn('path', array_diff($existingPhotos, $estatePhotos))->delete();
                 Log::error('deleting exisitng');
             }
-
-            $temporaryPhotos = [];
-            $updatedTemporaryPhotos = EstateDocument::where('estate_id', $estate->id)->get();
-
-            foreach ($updatedTemporaryPhotos as $updatedTemporaryPhoto) {
-                $temporaryPhotos[] = 'estate/photos/' . $updatedTemporaryPhoto->path;
-            }
-
-            $estate->unsetEventDispatcher();
-            $estate->temporary_photos = json_encode($temporaryPhotos);
-            $estate->saveQuietly();
         }
+
+
+        $temporaryPhotos = [];
+        $updatedTemporaryPhotos = EstateDocument::where('estate_id', $estate->id)->get();
+
+        foreach ($updatedTemporaryPhotos as $updatedTemporaryPhoto) {
+            $temporaryPhotos[] = 'estate/photos/' . $updatedTemporaryPhoto->path;
+        }
+
+
+        $estate->unsetEventDispatcher();
+        $estate->temporary_photos = json_encode($temporaryPhotos);
+        $estate->price_usd = (int)((int)$estate->price_amd / 387);
+        $estate->saveQuietly();
 
     }
 

@@ -27,6 +27,8 @@
         {{-- Topbar. Contains the right part --}}
         @include(backpack_view('inc.topbar_right_content'))
         @include(backpack_view('inc.menu_user_dropdown'))
+
+
     @endif
 </ul>
 {{-- ========== End of top menu right items ========== --}}

@@ -77,6 +77,14 @@ class EstateCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
+            'name' => 'full_price',
+            'type' => "text",
+            'label' => "Gin",
+            'tab' => 'Genersdfal',
+            'limit' => 500,
+        ]);
+
+        CRUD::addColumn([
             'name' => 'full_address',
             'type' => "text",
             'label' => "Հասցե",
@@ -385,26 +393,27 @@ class EstateCrudController extends CrudController
 
 
         CRUD::addField([
-            'name' => 'price',
+            'name' => 'price_amd',
             'type' => "number",
             'label' => "Գին",
             'wrapper' => [
-                'class' => 'form-group col-md-2'
+                'class' => 'form-group col-md-4'
             ],
+            "suffix" => 'AMD'
         ]);
 
-        CRUD::addField([
-            'name' => 'currency',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "<br/>",
-            'allows_null' => false,
-            'default' => 1,
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-1'
-            ],
-        ]);
+//        CRUD::addField([
+//            'name' => 'currency',
+//            'type' => "relationship",
+//            'attribute' => "name_arm",
+//            'label' => "<br/>",
+//            'allows_null' => false,
+//            'default' => 1,
+//            'placeholder' => '-Ընտրել մեկը-',
+//            'wrapper' => [
+//                'class' => 'form-group col-md-1'
+//            ],
+//        ]);
 
 
         /*Նկարներ tab fields*/

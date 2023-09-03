@@ -77,4 +77,5 @@ Route::group([
     Route::crud('c-separate-entrance-type', 'CSeparateEntranceTypeCrudController');
     Route::crud('realtor-user', 'RealtorUserCrudController');
     Route::crud('professional', 'ProfessionalCrudController');
+    Route::post('setCurrency', 'CurrencyController@setCurrency')->name('setCurrency');
 }); // this should be the absolute last line of this file
