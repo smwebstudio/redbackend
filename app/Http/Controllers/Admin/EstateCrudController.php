@@ -1021,7 +1021,7 @@ class EstateCrudController extends CrudController
             'placeholder' => '-Ընտրել մեկը-',
             'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
         ]);
-        
+
 
         CRUD::addColumn([
             'name' => 'meta_title_arm',

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('estate', function (Blueprint $table) {
-            $table->integer('price_amd', 10, 2)->after('price_usd');
+            $table->integer('price_amd')->after('price_usd')->nullable();
         });
     }
 
