@@ -193,26 +193,27 @@ trait HasEstateFilters
         ]);
 
 
-        $this->crud->addFilter([
-            'name' => 'currency',
-            'type' => 'select2',
-            'label' => 'Արժույթ',
-        ], function () {
-            return \App\Models\CCurrency::all()->pluck('name_arm', 'id')->toArray();
-        }, function ($value) {
-//            $this->crud->addClause('where', 'currency_id', $value);
-        });
+//        $this->crud->addFilter([
+//            'name' => 'currency',
+//            'type' => 'select2',
+//            'label' => 'Արժույթ',
+//        ], function () {
+//            return \App\Models\CCurrency::all()->pluck('name_arm', 'id')->toArray();
+//        }, function ($value) {
+////            $this->crud->addClause('where', 'currency_id', $value);
+//        });
 
-        if (request('currency') && !request('extended_price')) {
-            $currency = request('currency');
+        if (!request('extended_price')) {
+            $currency = session('currency') ? session('currency') : 'AMD';
             $contractType = request('contract_type');
+
             if (!empty($currency)) {
                 $this->crud->addFilter([
                     'name' => 'price_range',
                     'type' => 'select2',
                     'label' => 'Գնային միջակայք',
                 ], function () use ($currency,$contractType) {
-                    if ($currency == 1) {
+                    if ($currency == 'USD') {
                         if($contractType == 2) {
                             return \App\Models\CRentPriceInUsd::all()->pluck('name_arm', 'name_eng')->toArray();
                         }
@@ -221,7 +222,7 @@ trait HasEstateFilters
                         }
                         return \App\Models\CSellPriceInUsd::all()->pluck('name_arm', 'name_eng')->toArray();
                     }
-                    if ($currency == 2) {
+                    if ($currency == 'RUB') {
                         if($contractType == 2) {
                             return \App\Models\CRentPriceInRur::all()->pluck('name_arm', 'name_eng')->toArray();
                         }
@@ -230,7 +231,7 @@ trait HasEstateFilters
                         }
                         return \App\Models\CSellPriceInRur::all()->pluck('name_arm', 'name_eng')->toArray();
                     }
-                    if ($currency == 3) {
+                    if ($currency == 'AMD') {
                         if($contractType == 2) {
                             return \App\Models\CRentPriceInAmd::all()->pluck('name_arm', 'name_eng')->toArray();
                         }
@@ -240,7 +241,7 @@ trait HasEstateFilters
                         return \App\Models\CSellPriceInAmd::all()->pluck('name_arm', 'name_eng')->toArray();
                     }
                 }, function ($values) {
-                    $currency = request('currency');
+                    $currency = session('currency') ? session('currency') : 'AMD';
 
                     preg_match('/(\d+)/', $values, $matches);
 
@@ -249,40 +250,42 @@ trait HasEstateFilters
                     } elseif (strpos($values, 'and more') !== false) {
                         $range = [(int) $matches[1], null];
                     } else {
-                        if ($currency == 3) {
+                        if ($currency == 'AMD') {
                             preg_match('/(\d+) million/', $values, $matches);
                             $range = [(int) $matches[0]* 1000000, (int) $matches[1] * 1000000];
                         } else {
                             preg_match('/(\d+)-(\d+)/', $values, $matches);
                             $range = [(int) $matches[1], (int) $matches[2]];
+
                         }
 
                     }
 
-                    if ($currency == 1) {
+
+                    if ($currency == 'AMD') {
                         if ($range[0]) {
-                            $this->crud->addClause('where', 'price', '>=', (float)$range[0]);
+                            $this->crud->addClause('where', 'price_amd', '>=', (float)$range[0]);
                         }
                         if ($range[1]) {
-                            $this->crud->addClause('where', 'price', '<=', (float)$range[1]);
+                            $this->crud->addClause('where', 'price_amd', '<=', (float)$range[1]);
                         }
                     }
 
-                    if ($currency == 2) {
+                    if ($currency == 'RUB') {
                         if ($range[0]) {
-                            $this->crud->addClause('where', 'price', '>=', (float)$range[0] * 90);
+                            $this->crud->addClause('where', 'price_amd', '>=', (float)$range[0] * 4);
                         }
                         if ($range[1]) {
-                            $this->crud->addClause('where', 'price', '<=', (float)$range[1] * 90);
+                            $this->crud->addClause('where', 'price_amd', '<=', (float)$range[1] * 4);
                         }
                     }
 
-                    if ($currency == 3) {
+                    if ($currency == 'USD') {
                         if ($range[0]) {
-                            $this->crud->addClause('where', 'price', '>=', (float)$range[0] * 390);
+                            $this->crud->addClause('where', 'price_amd', '>=', (float)$range[0] * 390);
                         }
                         if ($range[1]) {
-                            $this->crud->addClause('where', 'price', '<=', (float)$range[1] * 390);
+                            $this->crud->addClause('where', 'price_amd', '<=', (float)$range[1] * 390);
                         }
                     }
 
@@ -313,12 +316,37 @@ trait HasEstateFilters
                 false,
                 function ($value) {
                     $range = json_decode($value);
-                    if ($range->from) {
-                        $this->crud->addClause('where', 'price', '>=', (float)$range->from);
+
+
+                    $currency = session('currency') ? session('currency') : 'AMD';
+
+                    if ($currency == 'AMD') {
+                        if ($range->from) {
+                            $this->crud->addClause('where', 'price_amd', '>=', (float)$range->from);
+                        }
+                        if ($range->to) {
+                            $this->crud->addClause('where', 'price_amd', '<=', (float)$range->to);
+                        }
                     }
-                    if ($range->to) {
-                        $this->crud->addClause('where', 'price', '<=', (float)$range->to);
+
+                    if ($currency == 'RUB') {
+                        if ($range->from) {
+                            $this->crud->addClause('where', 'price_amd', '>=', (float)$range->from * 4);
+                        }
+                        if ($range->to) {
+                            $this->crud->addClause('where', 'price_amd', '<=', (float)$range->to * 4);
+                        }
                     }
+
+                    if ($currency == 'USD') {
+                        if ($range->from) {
+                            $this->crud->addClause('where', 'price_amd', '>=', (float)$range->from * 390);
+                        }
+                        if ($range->to) {
+                            $this->crud->addClause('where', 'price_amd', '<=', (float)$range->to * 390);
+                        }
+                    }
+
                 });
         }
 
@@ -330,14 +358,42 @@ trait HasEstateFilters
             false,
             function ($value) {
                 $range = json_decode($value);
-                if ($range->from) {
-                    $this->crud->addClause('whereRaw', 'price_usd/area_total > ?', [(float)$range->from]);
+
+                $currency = session('currency') ? session('currency') : 'AMD';
+
+                if ($currency == 'AMD') {
+                    if ($range->from) {
+                        $this->crud->addClause('whereRaw', 'price_amd/area_total > ?', [(float)$range->from]);
+                    }
+                    if ($range->to) {
+                        $this->crud->addClause('whereRaw', 'price_amd / estate.area_total < ?', [(float)$range->to]);
+                    }
                 }
-                if ($range->to) {
-                    $this->crud->addClause('whereRaw', 'price_usd / estate.area_total < ?', [(float)$range->to]);
+
+                if ($currency == 'RUB') {
+                    if ($range->from) {
+                        $this->crud->addClause('whereRaw', 'price_amd/area_total > ?', [(float)$range->from * 4]);
+                    }
+                    if ($range->to) {
+                        $this->crud->addClause('whereRaw', 'price_amd / estate.area_total < ?', [(float)$range->to * 4]);
+                    }
+                }
+
+                if ($currency == 'USD') {
+                    if ($range->from) {
+                        $this->crud->addClause('whereRaw', 'price_amd/area_total > ?', [(float)$range->from * 390]);
+                    }
+                    if ($range->to) {
+                        $this->crud->addClause('whereRaw', 'price_amd / estate.area_total < ?', [(float)$range->to * 390]);
+                    }
                 }
             });
 
+
+        $this->crud->addFilter([
+            'type' => 'divider',
+            'name' => 'divider_price_discount',
+        ]);
 
         $this->crud->addFilter([
             'type' => 'date',
