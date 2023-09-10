@@ -29,7 +29,6 @@
 		{{-- Default box --}}
 
 		@include('crud::inc.grouped_errors')
-
 		  <form method="post"
 		  		action="{{ url($crud->route) }}"
 				@if ($crud->hasUploadFields('create'))

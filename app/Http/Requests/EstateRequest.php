@@ -25,7 +25,13 @@ class EstateRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+             'name' => 'required|min:5|max:255',
+             'contract_type' => 'required|min:5|max:255',
+             'location_province' => 'required|min:5|max:255',
+             'location_community' => 'required|min:5|max:255',
+             'location_city' => 'required|min:5|max:255',
+             'location_street' => 'required|min:5|max:255',
+             'is_advertised' => 'required|min:5|max:255',
         ];
     }
 

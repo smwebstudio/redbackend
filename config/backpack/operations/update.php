@@ -15,7 +15,7 @@ return [
     'tabsType' => 'horizontal', //options: horizontal, vertical
 
     // How would you like the validation errors to be shown?
-    'groupedErrors' => true,
+    'groupedErrors' => false,
     'inlineErrors'  => true,
 
     // when the page loads, put the cursor on the first input?
