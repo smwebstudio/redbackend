@@ -32,6 +32,7 @@ class EstateDetailsResource extends JsonResource
             'room_count' => $this->room_count,
             'old_price' => $this->old_price,
             'full_address' => $this->full_address,
+            'short_description' => $this->short_description,
             'public_text_arm' => $this->public_text_arm,
             'name' => $this->name,
             'area_total' => $this->area_total,

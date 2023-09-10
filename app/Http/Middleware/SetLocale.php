@@ -18,11 +18,8 @@ class SetLocale
     public function handle(Request $request, Closure $next)
     {
         $languageApi = $request->server('HTTP_ACCEPT_LANGUAGE');
-
-        Log::error('$languageApi');
-        Log::error($languageApi);
-
-        $language = config('constants.'.$languageApi);
+        $locale = substr($languageApi, 0, 2);
+        $language = config('constants.'.$locale);
         app()->setLocale($language);
         return $next($request);
     }
