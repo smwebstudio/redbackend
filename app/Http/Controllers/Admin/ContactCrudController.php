@@ -101,7 +101,7 @@ class ContactCrudController extends CrudController
         CRUD::field('created_on');
         CRUD::field('created_by');
         CRUD::field('is_from_public');
-        CRUD::field('estate_type_id');
+//        CRUD::field('estate_type_id');
         CRUD::field('estate_contract_type_id');
         CRUD::field('location_province_id');
         CRUD::field('location_city_id');

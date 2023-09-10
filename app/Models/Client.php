@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use App\Traits\ApiMultiLanguage;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -53,6 +54,7 @@ class Client extends Model
 	public $timestamps = false;
 
     use ApiMultiLanguage;
+    use CrudTrait;
     protected array $multi_lang = [
         'name',
     ];
@@ -122,4 +124,150 @@ class Client extends Model
 		'archive_comment',
 		'is_from_public'
 	];
+
+    public function getTypeListAttribute($relation, $column)
+    {
+        if ($this->$relation->isNotEmpty()) {
+            return $this->$relation->pluck($column)->implode(', ');
+        }
+        return null;
+    }
+
+    public function building_types()
+    {
+        return $this->hasManyThrough(
+            CBuildingType::class,
+            'App\Models\ClientBuildingType',
+            'client_id',
+            'id',
+            'id',
+            'building_type_id',
+        );
+    }
+
+    public function repairing_types()
+    {
+        return $this->hasManyThrough(
+            CRepairingType::class,
+            'App\Models\ClientRepairingType',
+            'client_id',
+            'id',
+            'id',
+            'repairing_type_id',
+        );
+    }
+
+    public function building_project_types()
+    {
+        return $this->hasManyThrough(
+            CBuildingProjectType::class,
+            'App\Models\ClientBuildingProjectType',
+            'client_id',
+            'id',
+            'id',
+            'building_project_type_id',
+        );
+    }
+
+    public function land_use_types()
+    {
+        return $this->hasManyThrough(
+            CLandUseType::class,
+            'App\Models\ClientLandUseType',
+            'client_id',
+            'id',
+            'id',
+            'land_use_type_id',
+        );
+    }
+
+//    public function communities()
+//    {
+//        return $this->hasManyThrough(
+//            CLocationCommunity::class,
+//            'App\Models\ClientCommunity',
+//            'client_id',
+//            'id',
+//            'id',
+//            'community_id',
+//        );
+//    }
+
+    public function communities()
+    {
+        return $this->belongsToMany(
+            CLocationCommunity::class,
+            'client_community',
+            'client_id',
+            'community_id',
+            'id',
+            'id',
+        );
+    }
+
+    public function location_city()
+    {
+        return $this->belongsTo(CLocationCity::class, 'location_city_id');
+    }
+
+    public function location_province()
+    {
+        return $this->belongsTo(CLocationProvince::class, 'location_province_id');
+    }
+
+    public function location_street()
+    {
+        return $this->belongsTo(CLocationStreet::class, 'location_street_id');
+    }
+
+    public function estate_type()
+    {
+        return $this->belongsTo(CEstateType::class, 'estate_type_id');
+    }
+
+    public function contract_type()
+    {
+        return $this->belongsTo(CContractType::class, 'estate_contract_type_id');
+    }
+
+    public function contact_status()
+    {
+        return $this->belongsTo(CContactStatus::class, 'contact_status_id');
+    }
+
+    public function broker()
+    {
+        return $this->belongsTo(RealtorUser::class, 'broker_id');
+    }
+
+    public function infoSource()
+    {
+        return $this->belongsTo(RealtorUser::class, 'info_source_id');
+    }
+
+
+    public function getBuildingTypesListAttribute()
+    {
+        return $this->getTypeListAttribute('building_types', 'name_arm');
+    }
+
+    public function getRepairingTypesListAttribute()
+    {
+        return $this->getTypeListAttribute('repairing_types', 'name_arm');
+    }
+
+    public function getBuildingProjectTypesListAttribute()
+    {
+        return $this->getTypeListAttribute('building_project_types', 'name_arm');
+    }
+
+    public function getCommunityListAttribute()
+    {
+        return $this->getTypeListAttribute('communities', 'name_arm');
+    }
+
+    public function getLandUseTypesListAttribute()
+    {
+        return $this->getTypeListAttribute('land_use_types', 'name_arm');
+    }
 }

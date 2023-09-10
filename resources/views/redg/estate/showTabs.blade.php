@@ -73,10 +73,17 @@
             </div>
 
             <div class="col-md-5 pt-16">
-                <p class="text-xl mb-12">
-                    <span
-                        class="bg-green text-white p-4">{{ isset($estate->contract_type) ? $estate->contract_type->name_arm : '' }}</span>
-                    <span>{{ isset($estate->code) ? $estate->code : '' }}</span>
+                <p class="text-xl mb-12 flex flex-row justify-between align-items-center pr-16">
+                    <span>
+
+                        <span
+                            class="bg-green text-white p-4 mr-4">{{ isset($estate->contract_type) ? $estate->contract_type->name_arm : '' }}
+                    </span>
+                    <span class="mr-4">{{ isset($estate->code) ? $estate->code : '' }}</span>
+                    </span>
+
+
+                    <span class="justify-self-end"><i class="las la-desktop"></i> {{ isset($estate->visits_count) ? $estate->visits_count : '' }}</span>
                 </p>
                 <p class="text-sm">{{ isset($estate->public_text_arm) ? $estate->public_text_arm : '' }}</p>
                 <div class="flex justify-content-left mt-10 flex-row">
@@ -101,17 +108,41 @@
                 </div>
             </div>
 
-            <div class="col-md-2 pt-16 border-2 border-solid">
+            @if(isset( $estate->agent))
+            <div class="col-md-2 pt-16 pl-16 text-center  border-l border-solid">
+                <h3 class="mb-4">Գործակալ</h3>
+                @if(isset( $estate->agent->average_rating))
+                    <div class="flex items-center space-x-1 text-center flex justify-center mb-8">
+                        @for ($i = 0; $i < $estate->agent->average_rating; $i++)
+                            <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                            </svg>
+                        @endfor
+
+                        @for ($i = $estate->agent->average_rating; $i < 5; $i++)
+                            <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        @endfor
+                    </div>
+                @endif
                 <p class="text-sm ">{{ isset($estate->agent->contact) ? $estate->agent->contact->fullName : '' }}</p>
-                <p class="text-sm mt-4 mb-4 "><img width="150px"
-                                                   src="{{
-    isset($estate->agent->profile_picture_path) ? Storage::disk('S3Public')->url('/estate/photos/'.$estate->agent->profile_picture_path) : ''
-    }}"/>
+
+
+
+                <p class="text-sm mt-4 mb-4">
+                    <a href="{{backpack_url('professional/' . $estate->agent->id . '/show')}}">
+                    <img class="m-auto" width="150px"
+                         src="{{
+                isset($estate->agent->profile_picture_path) ?  Storage::disk('S3Public')->url('/estate/photos/'.$estate->agent->profile_picture_path) : ''
+     }}"
+                    />
+                    </a>
+
                 </p>
                 <p class="text-sm ">{{ isset($estate->agent->contact) ? $estate->agent->contact->email : '' }}</p>
                 <p class="text-sm ">{{ isset($estate->agent->contact) ? $estate->agent->contact->phone_mobile_1 : '' }}</p>
 
             </div>
+            @endif
 
 
         </div>

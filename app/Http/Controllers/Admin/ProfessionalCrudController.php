@@ -44,14 +44,11 @@ class ProfessionalCrudController extends CrudController
 
     protected function setupShowOperation()
     {
+        CRUD::setShowView('redg.professional.showTabs');
 
-        $this->authorize('create', Contact::class);
-        CRUD::addColumn([
-            'name' => 'contactType',
-            'type' => "relationship",
-            'label' => "Կոնտակտի տեսակը",
-            'attribute' => "name_arm",
-        ]);
+
+        $professional = $this->crud->getCurrentEntry();
+        $this->crud->data['professional'] = $professional;
     }
 
     /**
@@ -279,7 +276,43 @@ class ProfessionalCrudController extends CrudController
             'type' => "text",
             'label' => "Ազգանուն",
             'wrapper' => [
+                'class' => 'form-group col-md-6'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'name_en',
+            'type' => "text",
+            'label' => "Անուն (ENG)",
+            'wrapper' => [
                 'class' => 'form-group col-md-4'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'last_name_en',
+            'type' => "text",
+            'label' => "Ազգանուն (ENG)",
+            'wrapper' => [
+                'class' => 'form-group col-md-6'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'name_ru',
+            'type' => "text",
+            'label' => "Անուն (RU)",
+            'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'last_name_ru',
+            'type' => "text",
+            'label' => "Ազգանուն (RU)",
+            'wrapper' => [
+                'class' => 'form-group col-md-6'
             ],
         ]);
 

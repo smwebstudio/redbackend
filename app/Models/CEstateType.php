@@ -38,7 +38,7 @@ class CEstateType extends Model
 	protected $table = 'c_estate_type';
 	public $incrementing = false;
 	public $timestamps = false;
-
+    protected string $identifiableAttribute = 'name_arm';
     use ApiMultiLanguage;
     protected array $multi_lang = [
         'name',

@@ -180,6 +180,11 @@ class RealtorUser extends Model
         return $this->hasMany(Message::class, 'recipient_id');
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Message::class, 'recipient_id')->where('message_type_id', 4);
+    }
+
 
     public function getAverageRatingAttribute()
     {

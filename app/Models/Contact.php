@@ -272,6 +272,12 @@ class Contact extends Model
     }
 
 
+    public function client()
+    {
+        return $this->hasOne(Client::class, 'contact_id', 'id');
+    }
+
+
     public function getFullNameAttribute()
     {
         return $this->name_arm.' '.$this->last_name_arm;

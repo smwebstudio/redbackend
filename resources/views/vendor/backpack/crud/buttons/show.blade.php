@@ -1,12 +1,38 @@
 @if ($crud->hasAccess('show'))
 	@if (!$crud->model->translationEnabled())
 
-	{{-- Single edit button --}}
-	<a href="{{ url($crud->route.'/'.$entry->getKey().'/show') }}" class="btn btn-sm btn-link"><i class="la la-eye"></i> </a>
+
+    @if($entry->contact_type_id)
+        @if($entry->contact_type_id == 1)
+            <a href="{{ url('/admin/seller/'.$entry->getKey().'/show') }}"
+               class="btn btn-sm btn-link"><i class="la la-eye"></i></a>
+        @endif
+        @if($entry->contact_type_id == 2)
+            <a href="{{ url('/admin/owner/'.$entry->getKey().'/show') }}"
+               class="btn btn-sm btn-link"><i class="la la-eye"></i></a>
+        @endif
+        @if($entry->contact_type_id == 3)
+            <a href="{{ url('/admin/agent/'.$entry->getKey().'/show') }}"
+               class="btn btn-sm btn-link"><i class="la la-eye"></i></a>
+        @endif
+        @if($entry->contact_type_id == 4)
+            <a href="{{ url('/admin/buyer/'.$entry->getKey().'/show') }}"
+               class="btn btn-sm btn-link"><i class="la la-eye"></i></a>
+        @endif
+        @if($entry->contact_type_id == 5)
+            <a href="{{ url('/admin/renter/'.$entry->getKey().'/show') }}"
+               class="btn btn-sm btn-link"><i class="la la-eye"></i></a>
+        @endif
+    @else
+        {{-- Single show button --}}
+        <a href="{{ url($crud->route.'/'.$entry->getKey().'/show') }}" class="btn btn-sm btn-link"><i class="la la-eye"></i> </a>
+    @endif
+
+
 
 	@else
 
-	{{-- Edit button group --}}
+	{{-- show button group --}}
 	<div class="btn-group">
 	  <a href="{{ url($crud->route.'/'.$entry->getKey().'/show') }}" class="btn btn-sm btn-link pr-0"><i class="la la-eye"></i> {{ trans('backpack::crud.preview') }}</a>
 	  <a class="btn btn-sm btn-link dropdown-toggle text-primary pl-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
