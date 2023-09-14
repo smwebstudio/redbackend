@@ -230,6 +230,11 @@ class Client extends Model
         return $this->belongsTo(CContractType::class, 'estate_contract_type_id');
     }
 
+    public function getClientContractTypeRentsAttribute()
+    {
+        return $this->contract_type()->where('id', '!=', 1)->first();
+    }
+
     public function contact_status()
     {
         return $this->belongsTo(CContactStatus::class, 'contact_status_id');

@@ -158,3 +158,19 @@ main .header-operation h1 {
     margin-right: 6px;
     text-wrap: nowrap;
 }
+
+
+.collapse-link:after {
+    content: "\25B2";
+    font-weight: 900;
+    float: right;
+}
+
+.collapse-link.collapsed:after {
+    content: "\25bc";
+}
+
+.collapse.show {
+    display: block !important;
+    visibility: visible !important;
+}

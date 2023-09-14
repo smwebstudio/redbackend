@@ -5,10 +5,12 @@ namespace App\Traits\Controllers;
 use App\Models\Contact;
 use App\Models\RealtorUser;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\CRUD\app\Library\Widget;
 
 trait AddContactListColumns
 {
     private function addListColumns()  {
+
 
         $this->crud->addButton('top', 'contact_create_buttons_set', 'view', 'crud::buttons.contact_create_buttons_set');
         $this->crud->removeButton('create');
@@ -51,6 +53,16 @@ trait AddContactListColumns
             'name' => 'phone_mobile_1',
             'type' => "text",
             'label' => "Հեռախոս",
+        ]);
+
+
+        Widget::add()->type('script')->content('assets/js/admin/lists/client.js');
+
+        CRUD::addColumn([
+            'name' => 'client.archive_till_date',
+            'attribute' => 'archive_till_date',
+            'type' => "relationship",
+            'label' => "Արխիվ․ մինչև",
         ]);
 
         CRUD::addColumn([

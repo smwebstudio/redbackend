@@ -113,6 +113,46 @@ class OwnerCrudController extends CrudController
             ],
         ]);
 
+        CRUD::addField([
+            'name' => 'name_en',
+            'type' => "text",
+            'label' => "Անուն (ENG)",
+            'tab' => "Թարգմանություն",
+            'wrapper' => [
+                'class' => 'form-group col-md-6'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'last_name_en',
+            'type' => "text",
+            'label' => "Ազգանուն (ENG)",
+            'tab' => "Թարգմանություն",
+            'wrapper' => [
+                'class' => 'form-group col-md-6'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'name_ru',
+            'type' => "text",
+            'label' => "Անուն (RU)",
+            'tab' => "Թարգմանություն",
+            'wrapper' => [
+                'class' => 'form-group col-md-6'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'last_name_ru',
+            'type' => "text",
+            'label' => "Ազգանուն (RU)",
+            'tab' => "Թարգմանություն",
+            'wrapper' => [
+                'class' => 'form-group col-md-6'
+            ],
+        ]);
+
 
 
         CRUD::addField([

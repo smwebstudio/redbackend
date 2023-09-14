@@ -85,6 +85,7 @@ class RenterCrudController extends CrudController
                 'readonly' => 'readonly',
             ],
             'placeholder' => '-Ընտրել մեկը-',
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-3 d-none'
             ],
@@ -94,6 +95,7 @@ class RenterCrudController extends CrudController
             'name' => 'is_renter',
             'type' => "switch",
             'default' => 1,
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-3 d-none'
             ],
@@ -105,6 +107,7 @@ class RenterCrudController extends CrudController
             'name' => 'name_arm',
             'type' => "text",
             'label' => "Անուն",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],
@@ -114,6 +117,238 @@ class RenterCrudController extends CrudController
             'name' => 'last_name_arm',
             'type' => "text",
             'label' => "Ազգանուն",
+            'tab' => "Հիմնական",
+            'wrapper' => [
+                'class' => 'form-group col-md-6'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'client',
+            'subfields'   => [
+                [
+                    'name' => 'contact_status',
+                    'type' => 'relationship',
+                    'attribute' => 'name_arm',
+                    'label' => "Հաճախորդի կարգավիճակ",
+                    'wrapper' => [
+                        'class' => 'form-group col-md-6',
+                    ],
+                ],
+                [
+                    'name' => 'is_urgent',
+                    'type' => 'switch',
+                    'label' => 'Շտապ',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-6'
+                    ],
+                ],
+                [
+                    'name' => 'estate_type',
+                    'type' => "relationship",
+                    'attribute' => "name_arm",
+                    'label' => "Գույքի տեսակ",
+                    'placeholder' => '-Ընտրել մեկը-',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-6'
+                    ],
+                ],
+                [
+                    'name' => 'contract_type',
+                    'type' => "select2",
+                    'attribute' => "name_arm",
+                    'label' => "Կոնտրակտի տեսակ",
+                    'placeholder' => '-Ընտրել մեկը-',
+                    'options'   => (function ($query) {
+                        return $query->where('name_eng', '!=', 'Sale')->get();
+                    }),
+                    'wrapper' => [
+                        'class' => 'form-group col-md-6'
+                    ],
+                ],
+                [
+                    'name' => 'broker',
+                    'type' => "relationship",
+                    'ajax' => true,
+                    'minimum_input_length' => 0,
+                    'attribute' => "name_arm",
+                    'label' => "Գործակալ",
+                    'placeholder' => '-Ընտրել մեկը-',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-6'
+                    ],
+                ],
+                [
+                    'name' => 'infoSource',
+                    'type' => "relationship",
+                    'ajax' => true,
+                    'minimum_input_length' => 0,
+                    'attribute' => "name_arm",
+                    'label' => "Ինֆորմացիայի աղբյուր",
+                    'placeholder' => '-Ընտրել մեկը-',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-6'
+                    ],
+                ],
+                [
+                    'name' => 'location_province',
+                    'type' => "relationship",
+                    'attribute' => "name_arm",
+                    'label' => "Մարզ",
+                    'placeholder' => '-Ընտրել մեկը-',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-4 '
+                    ],
+                ],
+                [
+                    'name' => 'location_city',
+                    'type' => "relationship",
+                    'attribute' => "name_arm",
+                    'ajax' => true,
+                    'minimum_input_length' => 0,
+                    'include_all_form_fields' => true,
+                    'label' => "Քաղաք",
+                    'dependencies' => ['location_province'],
+                    'placeholder' => '-Ընտրել մեկը-',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-4 '
+                    ],
+                ],
+                [
+                    'name' => 'communities',
+                    'type' => "relationship",
+                    'attribute' => "name_arm",
+                    'ajax' => true,
+                    'minimum_input_length' => 0,
+                    'dependencies' => ['location_province'],
+                    'label' => "Համայնք",
+                    'placeholder' => '-Ընտրել մեկը-',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-4'
+                    ],
+                ],
+                [
+                    'name' => 'location_street',
+                    'type' => "relationship",
+                    'attribute' => "name_arm",
+                    'ajax' => true,
+                    'minimum_input_length' => 0,
+                    'dependencies' => ['location_province'],
+                    'label' => "Փողոց",
+                    'placeholder' => '-Ընտրել մեկը-',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-9'
+                    ],
+                ],
+                [
+                    'name' => 'address_building',
+                    'type' => "text",
+                    'label' => "Շենք",
+                    'wrapper' => [
+                        'class' => 'form-group col-md-3'
+                    ],
+                ],
+
+                [
+                    'name' => 'price_from',
+                    'type' => "text",
+                    'label' => "Գինը սկսած",
+                    'wrapper' => [
+                        'class' => 'form-group col-md-6'
+                    ],
+                ],
+
+                [
+                    'name' => 'price_to',
+                    'type' => "text",
+                    'label' => "Գինը մինչև",
+                    'wrapper' => [
+                        'class' => 'form-group col-md-6'
+                    ],
+                ],
+
+                [
+                    'name' => 'area_from',
+                    'type' => "text",
+                    'label' => "Մակերեսը սկսած",
+                    'wrapper' => [
+                        'class' => 'form-group col-md-6'
+                    ],
+                ],
+
+                [
+                    'name' => 'area_to',
+                    'type' => "text",
+                    'label' => "Մակերեսը մինչև",
+                    'wrapper' => [
+                        'class' => 'form-group col-md-6'
+                    ],
+                ],
+
+                [
+                    'name' => 'room_count_from',
+                    'type' => "text",
+                    'label' => "Սենյակներ սկսած",
+                    'wrapper' => [
+                        'class' => 'form-group col-md-6'
+                    ],
+                ],
+
+                [
+                    'name' => 'room_count_to',
+                    'type' => "text",
+                    'label' => "Սենյակներ մինչև",
+                    'wrapper' => [
+                        'class' => 'form-group col-md-6'
+                    ],
+                ]
+            ],
+            'type' => "repeatable",
+            'label' => "",
+            'tab' => "Գնորդ",
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+            'init_rows' => 1,
+            'min_rows' => 1,
+            'max_rows' => 1
+        ]);
+
+        CRUD::addField([
+            'name' => 'name_en',
+            'type' => "text",
+            'label' => "Անուն (ENG)",
+            'tab' => "Թարգմանություն",
+            'wrapper' => [
+                'class' => 'form-group col-md-6'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'last_name_en',
+            'type' => "text",
+            'label' => "Ազգանուն (ENG)",
+            'tab' => "Թարգմանություն",
+            'wrapper' => [
+                'class' => 'form-group col-md-6'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'name_ru',
+            'type' => "text",
+            'label' => "Անուն (RU)",
+            'tab' => "Թարգմանություն",
+            'wrapper' => [
+                'class' => 'form-group col-md-6'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'last_name_ru',
+            'type' => "text",
+            'label' => "Ազգանուն (RU)",
+            'tab' => "Թարգմանություն",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],
@@ -125,6 +360,7 @@ class RenterCrudController extends CrudController
             'name' => 'email',
             'type' => "text",
             'label' => "Էլ. հասցե",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],
@@ -134,6 +370,7 @@ class RenterCrudController extends CrudController
             'name' => 'phone_mobile_1',
             'type' => "text",
             'label' => "Բջջ. հեռ. 1",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],
@@ -143,6 +380,7 @@ class RenterCrudController extends CrudController
             'name' => 'phone_mobile_2',
             'type' => "text",
             'label' => "Բջջ. հեռ. 2",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],
@@ -152,6 +390,7 @@ class RenterCrudController extends CrudController
             'name' => 'phone_mobile_3',
             'type' => "text",
             'label' => "Բջջ. հեռ. 3",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],
@@ -161,6 +400,7 @@ class RenterCrudController extends CrudController
             'name' => 'phone_mobile_4',
             'type' => "text",
             'label' => "Բջջ. հեռ. 4",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],
@@ -170,6 +410,7 @@ class RenterCrudController extends CrudController
             'name' => 'phone_office',
             'type' => "text",
             'label' => "Գրասենյակի հեռ.",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],
@@ -179,6 +420,7 @@ class RenterCrudController extends CrudController
             'name' => 'phone_home',
             'type' => "text",
             'label' => "Տան հեռ.",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],
@@ -188,6 +430,7 @@ class RenterCrudController extends CrudController
             'name' => 'viber',
             'type' => "text",
             'label' => "Viber",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],
@@ -197,6 +440,7 @@ class RenterCrudController extends CrudController
             'name' => 'whatsapp',
             'type' => "text",
             'label' => "WhatsApp",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],
@@ -206,221 +450,11 @@ class RenterCrudController extends CrudController
             'name' => 'comment_arm',
             'type' => "textarea",
             'label' => "Մեկնաբանություն",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-12'
             ],
         ]);
-
-
-        CRUD::addField([
-            'name' => 'buyer_separator',
-            'type' => 'custom_html',
-            'value' => '<hr/>',
-            'wrapper' => [
-                'class' => 'form-group col-md-12 separator'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'contact_status',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "Հաճախորդի կարգավիճակ",
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-8'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'is_urgent',
-            'type' => 'switch',
-            'label' => 'Շտապ',
-            'wrapper' => [
-                'class' => 'form-group col-md-2'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'estate_type',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "Գույքի տեսակ",
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-6'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'estate_contract_type',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "Կոնտրակտի տեսակ",
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-6'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'broker',
-            'type' => "relationship",
-            'ajax' => true,
-            'minimum_input_length' => 0,
-            'attribute' => "name_arm",
-            'label' => "Գործակալ",
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-6'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'infoSource',
-            'type' => "relationship",
-            'ajax' => true,
-            'minimum_input_length' => 0,
-            'attribute' => "name_arm",
-            'label' => "Ինֆորմացիայի աղբյուր",
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-6'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'location_province',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "Մարզ",
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-3 '
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'location_city',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'ajax' => true,
-            'minimum_input_length' => 0,
-            'include_all_form_fields' => true,
-            'label' => "Քաղաք",
-            'dependencies' => ['location_province'],
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-3 '
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'location_community',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'ajax' => true,
-            'minimum_input_length' => 0,
-            'dependencies' => ['location_province'],
-            'label' => "Համայնք",
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'location_street',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'ajax' => true,
-            'minimum_input_length' => 0,
-            'dependencies' => ['location_province'],
-            'label' => "Փողոց",
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-4'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'address_building',
-            'type' => "text",
-            'label' => "Շենք",
-            'wrapper' => [
-                'class' => 'form-group col-md-2'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'price_from',
-            'type' => "text",
-            'label' => "Գինը սկսած",
-            'wrapper' => [
-                'class' => 'form-group col-md-4'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'price_to',
-            'type' => "text",
-            'label' => "Գինը մինչև",
-            'wrapper' => [
-                'class' => 'form-group col-md-4'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'currency',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "<br/>",
-            'allows_null' => false,
-            'default' => 1,
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-2'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'area_from',
-            'type' => "text",
-            'label' => "Մակերեսը սկսած",
-            'wrapper' => [
-                'class' => 'form-group col-md-4'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'area_to',
-            'type' => "text",
-            'label' => "Մակերեսը մինչև",
-            'wrapper' => [
-                'class' => 'form-group col-md-5'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'room_count_from',
-            'type' => "text",
-            'label' => "Սենյակներ սկսած",
-            'wrapper' => [
-                'class' => 'form-group col-md-4'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'room_count_to',
-            'type' => "text",
-            'label' => "Սենյակներ մինչև",
-            'wrapper' => [
-                'class' => 'form-group col-md-5'
-            ],
-        ]);
-
-
     }
 
     /**

@@ -60,7 +60,9 @@
 <label>{!! $field['label'] !!}</label>
 
 @include('crud::fields.inc.translatable_icon')
-
+<div class="text-center p-4">
+    <span id="deleteAllButton" class="button btn bg-red text-white">Ջնջել բոլորը</span>
+</div>
 <div
     class="dropzone dropzone-target {{ $disabled ? 'disabled' : '' }} {{ $readonly ? 'readonly' : '' }}"
     data-config="{{json_encode($field['configuration'])}}"
@@ -74,6 +76,7 @@
         <button class="dz-button" type="button">Սեղմեք կամ քաշեք նկարներն այստեղ վերբեռնելու համար։</button>
     </div>
 </div>
+
 
 
 
@@ -102,6 +105,7 @@
             z-index: 1050; /* Increase the z-index value if necessary */
             position: fixed;
         }
+
         .modal-backdrop {
             display: none !important; /* Increase the z-index value if necessary */
         }
@@ -140,7 +144,7 @@
 
         .dropzone .actionsDropzone div:hover i {
             cursor: pointer;
-            color:#00bb00;
+            color: #00bb00;
         }
 
         .dropzone .dz-preview {
@@ -205,7 +209,6 @@
             height: 100%;
             object-fit: cover;
         }
-
 
 
         .dropzone .dz-remove i::before {
@@ -375,129 +378,135 @@
 
                     $.ajax({
                         url: '{{ backpack_url($crud->entity_name . '/dropzone/delete') }}',
-                            type: 'POST',
-                            data: `file=${filePath}`,
-                            success: function (data) {
-                                if (data.success) {
-                                    file.previewElement?.remove();
-                                    files.splice(files.findIndex(obj => (obj === filePath)), 1);
-                                    input.value = JSON.stringify(files);
-                                }
+                        type: 'POST',
+                        data: `file=${filePath}`,
+                        success: function (data) {
+                            if (data.success) {
+                                file.previewElement?.remove();
+                                files.splice(files.findIndex(obj => (obj === filePath)), 1);
+                                input.value = JSON.stringify(files);
                             }
-                        });
-                    } else {
-                        files = Array.isArray(files) ? files : Object.values(files);
-
-                        let fileToDelete = files.find((obj) => obj === filePath.path);
-
-                        if (fileToDelete) {
-                            file.previewElement?.remove();
-                            files.splice(files.findIndex(obj => (obj === filePath.path)), 1);
-                        }
-                        files = files.length > 0 ? files : '';
-                        input.value = JSON.stringify(files);
-                    }
-                    input.dispatchEvent(new Event('change', {bubbles: true}));
-                };
-
-                $dropzoneConfig.sending = function (file, xhr, formData) {
-                    formData.append('previousUploadedFiles', input.value);
-                    formData.append('operation', formOperation);
-                    formData.append('fieldName', $dropzoneConfig.paramName);
-                };
-
-
-                let dropzone = new Dropzone(dz, $dropzoneConfig);
-
-                let sortable = new Sortable(dz, {
-                    handle: '.dz-preview',
-                    draggable: '.dz-preview',
-                    scroll: false,
-                    onEnd: function (evt) {
-                        const currentSort = input.value;
-
-                        let files = currentSort ? JSON.parse(currentSort) : [];
-                        var newSort = files.splice(evt.oldIndex - 1, 1)[0];
-                        files.splice(evt.newIndex - 1, 0, newSort);
-
-                        input.value = JSON.stringify(files);
-                    },
-                    onChange: function (evt) {
-                        $(input).trigger('change');
-                    }
-                });
-
-                function disableDropzone() {
-                    $(dz).addClass('disabled');
-                    $(dz).siblings().find('.dz-hidden-input').prop('disabled', true);
-                    sortable.options.disabled = true;
-                    dropzone.removeEventListeners();
-                }
-
-                function enableDropzone() {
-                    $(dz).removeClass('disabled');
-                    $(dz).siblings().find('.dz-hidden-input').prop('disabled', false);
-                    sortable.options.disabled = false;
-                    dropzone.setupEventListeners();
-                }
-
-                input.addEventListener('CrudField:disable', function(e) {
-                    disableDropzone();
-                });
-
-                input.addEventListener('CrudField:enable', function(e) {
-                    enableDropzone();
-                });
-
-                element.find('.dz-filename').on('click', function(e) {
-                    const serverFiles = dz.dataset.serverFiles;
-                    if (!serverFiles || !e.currentTarget.innerText) {
-                        return;
-                    }
-
-                    let files = JSON.parse(serverFiles);
-
-
-                    let imageIndex = -1;
-                    files.forEach((file, index) => {
-                        if (file.name == e.currentTarget.innerText) {
-                            imageIndex = index;
-                            const lightboxImages = files.map((file) => file.url);
-
-                            // Create and show the Bootstrap modal
-                            const modal = new bootstrap.Modal(document.getElementById('imageModal'));
-                            modal.show();
-
-                            // Set the current image in the modal
-                            const modalImage = document.getElementById('modalImage');
-                            modalImage.src = file.url;
-                            modalImage.alt = file.name;
-
-                            // Set the navigation controls
-                            const prevBtn = document.getElementById('prevBtn');
-                            const nextBtn = document.getElementById('nextBtn');
-                            prevBtn.addEventListener('click', function() {
-                                const prevIndex = (imageIndex - 1 + files.length) % files.length;
-                                modalImage.src = lightboxImages[prevIndex];
-                                modalImage.alt = files[prevIndex].name;
-                            });
-                            nextBtn.addEventListener('click', function() {
-                                const nextIndex = (imageIndex + 1) % files.length;
-                                console.log(nextIndex);
-                                modalImage.src = lightboxImages[nextIndex];
-                                modalImage.alt = files[nextIndex].name;
-                            });
                         }
                     });
-                });
+                } else {
+                    files = Array.isArray(files) ? files : Object.values(files);
 
-                if (isDropzoneActive !== 'true') {
-                    disableDropzone();
+                    let fileToDelete = files.find((obj) => obj === filePath.path);
+
+                    if (fileToDelete) {
+                        file.previewElement?.remove();
+                        files.splice(files.findIndex(obj => (obj === filePath.path)), 1);
+                    }
+                    files = files.length > 0 ? files : '';
+                    input.value = JSON.stringify(files);
                 }
+                input.dispatchEvent(new Event('change', {bubbles: true}));
+            };
+
+            $dropzoneConfig.sending = function (file, xhr, formData) {
+                formData.append('previousUploadedFiles', input.value);
+                formData.append('operation', formOperation);
+                formData.append('fieldName', $dropzoneConfig.paramName);
+            };
+
+
+            let dropzone = new Dropzone(dz, $dropzoneConfig);
+
+            const deleteAllButton = document.getElementById("deleteAllButton");
+            deleteAllButton.addEventListener("click", function () {
+                // Remove all files from Dropzone
+                dropzone.removeAllFiles();
+            });
+
+            let sortable = new Sortable(dz, {
+                handle: '.dz-preview',
+                draggable: '.dz-preview',
+                scroll: false,
+                onEnd: function (evt) {
+                    const currentSort = input.value;
+
+                    let files = currentSort ? JSON.parse(currentSort) : [];
+                    var newSort = files.splice(evt.oldIndex - 1, 1)[0];
+                    files.splice(evt.newIndex - 1, 0, newSort);
+
+                    input.value = JSON.stringify(files);
+                },
+                onChange: function (evt) {
+                    $(input).trigger('change');
+                }
+            });
+
+            function disableDropzone() {
+                $(dz).addClass('disabled');
+                $(dz).siblings().find('.dz-hidden-input').prop('disabled', true);
+                sortable.options.disabled = true;
+                dropzone.removeEventListeners();
             }
-        </script>
-        @endBassetBlock
-    @endpush
+
+            function enableDropzone() {
+                $(dz).removeClass('disabled');
+                $(dz).siblings().find('.dz-hidden-input').prop('disabled', false);
+                sortable.options.disabled = false;
+                dropzone.setupEventListeners();
+            }
+
+            input.addEventListener('CrudField:disable', function (e) {
+                disableDropzone();
+            });
+
+            input.addEventListener('CrudField:enable', function (e) {
+                enableDropzone();
+            });
+
+            element.find('.dz-filename').on('click', function (e) {
+                const serverFiles = dz.dataset.serverFiles;
+                if (!serverFiles || !e.currentTarget.innerText) {
+                    return;
+                }
+
+                let files = JSON.parse(serverFiles);
+
+
+                let imageIndex = -1;
+                files.forEach((file, index) => {
+                    if (file.name == e.currentTarget.innerText) {
+                        imageIndex = index;
+                        const lightboxImages = files.map((file) => file.url);
+
+                        // Create and show the Bootstrap modal
+                        const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+                        modal.show();
+
+                        // Set the current image in the modal
+                        const modalImage = document.getElementById('modalImage');
+                        modalImage.src = file.url;
+                        modalImage.alt = file.name;
+
+                        // Set the navigation controls
+                        const prevBtn = document.getElementById('prevBtn');
+                        const nextBtn = document.getElementById('nextBtn');
+                        prevBtn.addEventListener('click', function () {
+                            const prevIndex = (imageIndex - 1 + files.length) % files.length;
+                            modalImage.src = lightboxImages[prevIndex];
+                            modalImage.alt = files[prevIndex].name;
+                        });
+                        nextBtn.addEventListener('click', function () {
+                            const nextIndex = (imageIndex + 1) % files.length;
+                            console.log(nextIndex);
+                            modalImage.src = lightboxImages[nextIndex];
+                            modalImage.alt = files[nextIndex].name;
+                        });
+                    }
+                });
+            });
+
+            if (isDropzoneActive !== 'true') {
+                disableDropzone();
+            }
+        }
+    </script>
+    @endBassetBlock
+@endpush
 
 {{-- End of Extra CSS and JS --}}
 {{-- ########################################## --}}

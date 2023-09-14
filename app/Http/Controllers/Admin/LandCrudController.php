@@ -112,6 +112,82 @@ class LandCrudController extends CrudController
         $this->addLandFields();
         $this->addCreateCommonFields();
 
+        CRUD::addField([
+            'name' => 'public_text_en',
+            'type' => "textarea",
+            'attributes' => [
+                'rows' => 7,
+            ],
+            'label' => "Հայտարարության տեքստ (ENG)",
+            'tab' => 'Թարգմանություն',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'public_text_ru',
+            'type' => "textarea",
+            'attributes' => [
+                'rows' => 7,
+            ],
+            'label' => "Հայտարարության տեքստ (RU)",
+            'tab' => 'Թարգմանություն',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+
+        CRUD::addField([
+            'name' => 'separator77776788',
+            'type' => 'custom_html',
+            'value' => '<h4>SEO</h4>',
+            'tab' => 'Թարգմանություն',
+            'wrapper' => [
+                'class' => 'form-group col-md-12 separator'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'meta_title_en',
+            'type' => "textarea",
+            'label' => "Վերնագիր SEO ENG",
+            'tab' => 'Թարգմանություն',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'meta_description_en',
+            'type' => "textarea",
+            'label' => "Նկարագրություն SEO ENG",
+            'tab' => 'Թարգմանություն',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'meta_title_ru',
+            'type' => "textarea",
+            'label' => "Վերնագիր SEO RU",
+            'tab' => 'Թարգմանություն',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'meta_description_ru',
+            'type' => "textarea",
+            'label' => "Նկարագրություն SEO RU",
+            'tab' => 'Թարգմանություն',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
 
     }
 

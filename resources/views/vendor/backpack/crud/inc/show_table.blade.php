@@ -6,10 +6,12 @@
     flex-flow: row wrap; ">
             @foreach($columns as $column)
                 <div class="{!! isset($column['className']) ? $column['className'] : '' !!}" style="display: flex; flex-direction: row; gap: 16px;">
+                    @if(!isset($column['hideLabel']))
                     <div  class="border-top-0 basis-3/6 grow-1 ">
                         <strong>{!! $column['label'] !!}</strong>
                     </div>
-                    <div class="border-top-0 basis-3/6 grow-1">
+                    @endif
+                    <div class="border-top-0  {!! isset($column['hideLabel']) ? 'w-100' : 'basis-3/6 grow-1' !!}">
                         @php
                             // create a list of paths to column blade views
                             // including the configured view_namespaces

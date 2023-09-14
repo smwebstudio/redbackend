@@ -19,7 +19,11 @@ crud.field('is_estate_commercial_land').onChange(function(field) {
 
 crud.field('is_organization').onChange(function(field) {
     crud.field('name_arm').show(field.value == 0).enable(field.value == 0);
+    crud.field('name_en').show(field.value == 0).enable(field.value == 0);
+    crud.field('name_ru').show(field.value == 0).enable(field.value == 0);
     crud.field('last_name_arm').show(field.value == 0).enable(field.value == 0);
+    crud.field('last_name_en').show(field.value == 0).enable(field.value == 0);
+    crud.field('last_name_ru').show(field.value == 0).enable(field.value == 0);
     crud.field('organization').show(field.value == 1).enable(field.value == 1);
 }).change();
 

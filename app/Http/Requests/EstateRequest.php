@@ -26,12 +26,15 @@ class EstateRequest extends FormRequest
     {
         return [
              'name' => 'required|min:5|max:255',
-             'contract_type' => 'required|min:5|max:255',
-             'location_province' => 'required|min:5|max:255',
-             'location_community' => 'required|min:5|max:255',
-             'location_city' => 'required|min:5|max:255',
-             'location_street' => 'required|min:5|max:255',
-             'is_advertised' => 'required|min:5|max:255',
+             'contract_type' => 'required',
+             'location_province' => 'required_if:estate_status,Incomplete',
+             'location_community' => 'required_if:location_province,Yerevan',
+             'location_city' => 'required',
+             'location_street' => 'required',
+             'address_building' => 'required_if:location_province,1',
+             'floor' => 'required',
+             'building_floor_count' => 'required_if:floor,5',
+             'is_advertised' => 'required_if:estate_status,Incomplete',
         ];
     }
 

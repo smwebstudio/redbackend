@@ -380,6 +380,9 @@ class EstateObserver
     {
 
         try {
+            $startTime = microtime(true);
+
+
             $imageContents = Storage::disk('S3Public')->get($imagePath);
 
             // Save the image locally temporarily
@@ -389,6 +392,8 @@ class EstateObserver
             // Apply watermark
             $watermarkPath = public_path('watermark.png');  // Updated to use public_path helper function
             $watermarkedImage = Image::load($localImagePath)
+                ->optimize()
+                ->apply()
                 ->watermark($watermarkPath)
                 ->watermarkPosition(Manipulations::POSITION_CENTER)
                 ->watermarkHeight(15, Manipulations::UNIT_PERCENT)
@@ -429,6 +434,12 @@ class EstateObserver
             unlink($localImagePath);
             unlink($watermarkedImagePath);
 
+            $endTime = microtime(true);
+
+            // Calculate and log the execution time
+            $executionTime = $endTime - $startTime;
+            Log::info("Watermarking image took {$executionTime} seconds.");
+
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             Alert::error('An error occured uploading files. Check log files.')->flash();
@@ -437,6 +448,60 @@ class EstateObserver
 
         return true;
     }
+
+//    public function watermarkImage($estate, $imagePath, $filename)
+//    {
+//        try {
+//
+//            $startTime = microtime(true);
+//            $imageContents = Storage::disk('S3Public')->get($imagePath);
+//            $localImagePath = storage_path('app/public/temp.jpg');
+//            file_put_contents($localImagePath, $imageContents);
+//
+//            $watermarkPath = public_path('watermark.png');
+////            $watermarkedImage = Image::load($localImagePath);
+////
+////            $positions = [
+////                Manipulations::POSITION_CENTER,
+////                Manipulations::POSITION_TOP_LEFT,
+////                Manipulations::POSITION_TOP_RIGHT,
+////                Manipulations::POSITION_BOTTOM_LEFT,
+////                Manipulations::POSITION_BOTTOM_RIGHT,
+////            ];
+////
+////            foreach ($positions as $position) {
+////                $watermarkedImage->watermark($watermarkPath)
+////                    ->watermarkPosition($position)
+////                    ->watermarkHeight(15, Manipulations::UNIT_PERCENT)
+////                    ->watermarkWidth(15, Manipulations::UNIT_PERCENT);
+////            }
+////
+////            $watermarkedImage->apply();
+//
+//            $watermarkedImage = Image::load($imageContents)
+//                ->watermark($watermarkPath)
+//                ->watermarkPosition(Manipulations::POSITION_CENTER)
+//                ->watermarkHeight(15, Manipulations::UNIT_PERCENT)
+//                ->watermarkWidth(15, Manipulations::UNIT_PERCENT)
+//                ->apply();
+//
+//            $newImagePath = 'estate/photos/' . $estate->id . '/' . $filename;
+//            Storage::disk('S3Public')->put($newImagePath, (string)$watermarkedImage->encode(), $filename);
+//
+//            unlink($localImagePath);
+//            $endTime = microtime(true);
+//
+//            // Calculate and log the execution time
+//            $executionTime = $endTime - $startTime;
+//            Log::info("Watermarking image via S3 took {$executionTime} seconds.");
+//        } catch (\Throwable $th) {
+//            Log::error($th->getMessage());
+//            throw $th; // Consider throwing the exception for better error handling
+//        }
+//
+//        return true;
+//    }
+
 
     public function transferOriginalImage($estate, $imagePath, $filename)
     {

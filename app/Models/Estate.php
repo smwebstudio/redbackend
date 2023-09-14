@@ -980,9 +980,22 @@ class Estate extends Model
             $price = $this->price_amd / 4;
         }
 
+        return $this->roundPrice($price, $currency);
+    }
 
+    private function roundPrice(?float $price, ?string $currency): ?float
+    {
+        if ($price === null) {
+            return null;
+        }
 
-        return $price;
+        if ($currency === 'AMD') {
+            return round($price / 100) * 100; // Round AMD to nearest 1000
+        } elseif ($currency === 'RUB') {
+            return round($price / 10) * 10; // Round RUB to nearest 10
+        }
+
+        return $price; // No rounding for other currencies
     }
 
 
@@ -1001,7 +1014,10 @@ class Estate extends Model
             $price = $this->price_amd / 4;
         }
 
-        return ceil($price / $this->area_total);
+        $pricePerSQM = ceil($price / $this->area_total);
+
+        return $this->roundPrice($pricePerSQM, $currency);
+
     }
 
     public function getProvince(): ?string

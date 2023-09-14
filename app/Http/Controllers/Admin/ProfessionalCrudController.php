@@ -257,6 +257,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'is_organization',
             'type' => "switch",
             'label' => "Կազմակերպություն",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-12'
             ],
@@ -266,6 +267,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'name_arm',
             'type' => "text",
             'label' => "Անուն",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-4'
             ],
@@ -275,6 +277,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'last_name_arm',
             'type' => "text",
             'label' => "Ազգանուն",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],
@@ -284,6 +287,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'name_en',
             'type' => "text",
             'label' => "Անուն (ENG)",
+            'tab' => "Թարգմանություն",
             'wrapper' => [
                 'class' => 'form-group col-md-4'
             ],
@@ -293,6 +297,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'last_name_en',
             'type' => "text",
             'label' => "Ազգանուն (ENG)",
+            'tab' => "Թարգմանություն",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],
@@ -302,6 +307,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'name_ru',
             'type' => "text",
             'label' => "Անուն (RU)",
+            'tab' => "Թարգմանություն",
             'wrapper' => [
                 'class' => 'form-group col-md-4'
             ],
@@ -311,6 +317,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'last_name_ru',
             'type' => "text",
             'label' => "Ազգանուն (RU)",
+            'tab' => "Թարգմանություն",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],
@@ -320,6 +327,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'organization',
             'type' => "text",
             'label' => "Կազմակերպության անվանում",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-4'
             ],
@@ -329,6 +337,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'separator1',
             'type' => 'custom_html',
             'value' => '<br/>',
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-12 separator'
             ],
@@ -338,6 +347,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'email',
             'type' => "text",
             'label' => "Էլ. հասցե",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-4'
             ],
@@ -347,6 +357,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'password',
             'type' => "password",
             'label' => "Գաղտնաբառ",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-4'
             ],
@@ -355,6 +366,7 @@ class ProfessionalCrudController extends CrudController
         CRUD::addField([
             'name' => 'separator2',
             'type' => 'custom_html',
+            'tab' => "Հիմնական",
             'value' => '<br/>',
             'wrapper' => [
                 'class' => 'form-group col-md-12 separator'
@@ -365,6 +377,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'phone_mobile_1',
             'type' => "text",
             'label' => "Բջջ. հեռ. 1",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-4'
             ],
@@ -374,6 +387,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'phone_mobile_2',
             'type' => "text",
             'label' => "Բջջ. հեռ. 2",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-4'
             ],
@@ -383,6 +397,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'phone_office',
             'type' => "text",
             'label' => "Գրասենյակի հեռ.",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-4'
             ],
@@ -392,6 +407,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'viber',
             'type' => "text",
             'label' => "Viber",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-4'
             ],
@@ -401,6 +417,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'whatsapp',
             'type' => "text",
             'label' => "WhatsApp",
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-4'
             ],
@@ -410,6 +427,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'separator3',
             'type' => 'custom_html',
             'value' => '<br/>',
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-12 separator'
             ],
@@ -424,12 +442,14 @@ class ProfessionalCrudController extends CrudController
             'model'     => "App\Models\CProfessionType",
             'pivot'     => true,
              'number_of_columns' => 3,
+            'tab' => "Հիմնական",
         ]);
 
         CRUD::addField([
             'name' => 'separator4',
             'type' => 'custom_html',
             'value' => '<br/>',
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-12 separator'
             ],
@@ -443,6 +463,7 @@ class ProfessionalCrudController extends CrudController
             'attribute' => 'name_arm',
             'model'     => "App\Models\CRole",
             'pivot'     => true,
+            'tab' => "Հիմնական",
             'options'   => (function ($query) {
                 return $query->whereIn('id', [1,2,4,5])->get();
             }),
@@ -452,6 +473,7 @@ class ProfessionalCrudController extends CrudController
             'name' => 'separator5',
             'type' => 'custom_html',
             'value' => '<br/>',
+            'tab' => "Հիմնական",
             'wrapper' => [
                 'class' => 'form-group col-md-12 separator'
             ],
@@ -462,6 +484,7 @@ class ProfessionalCrudController extends CrudController
             'label'        => "Profile Image",
             'type'         => 'image',
             'disk'         => 'S3',
+            'tab' => "Հիմնական",
             'aspect_ratio' => 1, // set to 0 to allow any aspect ratio
             'crop'         => true, // set to true to allow cropping, false to disable
             'withFiles' => ([

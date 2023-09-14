@@ -117,6 +117,7 @@ class EstateCrudController extends CrudController
 
     protected function setupUpdateOperation()
     {
+        CRUD::setValidation(EstateRequest::class);
         $this->setupCreateOperation();
         $estate = $this->crud->getCurrentEntry();
         CRUD::setOperationSetting('strippedRequest', function ($request) {
@@ -385,7 +386,7 @@ class EstateCrudController extends CrudController
             'label' => 'Նկարներ',
             'type' => "dropzone",
             'configuration' => [
-                'parallelUploads' => 2,
+                'parallelUploads' => 10,
                 'uploadMultiple' => true,
                 'createImageThumbnails' => true,
                 'maxFilesize' => 1680000,
@@ -604,6 +605,85 @@ class EstateCrudController extends CrudController
             ],
         ]);
 
+        /*Translations*/
+
+        CRUD::addField([
+            'name' => 'public_text_en',
+            'type' => "textarea",
+            'attributes' => [
+                'rows' => 7,
+            ],
+            'label' => "Հայտարարության տեքստ (ENG)",
+            'tab' => 'Թարգմանություն',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'public_text_ru',
+            'type' => "textarea",
+            'attributes' => [
+                'rows' => 7,
+            ],
+            'label' => "Հայտարարության տեքստ (RU)",
+            'tab' => 'Թարգմանություն',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+
+        CRUD::addField([
+            'name' => 'separator77776788',
+            'type' => 'custom_html',
+            'value' => '<h4>SEO</h4>',
+            'tab' => 'Թարգմանություն',
+            'wrapper' => [
+                'class' => 'form-group col-md-12 separator'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'meta_title_en',
+            'type' => "textarea",
+            'label' => "Վերնագիր SEO ENG",
+            'tab' => 'Թարգմանություն',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'meta_description_en',
+            'type' => "textarea",
+            'label' => "Նկարագրություն SEO ENG",
+            'tab' => 'Թարգմանություն',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'meta_title_ru',
+            'type' => "textarea",
+            'label' => "Վերնագիր SEO RU",
+            'tab' => 'Թարգմանություն',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'meta_description_ru',
+            'type' => "textarea",
+            'label' => "Նկարագրություն SEO RU",
+            'tab' => 'Թարգմանություն',
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+        ]);
+
     }
 
     private function addApartmentFields(): void
@@ -716,7 +796,7 @@ class EstateCrudController extends CrudController
             'value' => '<h4>Շենք/Բնակարան</h4>',
             'tab' => 'Հիմնական',
             'wrapper' => [
-                'class' => 'form-group col-md-2 apartment_building_attribute'
+                'class' => 'form-group col-md-12 apartment_building_attribute'
             ],
         ]);
 
@@ -904,7 +984,9 @@ class EstateCrudController extends CrudController
 
         CRUD::addColumn([
             'name' => 'name_arm',
-            'type' => "textarea",
+            'type' => "collapse",
+            'hideLabel' => true,
+            'limit' => 5000,
             'row' => 12,
             'label' => "Մասնագիտական կարծիք, Վերլուծություն",
             'tab' => 'Մասնագիտական',
@@ -913,7 +995,9 @@ class EstateCrudController extends CrudController
 
         CRUD::addColumn([
             'name' => 'additional_info_arm',
-            'type' => "textarea",
+            'type' => "collapse",
+            'hideLabel' => true,
+            'limit' => 5000,
             'row' => 12,
             'label' => "Ինչու ես ձեռք չէի բերի այս գույքը",
             'tab' => 'Մասնագիտական',
@@ -923,7 +1007,8 @@ class EstateCrudController extends CrudController
 
         CRUD::addColumn([
             'name' => 'comment_arm',
-            'type' => "text",
+            'type' => "collapse",
+            'hideLabel' => true,
             'row' => 12,
             'label' => "Այլ նոթեր",
             'tab' => 'Մասնագիտական',
@@ -934,7 +1019,9 @@ class EstateCrudController extends CrudController
 
         CRUD::addColumn([
             'name' => 'is_public_text_generation',
-            'type' => "switch",
+            'type' => "collapse",
+            'hideLabel' => true,
+            'limit' => 5000,
             'label' => "Ավտո տեքստ",
             'tab' => 'Մասնագիտական',
             'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
@@ -942,7 +1029,8 @@ class EstateCrudController extends CrudController
 
         CRUD::addColumn([
             'name' => 'public_text_arm',
-            'type' => "text",
+            'type' => "collapse",
+            'hideLabel' => true,
             'label' => "Հայտարարության տեքստ (հայերեն)",
             'tab' => 'Մասնագիտական',
             'limit' => 10000,
@@ -993,6 +1081,14 @@ class EstateCrudController extends CrudController
             'name' => 'is_advertised',
             'type' => 'switch',
             'label' => 'Գովազդված',
+            'tab' => 'Լրացուցիչ',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'address_apartment',
+            'type' => 'text',
+            'label' => 'Բնակարան',
             'tab' => 'Լրացուցիչ',
             'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
         ]);
