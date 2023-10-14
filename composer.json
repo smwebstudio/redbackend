@@ -11,6 +11,7 @@
         "backpack/permissionmanager": "^7.0",
         "backpack/pro": "^2.0",
         "backpack/theme-coreuiv2": "^1.1",
+        "cmgmyr/messenger": "^2.29",
         "guzzlehttp/guzzle": "^7.5",
         "izica/relations-widgets-for-backpack": "^3.3",
         "laravel/framework": "^10.0",
