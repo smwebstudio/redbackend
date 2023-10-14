@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Http\Controllers\Admin\Operations\DownloadEstateImagesOperation;
 use App\Http\Controllers\Admin\Operations\RedDropZoneOperation;
 use App\Http\Requests\EstateRequest;
 use App\Models\CLocationCity;
@@ -20,6 +21,8 @@ use Backpack\CRUD\app\Library\Widget;
 use Backpack\Pro\Http\Controllers\Operations\FetchOperation;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Storage;
+use ZipArchive;
 
 /**
  * Class EstateCrudController
@@ -41,6 +44,7 @@ class EstateCrudController extends CrudController
     use HasEstateFilters;
     use AddEstateListColumns;
     use AddEstateFetchMethods;
+    use DownloadEstateImagesOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -57,6 +61,7 @@ class EstateCrudController extends CrudController
     protected function setupShowOperation()
     {
         CRUD::setShowView('redg.estate.showTabs');
+        $this->crud->addButton('line', 'download_estate_images', 'view', 'crud::buttons.download', 'end');
         Widget::add()->type('script')
             ->content('https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js')
             ->crossorigin('anonymous');
@@ -1602,6 +1607,53 @@ class EstateCrudController extends CrudController
                 }
             }
         ]);
+    }
+
+
+    public function downloadEstateImages()
+    {
+
+        $estate = $this->crud->getCurrentEntry();
+        // Set the S3 directory
+        // Set the S3 directory
+        $directory = $estate->id;
+
+        // Create a temporary directory to store downloaded files
+        $tempDir = storage_path('temp');
+        if (!is_dir($tempDir)) {
+            mkdir($tempDir, 0755, true);
+        }
+
+        // List files in the S3 directory
+        $files = Storage::disk('S3')->files('/estate/photos/'.$directory);
+
+
+
+        // Create a ZIP file
+        $zipFileName = $directory . '.zip';
+        $publicDir = public_path(); // Get the path to the public directory
+
+// List files in the S3 directory
+        $files = Storage::disk('S3')->files('/estate/photos/' . $directory);
+
+// Create a ZIP file in the public directory
+        $zip = new ZipArchive;
+        $zip->open($publicDir . '/' . $zipFileName, ZipArchive::CREATE);
+
+// Download and add each file to the ZIP archive
+        foreach ($files as $file) {
+            $fileContent = Storage::disk('S3')->get($file);
+            $zip->addFromString(basename($file), $fileContent);
+        }
+
+// Close the ZIP archive
+        $zip->close();
+
+// Return the URL of the generated ZIP file in the response
+        $zipFileUrl = url($zipFileName);
+        return response()->json(['zipFileUrl' => $zipFileUrl]);
+
+//        return response()->download($tempDir . '/' . $zipFileName, $zipFileName)->deleteFileAfterSend(true);
     }
 
 }
