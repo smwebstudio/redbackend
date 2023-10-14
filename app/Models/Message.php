@@ -86,4 +86,9 @@ class Message extends Model
     {
         return $this->belongsTo(RealtorUser::class, 'recipient_id');
     }
+
+    public function estate()
+    {
+        return $this->belongsTo(Estate::class, 'estate_id');
+    }
 }

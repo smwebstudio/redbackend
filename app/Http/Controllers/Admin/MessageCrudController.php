@@ -42,16 +42,27 @@ class MessageCrudController extends CrudController
     protected function setupListOperation()
     {
 
+
+
         CRUD::addColumn([
             'name' => 'id',
             'type' => "text",
             'label' => "Կոդ",
+            'wrapper' => [
+                'element' => 'a',
+                'className' => 'btn btn-link btn-sm bg-light',
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url('message' . $related_key . '/'.$entry->id).'/show';
+                },
+            ],
+            'limit' => 500,
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
         ]);
 
         CRUD::addColumn([
             'name' => 'recipient',
             'type' => "relationship",
-            'attribute' => "full_name",
+            'attribute' => "contactFullName",
             'label' => "Հասցեատեր",
         ]);
 
@@ -78,6 +89,68 @@ class MessageCrudController extends CrudController
             'type' => "text",
             'label' => "Ուղղարկման ամսաթիվ",
         ]);
+
+
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'feedback',
+            'label' => 'Հետադարձ կապ'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('where', 'message_type_id', 1);
+            });
+
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'ask_more',
+            'label' => ' Հարցնել ավելին'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('where', 'message_type_id', 2);
+            });
+
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'new_price',
+            'label' => 'Նոր գնի առաջարկներ'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('where', 'message_type_id', 5);
+            });
+
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'agent_message',
+            'label' => 'Նամակ գործակալին'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('where', 'message_type_id', 3);
+            });
+
+
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'overall_rate',
+            'label' => 'Ընդհանուր գնահատական'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('where', 'message_type_id', 4);
+            });
+
+
+
+
+
+
+
+
+
+
 
 
 //        CRUD::column('message_type_id');
@@ -109,8 +182,9 @@ class MessageCrudController extends CrudController
     {
         CRUD::setValidation(MessageRequest::class);
 
-        CRUD::field('recipient_id');
-        CRUD::field('estate_id');
+
+//        CRUD::field('recipient_id');
+//        CRUD::field('estate_id');
         CRUD::field('sender_name');
         CRUD::field('sender_email');
         CRUD::field('sender_phone');
@@ -146,5 +220,114 @@ class MessageCrudController extends CrudController
 
     protected function setupShowOperation()
     {
+
+        CRUD::addColumn([
+            'name' => 'sender_name',
+            'type' => "text",
+            'label' => "Ում կողմից",
+            'tab' => "Կոնտակտային տվյալներ",
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4',
+            'limit' => 500
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'sender_email',
+            'type' => "text",
+            'label' => "Էլ․ հասցե",
+            'tab' => "Կոնտակտային տվյալներ",
+            'limit' => 500,
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+        CRUD::addColumn([
+            'name' => 'sender_phone',
+            'type' => "text",
+            'label' => "Հեռախոս",
+            'tab' => "Կոնտակտային տվյալներ",
+            'limit' => 500,
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'sent_on',
+            'type' => "text",
+            'label' => "Ստացման ժամանակ",
+            'tab' => "Կոնտակտային տվյալներ",
+            'limit' => 500,
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'recipient',
+            'type' => "relationship",
+            'attribute' => "contactFullName",
+            'label' => "Հասցեատեր",
+            'tab' => "Հաղորդագրություն",
+            'wrapper' => [
+                'element' => 'a',
+                'className' => 'btn btn-link btn-sm bg-light',
+                'target' => '_blank',
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url('professional/' . $related_key . '/show');
+                },
+            ],
+            'limit' => 500,
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'message_text',
+            'type' => "text",
+            'label' => "Հաղորդագրություն",
+            'tab' => "Հաղորդագրություն",
+            'limit' => 500,
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+
+
+        CRUD::addColumn([
+            'name' => 'estate',
+            'key' => 'public_text_arm',
+            'type' => "relationship",
+            'attribute' => "public_text_arm",
+            'label' => "Անշարժ գույք",
+            'tab' => "Հաղորդագրություն",
+            'limit' => 500,
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'estate',
+            'key' => 'rooms_count',
+            'type' => "relationship",
+            'attribute' => "room_count",
+            'label' => "Սենյակներ",
+            'tab' => "Հաղորդագրություն",
+            'limit' => 500,
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'estate',
+            'key' => 'area_total',
+            'type' => "relationship",
+            'attribute' => "area_total",
+            'label' => "Մակերես",
+            'tab' => "Հաղորդագրություն",
+            'limit' => 500,
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'estate',
+            'key' => 'formatted_price',
+            'type' => "relationship",
+            'attribute' => "full_price",
+            'label' => "Գին",
+            'tab' => "Հաղորդագրություն",
+            'limit' => 500,
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
     }
 }
