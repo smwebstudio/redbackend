@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\ProfessionalRequest;
 use App\Http\Requests\RealtorUserRequest;
 use App\Models\Contact;
 use App\Models\CProfessionType;
@@ -249,7 +250,7 @@ class ProfessionalCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(RealtorUserRequest::class);
+        CRUD::setValidation(ProfessionalRequest::class);
         Widget::add()->type('script')->content('assets/js/admin/forms/estate.js');
         $this->crud->setCreateContentClass('col-md-8');
 
@@ -375,7 +376,11 @@ class ProfessionalCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_mobile_1',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Բջջ. հեռ. 1",
             'tab' => "Հիմնական",
             'wrapper' => [
@@ -385,7 +390,11 @@ class ProfessionalCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_mobile_2',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Բջջ. հեռ. 2",
             'tab' => "Հիմնական",
             'wrapper' => [
@@ -395,7 +404,11 @@ class ProfessionalCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_office',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Գրասենյակի հեռ.",
             'tab' => "Հիմնական",
             'wrapper' => [
@@ -405,7 +418,11 @@ class ProfessionalCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'viber',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Viber",
             'tab' => "Հիմնական",
             'wrapper' => [
@@ -415,7 +432,11 @@ class ProfessionalCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'whatsapp',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "WhatsApp",
             'tab' => "Հիմնական",
             'wrapper' => [

@@ -371,7 +371,11 @@ class BuyerCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_mobile_1',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Բջջ. հեռ. 1",
             'tab' => "Հիմնական",
             'wrapper' => [
@@ -381,7 +385,11 @@ class BuyerCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_mobile_2',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Բջջ. հեռ. 2",
             'tab' => "Հիմնական",
             'wrapper' => [
@@ -391,7 +399,11 @@ class BuyerCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_mobile_3',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Բջջ. հեռ. 3",
             'tab' => "Հիմնական",
             'wrapper' => [
@@ -401,7 +413,11 @@ class BuyerCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_mobile_4',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Բջջ. հեռ. 4",
             'tab' => "Հիմնական",
             'wrapper' => [
@@ -411,7 +427,11 @@ class BuyerCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_office',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Գրասենյակի հեռ.",
             'tab' => "Հիմնական",
             'wrapper' => [
@@ -421,7 +441,11 @@ class BuyerCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_home',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Տան հեռ.",
             'tab' => "Հիմնական",
             'wrapper' => [
@@ -431,7 +455,11 @@ class BuyerCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'viber',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Viber",
             'tab' => "Հիմնական",
             'wrapper' => [
@@ -441,7 +469,11 @@ class BuyerCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'whatsapp',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "WhatsApp",
             'tab' => "Հիմնական",
             'wrapper' => [

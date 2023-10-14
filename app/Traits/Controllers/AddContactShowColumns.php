@@ -59,7 +59,7 @@ trait AddContactShowColumns
 
         CRUD::addColumn([
             'name' => 'phone_mobile_1',
-            'type' => "text",
+            'type' => "phone",
             'attribute' => "phone_mobile_1",
             'label' => "Բջջ. հեռ. 1",
             'tab' => 'Հիմնական',

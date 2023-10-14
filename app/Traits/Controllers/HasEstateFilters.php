@@ -165,6 +165,16 @@ trait HasEstateFilters
                 $this->crud->addClause('where', 'exchange', 1);
             });
 
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'is_urgent',
+            'label' => 'Շտապ'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('where', 'is_urgent', 1);
+            });
+
 
         $this->crud->addFilter([
             'type' => 'simple',
@@ -178,6 +188,17 @@ trait HasEstateFilters
 
         $this->crud->addFilter([
             'type' => 'simple',
+            'name' => 'ready_from_archive',
+            'label' => 'Պատրաստ է վերակ. արխիվից'
+        ], false, function () {
+            $currentDate = \Carbon\Carbon::now();
+            $this->crud->addClause('whereDate', 'archive_till_date', '<=', $currentDate->toDateString());
+            $this->crud->addClause('whereNotNull', 'archive_till_date');
+            $this->crud->addClause('where', 'estate_status_id', '=', 8);
+        });
+
+        $this->crud->addFilter([
+            'type' => 'simple',
             'name' => 'is_from_public',
             'label' => 'Միայն հայտեր'
         ],
@@ -188,13 +209,16 @@ trait HasEstateFilters
 
         $this->crud->addFilter([
             'type' => 'simple',
-            'name' => 'is_urgent',
-            'label' => 'Շտապ'
+            'name' => 'is_ready_from_rent',
+            'label' => 'Պատրաստ է վերակ. վարձակալումից'
         ],
             false,
             function () {
-                $this->crud->addClause('where', 'is_urgent', 1);
+                $this->crud->addClause('where', 'estate_status_id', '=', 6);
+                $this->crud->addClause('isReadyFromRent');
             });
+
+
 
 
         $this->crud->addFilter([

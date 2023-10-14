@@ -129,7 +129,11 @@ class AgentCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_mobile_1',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Բջջ. հեռ. 1",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
@@ -138,7 +142,11 @@ class AgentCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_mobile_2',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Բջջ. հեռ. 2",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
@@ -147,7 +155,11 @@ class AgentCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_mobile_3',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Բջջ. հեռ. 3",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
@@ -156,7 +168,11 @@ class AgentCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_mobile_4',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Բջջ. հեռ. 4",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
@@ -165,7 +181,11 @@ class AgentCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_office',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Գրասենյակի հեռ.",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
@@ -174,7 +194,11 @@ class AgentCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'phone_home',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Տան հեռ.",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
@@ -183,7 +207,11 @@ class AgentCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'viber',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "Viber",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
@@ -192,7 +220,11 @@ class AgentCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'whatsapp',
-            'type' => "text",
+            'type' => "phone",
+            'config' => [
+                'onlyCountries' => ['am', 'us', 'ru'],
+                'separateDialCode' => true,
+            ],
             'label' => "WhatsApp",
             'wrapper' => [
                 'class' => 'form-group col-md-6'

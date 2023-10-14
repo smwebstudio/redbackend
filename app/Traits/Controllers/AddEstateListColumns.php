@@ -5,6 +5,7 @@ namespace App\Traits\Controllers;
 use App\Models\Contact;
 use App\Models\RealtorUser;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Carbon\Carbon;
 
 trait AddEstateListColumns
 {
@@ -64,6 +65,27 @@ trait AddEstateListColumns
                 if($entry->is_urgent == 1) {
                     $statusIcon .= '<i class="las la-bolt" style="font-size: 24px; color: #fd9002" title="Շտապ"></i>';
                 }
+
+                if($entry->is_from_public == 1) {
+                    $statusIcon .= '<i class="las la-file-export" style="font-size: 24px; color: #fd9002" title="Ձևակերպված է որպես հայտ"></i>';
+                }
+
+                if($entry->archive_till_date != null && $entry->estate_status_id === 8) {
+                    $archiveDate = Carbon::parse($entry->archive_till_date);;
+                    $currentDate = Carbon::now();
+                    if ($currentDate->greaterThanOrEqualTo($archiveDate)) {
+                        $statusIcon .= '<i class="las la-external-link-square-alt" style="font-size: 24px; color: #e800d7" title="Պատրաստ է վերականգնման"></i>';
+                    }
+                }
+
+                if($entry->isReadyFromRent()  && $entry->estate_status_id === 6) {
+                    $archiveDate = Carbon::parse($entry->archive_till_date);;
+                    $currentDate = Carbon::now();
+                    if ($currentDate->greaterThanOrEqualTo($archiveDate)) {
+                        $statusIcon .= '<i class="las la-external-link-square-alt" style="font-size: 24px; color: #c4003a" title="Վարձակալված գույքը պատրաստ է վերականգնման"></i>';
+                    }
+                }
+
 
 
                 return $statusIcon;

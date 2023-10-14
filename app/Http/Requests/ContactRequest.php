@@ -25,7 +25,9 @@ class ContactRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'name_arm' => 'required',
+            'last_name_arm' => 'required',
+            'phone_mobile_1' => 'required|min:5|max:255|phone',
         ];
     }
 

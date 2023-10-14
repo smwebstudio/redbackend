@@ -1087,6 +1087,7 @@ class Estate extends Model
     }
 
 
+
     /*Local scopes*/
 
     /**
@@ -1123,6 +1124,17 @@ class Estate extends Model
     public function scopeIsNotExclusive($query)
     {
         return $query->orWhereNull('agent_id');
+    }
+
+    public function scopeIsReadyFromRent($query)
+    {
+        $now = now(); // Get the current date and time
+
+        return $query->whereHas('rentContracts', function ($contractQuery) use ($now) {
+            $contractQuery->where('end_date', '<=', $now)
+                ->latest('end_date') // Order by end_date in descending order to get the latest contract
+                ->limit(1); // Limit the results to the latest contract
+        });
     }
 
     public function getStoragePathAttribute(): string

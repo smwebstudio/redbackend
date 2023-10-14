@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EstateRequest extends FormRequest
+class ProfessionalRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,17 +25,14 @@ class EstateRequest extends FormRequest
     public function rules()
     {
         return [
-             'contract_type' => 'required',
-             'estate_status' => 'required',
-             'location_province' => 'required',
-//             'location_community' => 'required_if:location_province,Yerevan',
-//             'location_city' => 'required',
-             'location_street' => 'required',
-             'address_building' => 'required',
-             'address_apartment' => 'required',
-//             'floor' => 'required',
-            'archive_till_date' => 'required_if:estate_status,8',
-            'archive_comment_arm' => 'required_if:estate_status,8',
+             'name_arm' => 'required_if:is_organization,0',
+             'last_name_arm' => 'required_if:is_organization,0',
+             'email' => 'required',
+             'password' => 'required|min:5|max:255',
+             'phone_mobile_1' => 'required|min:5|max:255',
+             'professions' => 'required',
+            'inner_roles' => 'required_if:professions,-3,-2,-1',
+             'organization' => 'required_if:is_organization,1',
         ];
     }
 
@@ -59,7 +56,7 @@ class EstateRequest extends FormRequest
     public function messages()
     {
         return [
-            //
+            'required_if' => 'Պարտադիր է լրացման համար։',
         ];
     }
 }

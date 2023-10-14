@@ -78,12 +78,16 @@
 
 
 
+
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12 mt-12">
                 <p class="text-sm ">{{ isset($professional->contact->comment_arm) ? $professional->contact->comment_arm : '' }}</p>
+            </div>
+            <div class="col-md-12">
+                <a class="btn bg-light" href="{{backpack_url('estate?agents='.$professional->id)}}">Անշարժ գույքեր ({{count($professional->broker_estates)}})</a>
             </div>
         </div>
     </section>
@@ -105,17 +109,6 @@
                                class="nav-link active"
                             >Հաճախորդների գնահատականներ</a>
                         </li>
-                    <li role="presentation" class="nav-item">
-                        <a href="#tab_estates"
-                           aria-controls="tab_estates"
-                           role="tab"
-                           data-toggle="tab"
-                           tab_name="estates"
-                           data-name="estates"
-                           data-bs-toggle="tab"
-                           class="nav-link"
-                        >Անշարժ գույքեր ({{count($professional->broker_estates)}})</a>
-                    </li>
                 </ul>
 
                 <div class="tab-content p-0">
@@ -145,10 +138,6 @@
                                 <p class="mb-8 pb-4 border-b">  {{ $review->message_text }} </p>
                                 @endforeach
 
-                        </div>
-
-                    <div role="tabpanel" class="tab-pane p-0 border-none" id="tab_estates">
-                        Անշարժ գույքեր ({{count($professional->broker_estates)}})
                         </div>
                 </div>
             </div>

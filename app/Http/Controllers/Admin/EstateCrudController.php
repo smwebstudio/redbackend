@@ -740,6 +740,36 @@ class EstateCrudController extends CrudController
         }
 
         CRUD::addField([
+            'name' => 'separator_archive',
+            'type' => 'custom_html',
+            'tab' => 'Լրացուցիչ',
+            'value' => '',
+            'wrapper' => [
+                'class' => 'form-group col-md-12 separator'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'archive_till_date',
+            'type' => "date",
+            'label' => "Արխիվացնել մինչև",
+            'tab' => 'Լրացուցիչ',
+            'wrapper' => [
+                'class' => 'form-group col-md-3'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'archive_comment_arm',
+            'type' => "textarea",
+            'label' => "Արխիվացման նշումներ",
+            'tab' => 'Լրացուցիչ',
+            'wrapper' => [
+                'class' => 'form-group col-md-9'
+            ],
+        ]);
+
+        CRUD::addField([
             'name' => 'separator77776',
             'type' => 'custom_html',
             'tab' => 'Լրացուցիչ',
@@ -1279,6 +1309,22 @@ class EstateCrudController extends CrudController
             'label' => "Կարգավիճակ",
             'tab' => 'Լրացուցիչ',
             'placeholder' => '-Ընտրել մեկը-',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'archive_till_date',
+            'type' => "text",
+            'label' => "Արխիվացնել մինչև",
+            'tab' => 'Լրացուցիչ',
+            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
+        ]);
+
+        CRUD::addColumn([
+            'name' => 'archive_comment_arm',
+            'type' => "text",
+            'label' => "Արխիվացման նշումներ",
+            'tab' => 'Լրացուցիչ',
             'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
         ]);
 

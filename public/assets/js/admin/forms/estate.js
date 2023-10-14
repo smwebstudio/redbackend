@@ -27,4 +27,9 @@ crud.field('is_organization').onChange(function(field) {
     crud.field('organization').show(field.value == 1).enable(field.value == 1);
 }).change();
 
+crud.field('estate_status').onChange(function(field) {
+    crud.field('archive_till_date').show(field.value == 8).enable(field.value == 8);
+    crud.field('archive_comment_arm').show(field.value == 8).enable(field.value == 8);
+}).change();
+
 

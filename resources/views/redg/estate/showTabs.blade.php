@@ -36,10 +36,14 @@
 @endsection
 
 @section('content')
+
     <section class="main-container__main b-shadow bg-white p-4 mb-4">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-10">
                 <h1 class="text-2xl">{{ $estate->short_description ?? '' }}</h1>
+            </div>
+            <div class="col-md-2">
+                @include('crud::inc.button_stack', ['stack' => 'line'])
             </div>
         </div>
         <div class="row">
