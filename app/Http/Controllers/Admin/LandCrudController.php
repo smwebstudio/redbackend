@@ -189,6 +189,84 @@ class LandCrudController extends CrudController
             ],
         ]);
 
+        $estate = $this->crud->getCurrentEntry();
+        if ($estate && in_array($estate->contract_type_id, [2, 3])) {
+
+            CRUD::addField([
+                'name'          => 'rentContracts',
+                'label'          => 'Վարձակալություն',
+                'attribute'          => 'id',
+                'type'          => "renting_table",
+                'new_item_label'  => 'Նոր Վարձակալություն',
+                'subfields'   => [
+                    [
+                        'name' => 'initial_price',
+                        'label' => 'Նախնական գին',
+                        'type' => 'text',
+                        'wrapper' => [
+                            'class' => 'form-group col-md-2',
+                        ],
+                    ],
+                    [
+                        'name' => 'final_price',
+                        'label' => 'Վերջնական գին',
+                        'type' => 'text',
+                        'wrapper' => [
+                            'class' => 'form-group col-md-2',
+                        ],
+                    ],
+                    [
+                        'label' => 'Սկիզբ',
+                        'type' => 'date',
+                        'name' => 'start_date',
+                        'wrapper' => [
+                            'class' => 'form-group col-md-2',
+                        ],
+                    ],
+                    [
+                        'label' => 'Ավարտ',
+                        'type' => 'date',
+                        'name' => 'end_date',
+                        'wrapper' => [
+                            'class' => 'form-group col-md-2',
+                        ],
+                    ],
+                    [
+                        'label' => 'Վարձակալ',
+                        'type' => 'relationship',
+                        'ajax' => true,
+                        'inline_create' => true,
+                        'attribute' => 'fullContact',
+                        'minimum_input_length' => 0,
+                        'name' => 'renter',
+                        'wrapper' => [
+                            'class' => 'form-group col-md-2',
+                        ],
+                    ],
+                    [
+                        'label' => 'Գործակալ',
+                        'type' => 'relationship',
+                        'ajax' => true,
+                        'attribute' => 'contactFullName',
+                        'minimum_input_length' => 0,
+                        'name' => 'agent',
+                        'wrapper' => [
+                            'class' => 'form-group col-md-2',
+                        ],
+                    ],
+                    [
+                        'label' => 'Մեկնաբանություն',
+                        'name' => 'comment_arm',
+                        'wrapper' => [
+                            'class' => 'form-group col-md-12',
+                        ],
+                    ],
+                ],
+                'tab' => 'Վարձակալություն',
+            ]);
+
+        }
+
     }
 
     protected function setupUpdateOperation()

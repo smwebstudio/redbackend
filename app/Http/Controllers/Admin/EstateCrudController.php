@@ -577,11 +577,6 @@ class EstateCrudController extends CrudController
             ],
         ]);
 
-
-
-        $estate = $this->crud->getCurrentEntry();
-        if ($estate && in_array($estate->contract_type_id, [2, 3])) {
-
 //
 //            CRUD::addField([
 //                    'type' => "relationship",
@@ -610,11 +605,70 @@ class EstateCrudController extends CrudController
 //                'tab' => 'Վարձակալություն',
 //            ]);
 
+        //            Widget::add([
+//                'type' => 'relation_table',
+//                'name' => 'rentContracts',
+//                'label' => 'Վարձակալություն',
+//                'backpack_crud' => 'estate-rent-contract',
+//                'relation_attribute' => 'estate_id',
+//                'buttons' => false,
+//                'button_create' => false,
+//                'button_delete' => false,
+//                'columns' => [
+//                    [
+//                        'label' => 'ID',
+//                        'name' => 'id',
+//                    ],
+//                    [
+//                        'label' => 'Նախնական գին',
+//                        'name' => 'initial_price',
+//                    ],
+//                    [
+//                        'label' => 'Վերջնական գին',
+//                        'name' => 'final_price',
+//                    ],
+//                    [
+//                        'label' => 'Սկիզբ',
+//                        'closure' => function($entry){
+//                            if(!empty($entry->start_date)) {
+//                                return Carbon::parse($entry->start_date)->format('d/n/Y');
+//                            }
+//                            return null;
+//                        }
+//                    ],
+//                    [
+//                        'label' => 'Ավարտ',
+//                        'closure' => function($entry){
+//                            if(!empty($entry->end_date)) {
+//                                return Carbon::parse($entry->end_date)->format('d/n/Y');
+//                            }
+//                            return null;
+//                        }
+//                    ],
+//                    [
+//                        'label' => 'Վարձակալ',
+//                        'name' => 'renter.full_name',
+//                    ],
+//                    [
+//                        'label' => 'Գործակալ',
+//                        'name' => 'agent.contactFullName',
+//                    ],
+//                    [
+//                        'label' => 'Մեկնաբանություն',
+//                        'name' => 'comment_arm',
+//                    ],
+//                ],
+//            ])->to('after_content');
+
+
+        $estate = $this->crud->getCurrentEntry();
+        if ($estate && in_array($estate->contract_type_id, [2, 3])) {
+
                     CRUD::addField([
             'name'          => 'rentContracts',
             'label'          => 'Վարձակալություն',
             'attribute'          => 'id',
-            'type'          => "relationship_table",
+            'type'          => "renting_table",
                         'new_item_label'  => 'Նոր Վարձակալություն',
             'subfields'   => [
                 [
@@ -683,60 +737,6 @@ class EstateCrudController extends CrudController
             'tab' => 'Վարձակալություն',
         ]);
 
-//            Widget::add([
-//                'type' => 'relation_table',
-//                'name' => 'rentContracts',
-//                'label' => 'Վարձակալություն',
-//                'backpack_crud' => 'estate-rent-contract',
-//                'relation_attribute' => 'estate_id',
-//                'buttons' => false,
-//                'button_create' => false,
-//                'button_delete' => false,
-//                'columns' => [
-//                    [
-//                        'label' => 'ID',
-//                        'name' => 'id',
-//                    ],
-//                    [
-//                        'label' => 'Նախնական գին',
-//                        'name' => 'initial_price',
-//                    ],
-//                    [
-//                        'label' => 'Վերջնական գին',
-//                        'name' => 'final_price',
-//                    ],
-//                    [
-//                        'label' => 'Սկիզբ',
-//                        'closure' => function($entry){
-//                            if(!empty($entry->start_date)) {
-//                                return Carbon::parse($entry->start_date)->format('d/n/Y');
-//                            }
-//                            return null;
-//                        }
-//                    ],
-//                    [
-//                        'label' => 'Ավարտ',
-//                        'closure' => function($entry){
-//                            if(!empty($entry->end_date)) {
-//                                return Carbon::parse($entry->end_date)->format('d/n/Y');
-//                            }
-//                            return null;
-//                        }
-//                    ],
-//                    [
-//                        'label' => 'Վարձակալ',
-//                        'name' => 'renter.full_name',
-//                    ],
-//                    [
-//                        'label' => 'Գործակալ',
-//                        'name' => 'agent.contactFullName',
-//                    ],
-//                    [
-//                        'label' => 'Մեկնաբանություն',
-//                        'name' => 'comment_arm',
-//                    ],
-//                ],
-//            ])->to('after_content');
         }
 
         CRUD::addField([

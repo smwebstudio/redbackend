@@ -110,6 +110,7 @@
 @endphp
 
 @if($field['type'])
+    <div id="rentingContainer">
     <table
         class="bg-white table table-striped table-hover nowrap rounded shadow-xs border-xs dataTable dtr-inline"
         cellspacing="0"
@@ -133,9 +134,9 @@
                         }
                         if(isset($column['name'])){
                             $colName = $column['name'];
-                            if($colName === 'renter') {
+                            if($colName === 'renter' && isset($item['renter'])) {
                                 $value = $item['renter']?->fullContact;
-                            } elseif ($colName === 'agent') {
+                            } elseif ($colName === 'agent'  && isset($item['agent'])) {
                                 $value = $item['agent']?->contactFullName;
                             } else {
                                  $value = data_get($item, $column['name']);
@@ -152,4 +153,7 @@
         </tbody>
     </table>
     @include($crud->getFirstFieldView($field['type']))
+
+
+    </div>
 @endif

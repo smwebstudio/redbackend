@@ -174,3 +174,8 @@ main .header-operation h1 {
     display: block !important;
     visibility: visible !important;
 }
+
+
+#rentingContainer .container-repeatable-elements .repeatable-element:not(.newAdded) {
+    display: none !important;
+}
