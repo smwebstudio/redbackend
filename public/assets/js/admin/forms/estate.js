@@ -32,4 +32,9 @@ crud.field('estate_status').onChange(function(field) {
     crud.field('archive_comment_arm').show(field.value == 8).enable(field.value == 8);
 }).change();
 
+crud.field('estate_status').onChange(function(field) {
+    crud.field('rentContracts').show(field.value == 6).enable(field.value == 6);
+    crud.field('rentContracts').show(field.value == 6).enable(field.value == 6);
+}).change();
+
 

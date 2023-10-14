@@ -85,10 +85,10 @@ class EstateCrudController extends CrudController
         Widget::add()->type('script')->content('assets/js/admin/lists/estate.js');
         $this->crud->addButton('top', 'estate_create_buttons_set', 'view', 'crud::buttons.estate_create_buttons_set');
         $this->crud->removeButton('create');
-        $this->crud->addButton('line', 'archive', 'view', 'crud::buttons.archive');
-        $this->crud->addButton('line', 'photo', 'view', 'crud::buttons.photo');
-        $this->crud->addButton('line', 'message', 'view', 'crud::buttons.message');
-        $this->crud->addButton('line', 'star', 'view', 'crud::buttons.star');
+//        $this->crud->addButton('line', 'archive', 'view', 'crud::buttons.archive');
+//        $this->crud->addButton('line', 'photo', 'view', 'crud::buttons.photo');
+//        $this->crud->addButton('line', 'message', 'view', 'crud::buttons.message');
+//        $this->crud->addButton('line', 'star', 'view', 'crud::buttons.star');
 
 
         /*Columns*/
@@ -739,7 +739,7 @@ class EstateCrudController extends CrudController
                     ],
                 ],
             ],
-            'tab' => 'Վարձակալություն',
+            'tab' => 'Լրացուցիչ',
         ]);
 
         }
