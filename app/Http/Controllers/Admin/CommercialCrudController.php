@@ -18,6 +18,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
 use Backpack\Pro\Http\Controllers\Operations\FetchOperation;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 /**
@@ -619,6 +620,88 @@ class CommercialCrudController extends CrudController
             'wrapper' => [
                 'class' => 'form-group col-md-3'
             ],
+        ]);
+        $estate = $this->crud->getCurrentEntry();
+        if (in_array($estate->contract_type_id, [2, 3])) {
+
+
+            Widget::add([
+                'type' => 'relation_table',
+                'name' => 'rentContracts',
+                'label' => 'Վարձակալություն',
+                'backpack_crud' => 'rentContracts',
+                'relation_attribute' => 'estate_id',
+                'buttons' => false,
+                'button_create' => false,
+                'button_delete' => false,
+                'columns' => [
+                    [
+                        'label' => 'ID',
+                        'name' => 'id',
+                    ],
+                    [
+                        'label' => 'Նախնական գին',
+                        'name' => 'initial_price',
+                    ],
+                    [
+                        'label' => 'Վերջնական գին',
+                        'name' => 'final_price',
+                    ],
+                    [
+                        'label' => 'Սկիզբ',
+                        'closure' => function($entry){
+                            if(!empty($entry->start_date)) {
+                                return Carbon::parse($entry->start_date)->format('d/n/Y');
+                            }
+                            return null;
+                        }
+                    ],
+                    [
+                        'label' => 'Ավարտ',
+                        'closure' => function($entry){
+                            if(!empty($entry->end_date)) {
+                                return Carbon::parse($entry->end_date)->format('d/n/Y');
+                            }
+                            return null;
+                        }
+                    ],
+                    [
+                        'label' => 'Վարձակալ',
+                        'name' => 'renter.full_name',
+                    ],
+                    [
+                        'label' => 'Գործակալ',
+                        'name' => 'agent.contactFullName',
+                    ],
+                    [
+                        'label' => 'Մեկնաբանություն',
+                        'name' => 'comment_arm',
+                    ],
+                ],
+            ])->to('after_content');
+        }
+
+        CRUD::addField([
+            'name'          => 'rentContracts',
+            'attribute'          => 'id',
+            'type'          => "relationship",
+            'subfields'   => [
+                [
+                    'name' => 'initial_price',
+                    'type' => 'text',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-3',
+                    ],
+                ],
+                [
+                    'name' => 'final_price',
+                    'type' => 'text',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-3',
+                    ],
+                ],
+            ],
+            'tab' => 'Լրացուցիչ',
         ]);
 
         CRUD::addField([

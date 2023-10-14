@@ -110,13 +110,13 @@
             display: none !important; /* Increase the z-index value if necessary */
         }
 
-        .modal.show .modal-dialog {
-            position: fixed !important;
-            margin: 0px auto;
-            width: 800px;
-            left: 40%;
-            z-index: 1090;
-        }
+        /*.modal.show .modal-dialog {*/
+        /*    position: fixed !important;*/
+        /*    margin: 0px auto;*/
+        /*    width: 800px;*/
+        /*    left: 40%;*/
+        /*    z-index: 1090;*/
+        /*}*/
 
         .dropzone {
             border: 1px solid rgba(0, 40, 100, 0.2);

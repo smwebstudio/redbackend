@@ -29,37 +29,44 @@ trait AddEstateListColumns
                 $query->orWhere('id', 'like', '%' . $searchTerm . '%')->orWhere('code', 'like', '%' . $searchTerm . '%');
             },
             'value' => function ($entry) {
+
+                $statusIcon = '';
+
                 if ($entry->estate_status_id === 1) {
-                    return '<i class="las la-file" style="font-size: 24px; color: #C00"  title="Սևագիր"></i>';
+                    $statusIcon = '<i class="las la-file" style="font-size: 24px; color: #C00"  title="Սևագիր"></i>';
                 }
 
                 if ($entry->estate_status_id === 2) {
-                    return '<i class="las la-file-alt" style="font-size: 24px; color: #939309"  title="Թերի Լրացված"></i>';
+                    $statusIcon = '<i class="las la-file-alt" style="font-size: 24px; color: #939309"  title="Թերի Լրացված"></i>';
                 }
 
                 if ($entry->estate_status_id === 3) {
-                    return '<i class="las la-camera-retro" style="font-size: 24px; color: #00a2d6"  title="Տեղազնված"></i>';
+                    $statusIcon = '<i class="las la-camera-retro" style="font-size: 24px; color: #00a2d6"  title="Տեղազնված"></i>';
                 }
 
                 if ($entry->estate_status_id === 4) {
-                    return '<i class="las la-check-square" style="font-size: 24px; color: #066c3c"  title="Հաստատված"></i>';
+                    $statusIcon = '<i class="las la-check-square" style="font-size: 24px; color: #066c3c"  title="Հաստատված"></i>';
                 }
 
                 if ($entry->estate_status_id === 6) {
-                    return '<i class="las la-tag" style="font-size: 24px; color: #066c3c" title="Վարձակալված"></i>';
+                    $statusIcon = '<i class="las la-tag" style="font-size: 24px; color: #066c3c" title="Վարձակալված"></i>';
                 }
 
 
                 if ($entry->estate_status_id === 7) {
-                    return '<i class="las la-calendar-check" style="font-size: 24px; color: #9369aa" title="Վաճառված"></i>';
+                    $statusIcon = '<i class="las la-calendar-check" style="font-size: 24px; color: #9369aa" title="Վաճառված"></i>';
                 }
 
                 if ($entry->estate_status_id === 8) {
-                    return '<i class="las la-file-download" style="font-size: 24px; color: #222f3e" title="Արխիվացված"></i>';
+                    $statusIcon = '<i class="las la-file-download" style="font-size: 24px; color: #222f3e" title="Արխիվացված"></i>';
+                }
+
+                if($entry->is_urgent == 1) {
+                    $statusIcon .= '<i class="las la-bolt" style="font-size: 24px; color: #fd9002" title="Շտապ"></i>';
                 }
 
 
-                return $entry->estate_status_id;
+                return $statusIcon;
 
             },
             'wrapper' => [

@@ -6,12 +6,13 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class EstateRentContract
- * 
+ *
  * @property int $id
  * @property int|null $estate_id
  * @property float|null $initial_price
@@ -32,6 +33,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class EstateRentContract extends Model
 {
+    use CrudTrait;
 	protected $table = 'estate_rent_contract';
 	public $incrementing = false;
 	public $timestamps = false;
@@ -69,4 +71,33 @@ class EstateRentContract extends Model
 		'comment_ru',
 		'comment_ar'
 	];
+
+    public function renter()
+    {
+        return $this->belongsTo(Contact::class, 'renter_id');
+    }
+
+
+    public function agent()
+    {
+        return $this->belongsTo(RealtorUser::class, 'agent_id');
+    }
+
+    public function getRenterFullNameAttribute()
+    {
+        if(!empty($this->renter_id)) {
+            return $this->renter->full_name;
+        }
+
+        return null;
+    }
+
+    public function getAgentFullNameAttribute()
+    {
+        if(!empty($this->agent_id)) {
+            return $this->agent->contactFullName;
+        }
+
+        return null;
+    }
 }

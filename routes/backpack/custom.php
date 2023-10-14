@@ -78,4 +78,5 @@ Route::group([
     Route::crud('realtor-user', 'RealtorUserCrudController');
     Route::crud('professional', 'ProfessionalCrudController');
     Route::post('setCurrency', 'CurrencyController@setCurrency')->name('setCurrency');
+    Route::crud('estate-rent-contract', 'EstateRentContractCrudController');
 }); // this should be the absolute last line of this file

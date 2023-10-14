@@ -18,6 +18,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
 use Backpack\Pro\Http\Controllers\Operations\FetchOperation;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 /**
@@ -33,6 +34,7 @@ class EstateCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CloneOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
     use RedDropZoneOperation;
     use FetchOperation;
     use AuthorizesRequests;
@@ -575,6 +577,168 @@ class EstateCrudController extends CrudController
             ],
         ]);
 
+
+
+        $estate = $this->crud->getCurrentEntry();
+        if ($estate && in_array($estate->contract_type_id, [2, 3])) {
+
+//
+//            CRUD::addField([
+//                    'type' => "relationship",
+//                    'name' => 'seller',
+//                    'ajax' => true,
+//                    'inline_create' => true,
+//                'tab' => 'Վարձակալություն',
+//            ]);
+
+//            CRUD::addField([
+//                'type' => "relationship",
+//                'name' => 'estateRentContracts',
+//                'label' => 'Վարձակալություն',
+//                'data_source' => backpack_url('estate/fetch/estate-rent-contract'),
+//                'ajax' => true,
+//                'inline_create' => [
+//                    'entity' => 'estateRentContract',
+//                    // OPTIONALS
+//                    'force_select' => true,
+//                    'modal_class' => 'modal-dialog modal-lg', // use modal-sm, modal-lg to change width
+//                    'modal_route' => route('estate-rent-contract-inline-create'), // InlineCreate::getInlineCreateModal()
+//                    'create_route' =>  route('estate-rent-contract-inline-create-save'), // InlineCreate::storeInlineCreate()
+//                    'add_button_label' => 'Նոր վարձակալություն', // configure the text for the `+ Add` inline button
+//                    'include_main_form_fields' => ['field1', 'field2'], // pass certain fields from the main form to the modal, get them with: request('main_form_fields')
+//                ],
+//                'tab' => 'Վարձակալություն',
+//            ]);
+
+                    CRUD::addField([
+            'name'          => 'rentContracts',
+            'label'          => 'Վարձակալություն',
+            'attribute'          => 'id',
+            'type'          => "relationship_table",
+                        'new_item_label'  => 'Նոր Վարձակալություն',
+            'subfields'   => [
+                [
+                    'name' => 'initial_price',
+                    'label' => 'Նախնական գին',
+                    'type' => 'text',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-2',
+                    ],
+                ],
+                [
+                    'name' => 'final_price',
+                    'label' => 'Վերջնական գին',
+                    'type' => 'text',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-2',
+                    ],
+                ],
+                [
+                    'label' => 'Սկիզբ',
+                    'type' => 'date',
+                    'name' => 'start_date',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-2',
+                    ],
+                ],
+                [
+                    'label' => 'Ավարտ',
+                    'type' => 'date',
+                    'name' => 'end_date',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-2',
+                    ],
+                ],
+                [
+                    'label' => 'Վարձակալ',
+                    'type' => 'relationship',
+                    'ajax' => true,
+                    'inline_create' => true,
+                    'attribute' => 'fullContact',
+                    'minimum_input_length' => 0,
+                    'name' => 'renter',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-2',
+                    ],
+                ],
+                [
+                    'label' => 'Գործակալ',
+                    'type' => 'relationship',
+                    'ajax' => true,
+                    'attribute' => 'contactFullName',
+                    'minimum_input_length' => 0,
+                    'name' => 'agent',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-2',
+                    ],
+                ],
+                [
+                    'label' => 'Մեկնաբանություն',
+                    'name' => 'comment_arm',
+                    'wrapper' => [
+                        'class' => 'form-group col-md-12',
+                    ],
+                ],
+            ],
+            'tab' => 'Վարձակալություն',
+        ]);
+
+//            Widget::add([
+//                'type' => 'relation_table',
+//                'name' => 'rentContracts',
+//                'label' => 'Վարձակալություն',
+//                'backpack_crud' => 'estate-rent-contract',
+//                'relation_attribute' => 'estate_id',
+//                'buttons' => false,
+//                'button_create' => false,
+//                'button_delete' => false,
+//                'columns' => [
+//                    [
+//                        'label' => 'ID',
+//                        'name' => 'id',
+//                    ],
+//                    [
+//                        'label' => 'Նախնական գին',
+//                        'name' => 'initial_price',
+//                    ],
+//                    [
+//                        'label' => 'Վերջնական գին',
+//                        'name' => 'final_price',
+//                    ],
+//                    [
+//                        'label' => 'Սկիզբ',
+//                        'closure' => function($entry){
+//                            if(!empty($entry->start_date)) {
+//                                return Carbon::parse($entry->start_date)->format('d/n/Y');
+//                            }
+//                            return null;
+//                        }
+//                    ],
+//                    [
+//                        'label' => 'Ավարտ',
+//                        'closure' => function($entry){
+//                            if(!empty($entry->end_date)) {
+//                                return Carbon::parse($entry->end_date)->format('d/n/Y');
+//                            }
+//                            return null;
+//                        }
+//                    ],
+//                    [
+//                        'label' => 'Վարձակալ',
+//                        'name' => 'renter.full_name',
+//                    ],
+//                    [
+//                        'label' => 'Գործակալ',
+//                        'name' => 'agent.contactFullName',
+//                    ],
+//                    [
+//                        'label' => 'Մեկնաբանություն',
+//                        'name' => 'comment_arm',
+//                    ],
+//                ],
+//            ])->to('after_content');
+        }
+
         CRUD::addField([
             'name' => 'separator77776',
             'type' => 'custom_html',
@@ -1040,6 +1204,7 @@ class EstateCrudController extends CrudController
 
     private function addAdditionalTabColumns(): void
     {
+        $estate = $this->crud->getCurrentEntry();
 
         /*Լրացուցիչ tab fields*/
 
@@ -1047,9 +1212,7 @@ class EstateCrudController extends CrudController
             'name' => 'propertyAgent',
             'entity' => 'propertyAgent',
             'type' => "relationship",
-            'ajax' => true,
-            'minimum_input_length' => 0,
-            'attribute' => "name_arm",
+            'attribute' => "contactFullName",
             'label' => "Տեղազննող գործակալ",
             'tab' => 'Լրացուցիչ',
             'placeholder' => '-Ընտրել մեկը-',
@@ -1135,6 +1298,65 @@ class EstateCrudController extends CrudController
             'tab' => 'Լրացուցիչ',
             'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
         ]);
+
+        if (in_array($estate->contract_type_id, [2, 3])) {
+
+
+            Widget::add([
+                'type' => 'relation_table',
+                'name' => 'rentContracts',
+                'label' => 'Վարձակալություն',
+                'backpack_crud' => 'rentContracts',
+                'relation_attribute' => 'estate_id',
+                'buttons' => false,
+                'button_create' => false,
+                'button_delete' => false,
+                'columns' => [
+                    [
+                        'label' => 'ID',
+                        'name' => 'id',
+                    ],
+                    [
+                        'label' => 'Նախնական գին',
+                        'name' => 'initial_price',
+                    ],
+                    [
+                        'label' => 'Վերջնական գին',
+                        'name' => 'final_price',
+                    ],
+                    [
+                        'label' => 'Սկիզբ',
+                        'closure' => function($entry){
+                            if(!empty($entry->start_date)) {
+                                return Carbon::parse($entry->start_date)->format('d/n/Y');
+                            }
+                            return null;
+                        }
+                    ],
+                    [
+                        'label' => 'Ավարտ',
+                        'closure' => function($entry){
+                            if(!empty($entry->end_date)) {
+                                return Carbon::parse($entry->end_date)->format('d/n/Y');
+                            }
+                            return null;
+                        }
+                    ],
+                    [
+                        'label' => 'Վարձակալ',
+                        'name' => 'renter.full_name',
+                    ],
+                    [
+                        'label' => 'Գործակալ',
+                        'name' => 'agent.contactFullName',
+                    ],
+                    [
+                        'label' => 'Մեկնաբանություն',
+                        'name' => 'comment_arm',
+                    ],
+                ],
+            ])->to('after_content');
+        }
     }
 
     private function addSellerTabColumns(): void
@@ -1285,6 +1507,55 @@ class EstateCrudController extends CrudController
 
 
 
+    }
+
+    public function fetchRenter()
+    {
+        return $this->fetch([
+            'model' => Contact::class,
+            'searchable_attributes' => [],
+            'paginate' => 100, // items to show per page
+            'query' => function ($model) {
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->whereIn('contact_type_id', [4,5])->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
+                } else {
+                    return $model->whereIn('contact_type_id', [4,5]);
+                }
+            }
+        ]);
+    }
+
+    public function fetchAgent()
+    {
+        return $this->fetch([
+            'model' => RealtorUser::class,
+            'searchable_attributes' => [],
+            'paginate' => 1500, // items to show per page
+            'query' => function ($model) {
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->whereHas('contact', function ($query) use($search) {
+                        $query->where('contact_type_id', 3)
+                            ->whereNotNull('name_arm')
+                            ->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
+                    })
+                        ->whereHas('roles', function ($query) {
+                            $query->whereIn('role_id', [4, 6, 7, 8]);
+                        })
+                        ->select('realtor_user.*');
+                } else {
+                    return $model->whereHas('contact', function ($query) {
+                        $query->where('contact_type_id', 3)
+                            ->whereNotNull('name_arm');
+                    })
+                        ->whereHas('roles', function ($query) {
+                            $query->whereIn('role_id', [4, 6, 7, 8]);
+                        })
+                        ->select('realtor_user.*');
+                }
+            }
+        ]);
     }
 
 }

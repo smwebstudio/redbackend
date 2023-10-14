@@ -186,6 +186,16 @@ trait HasEstateFilters
                 $this->crud->addClause('where', 'is_from_public', 1);
             });
 
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'is_urgent',
+            'label' => 'Շտապ'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('where', 'is_urgent', 1);
+            });
+
 
         $this->crud->addFilter([
             'type' => 'divider',

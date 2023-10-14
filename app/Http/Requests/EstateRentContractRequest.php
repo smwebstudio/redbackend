@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EstateRequest extends FormRequest
+class EstateRentContractRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,14 +25,7 @@ class EstateRequest extends FormRequest
     public function rules()
     {
         return [
-             'contract_type' => 'required',
-             'estate_status' => 'required',
-//             'location_province' => 'required_if:estate_status,Incomplete',
-//             'location_community' => 'required_if:location_province,Yerevan',
-//             'location_city' => 'required',
-//             'location_street' => 'required',
-//             'address_building' => 'required_if:location_province,1',
-//             'floor' => 'required',
+            // 'name' => 'required|min:5|max:255'
         ];
     }
 

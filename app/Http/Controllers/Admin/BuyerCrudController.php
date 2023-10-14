@@ -7,6 +7,7 @@ use App\Models\CLocationCity;
 use App\Models\CLocationCommunity;
 use App\Models\CLocationStreet;
 use App\Models\Contact;
+use App\Models\RealtorUser;
 use App\Traits\Controllers\AddContactListColumns;
 use App\Traits\Controllers\AddContactShowColumns;
 use App\Traits\Controllers\HasContactFilters;
@@ -14,6 +15,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
 use Backpack\Pro\Http\Controllers\Operations\FetchOperation;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 /**
@@ -172,7 +174,7 @@ class BuyerCrudController extends CrudController
                     'type' => "relationship",
                     'ajax' => true,
                     'minimum_input_length' => 0,
-                    'attribute' => "name_arm",
+                    'attribute' => "contactFullName",
                     'label' => "Գործակալ",
                     'placeholder' => '-Ընտրել մեկը-',
                     'wrapper' => [
@@ -184,7 +186,7 @@ class BuyerCrudController extends CrudController
                     'type' => "relationship",
                     'ajax' => true,
                     'minimum_input_length' => 0,
-                    'attribute' => "name_arm",
+                    'attribute' => "contactFullName",
                     'label' => "Ինֆորմացիայի աղբյուր",
                     'placeholder' => '-Ընտրել մեկը-',
                     'wrapper' => [
@@ -474,16 +476,20 @@ class BuyerCrudController extends CrudController
     public function fetchInfoSource()
     {
         return $this->fetch([
-            'model' => Contact::class,
+            'model' => RealtorUser::class,
             'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
+            'paginate' => 300, // items to show per page
             'searchOperator' => 'LIKE',
             'query' => function ($model) {
                 $search = request()->input('q') ?? false;
                 if ($search) {
-                    return $model->where('contact_type_id', '=', 3)->whereRaw('CONCAT(`name_arm`," ",`last_name_arm`) LIKE "%' . $search . '%"');
+                    return $model->whereHas('contact', function (Builder $query) use($search) {
+                        $query->whereNotNull(['name_arm'])->whereRaw('CONCAT(`name_arm`," ",`last_name_arm`) LIKE "%' . $search . '%"');
+                    })->with('contact');
                 } else {
-                    return $model->where('contact_type_id', '=', 3);
+                    return $model->whereHas('contact', function (Builder $query) {
+                        $query->whereNotNull(['name_arm']);
+                    })->with('contact');
                 }
             }
         ]);
@@ -492,15 +498,30 @@ class BuyerCrudController extends CrudController
     public function fetchBroker()
     {
         return $this->fetch([
-            'model' => Contact::class,
+            'model' => RealtorUser::class,
             'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
+            'paginate' => 500, // items to show per page
             'query' => function ($model) {
                 $search = request()->input('q') ?? false;
                 if ($search) {
-                    return $model->where('contact_type_id', '=', 3)->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
+                    return $model->whereHas('contact', function ($query) use($search) {
+                        $query->where('contact_type_id', 3)
+                            ->whereNotNull('name_arm')
+                            ->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
+                    })
+                        ->whereHas('roles', function ($query) {
+                            $query->whereIn('role_id', [4, 6, 7, 8]);
+                        })
+                        ->select('realtor_user.*');
                 } else {
-                    return $model->where('contact_type_id', '=', 3);
+                    return $model->whereHas('contact', function ($query) {
+                        $query->where('contact_type_id', 3)
+                            ->whereNotNull('name_arm');
+                    })
+                        ->whereHas('roles', function ($query) {
+                            $query->whereIn('role_id', [4, 6, 7, 8]);
+                        })
+                        ->select('realtor_user.*');
                 }
             }
         ]);

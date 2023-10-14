@@ -28,6 +28,7 @@ class RenterCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
     use FetchOperation;
     use AuthorizesRequests;
     use HasContactFilters;

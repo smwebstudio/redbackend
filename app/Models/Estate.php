@@ -728,6 +728,16 @@ class Estate extends Model
         return $this->belongsTo(Contact::class, 'seller_id');
     }
 
+    public function renter()
+    {
+        return $this->hasManyThrough(Contact::class, EstateRentContract::class, 'id', 'estate_id', 'id', 'id');
+    }
+
+    public function renterContact()
+    {
+        return $this->belongsTo(Contact::class, 'renter_id');
+    }
+
     public function currency()
     {
         return $this->belongsTo(CCurrency::class, 'currency_id');
@@ -914,6 +924,8 @@ class Estate extends Model
         return $this->belongsTo(RealtorUser::class, 'agent_id');
     }
 
+
+
     public function propertyAgent()
     {
         return $this->belongsTo(RealtorUser::class, 'property_agent_id');
@@ -922,6 +934,16 @@ class Estate extends Model
     public function infoSource()
     {
         return $this->belongsTo(RealtorUser::class, 'info_source_id');
+    }
+
+    public function rentContracts()
+    {
+        return $this->hasMany(EstateRentContract::class, 'estate_id');
+    }
+
+    public function estateRentContracts()
+    {
+        return $this->belongsTo(EstateRentContract::class, 'estate_id');
     }
 
     /*Methods*/
