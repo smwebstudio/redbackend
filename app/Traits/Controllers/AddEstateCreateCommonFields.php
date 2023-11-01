@@ -94,7 +94,7 @@ trait AddEstateCreateCommonFields
             'ajax' => true,
             'inline_create' => true,
             'minimum_input_length' => 0,
-            'label' => "Վարձակալ",
+            'label' => "Վարձատու",
             'wrapper' => [
                 'class' => 'form-group col-md-6'
             ],

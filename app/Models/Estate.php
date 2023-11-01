@@ -984,6 +984,21 @@ class Estate extends Model
         return $fullAddress;
     }
 
+    public function getFullAddressForAutoTextAttribute($onlyStreet = false): ?string
+    {
+        $fullAddress = null;
+        if ($this->getProvince()) {
+            $fullAddress = $this->getProvince();
+        }
+        if ($this->getCommunity()) {
+            $fullAddress .= ', ' . $this->getCommunity();
+        }
+        if ($this->getStreet()) {
+            $fullAddress .= ', ' . $this->getStreet();
+        }
+        return $fullAddress;
+    }
+
     public function getFullPriceAttribute(): ?string
     {
         $currency = session('currency') ?  session('currency') : 'AMD';

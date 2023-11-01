@@ -495,15 +495,7 @@ class EstateCrudController extends CrudController
         ]);
 
 
-        CRUD::addColumn([
-            'name' => 'is_public_text_generation',
-            'type' => "collapse",
-            'hideLabel' => true,
-            'limit' => 5000,
-            'label' => "Ավտո տեքստ",
-            'tab' => 'Մասնագիտական',
-            'className' => 'form-group col-md-12 apartment_building_attribute mt-4 pt-4 mb-4 border-solid  border-t-4'
-        ]);
+
 
         CRUD::addColumn([
             'name' => 'public_text_arm',

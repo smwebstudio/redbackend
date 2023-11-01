@@ -253,7 +253,7 @@ class EstateObserver
             $roomCount = $estate->room_count != null ? $estate->room_count : "...";
             $roomCountModified = ($estate->room_count_modified != null && $estate->room_count_modified != 0)
                 ? ($sale . " " . strval($estate->room_count_modified) . " ") : "";
-            $street = $estate->full_address != null ? $estate->full_address : "...";
+            $street = $estate->full_address_for_auto_text != null ? $estate->full_address_for_auto_text : "...";
             $buildingProjectType = $estate->building_project_type_id != null ? $estate->building_project_type->name_arm : "...";
             $buildingType = $estate->building_type != null ? $estate->building_type->name_arm : "...";
             $buildingFloorCount = $estate->building_floor_count != null ? $estate->building_floor_count : "...";

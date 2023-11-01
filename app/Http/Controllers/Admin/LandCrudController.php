@@ -11,6 +11,7 @@ use App\Models\CLocationStreet;
 use App\Models\Contact;
 use App\Models\Estate;
 use App\Models\RealtorUser;
+use App\Traits\Controllers\AddEstateCreateCommonFields;
 use App\Traits\Controllers\AddEstateFetchMethods;
 use App\Traits\Controllers\AddEstateListColumns;
 use App\Traits\Controllers\HasEstateFilters;
@@ -39,6 +40,7 @@ class LandCrudController extends CrudController
     use HasEstateFilters;
     use AddEstateListColumns;
     use AddEstateFetchMethods;
+    use AddEstateCreateCommonFields;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -476,229 +478,23 @@ class LandCrudController extends CrudController
 
         /*Նկարներ tab fields*/
 
-        CRUD::addField([
-            'name' => 'temporary_photos',
-            'label' => 'Նկարներ',
-            'type' => "dropzone",
-            'configuration' => [
-                'parallelUploads' => 2,
-                'uploadMultiple' => true,
-                'createImageThumbnails' => true,
-                'maxFilesize' => 1680000,
-
-            ],
-            'withFiles' => ([
-                'disk' => 'S3Public',
-                'path' => 'uploads/tmp',
-                'uploader' => 'App\Services\RedAjaxUploader',
-            ]),
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-            'tab' => 'Նկարներ',
-
-        ]);
+        $this->addCreateDropzoneField();
 
         /*Քարտեզ tab fields*/
 
-        CRUD::addField([
-            'name' => 'location',
-            'label' => 'Տեղը քարտեզի վրա',
-            'type' => 'google_map',
-            'tab' => 'Քարտեզ',
-            'value' => '{"lat":40.179674748428745,"lng":44.504069898889185}',
-            'map_options' => [
-                'default_lat' => 40.1783632,
-                'default_lng' => 44.51106509999999,
-                'locate' => true,
-                'height' => 400,
-            ]
-        ]);
+        $this->addCreateMapField();
 
         /*Մասնագիտական tab fields*/
 
-        CRUD::addField([
-            'name' => 'name_arm',
-            'type' => "textarea",
-            'row' => 12,
-            'label' => "Մասնագիտական կարծիք, Վերլուծություն",
-            'tab' => 'Մասնագիտական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'additional_info_arm',
-            'type' => "textarea",
-            'row' => 12,
-            'label' => "Ինչու ես ձեռք չէի բերի այս գույքը",
-            'tab' => 'Մասնագիտական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'comment_arm',
-            'type' => "textarea",
-            'row' => 12,
-            'label' => "Այլ նոթեր",
-            'tab' => 'Մասնագիտական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'is_public_text_generation',
-            'type' => "switch",
-            'label' => "Ավտո տեքստ",
-            'tab' => 'Մասնագիտական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'public_text_arm',
-            'type' => "textarea",
-            'attributes' => [
-                'rows' => 7,
-            ],
-            'label' => "Հայտարարության տեքստ (հայերեն)",
-            'tab' => 'Մասնագիտական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
+        $this->addCreateProfessionalFields();
 
         /*Լրացուցիչ tab fields*/
 
-        CRUD::addField([
-            'name' => 'propertyAgent',
-            'entity' => 'propertyAgent',
-            'type' => "relationship",
-            'ajax' => true,
-            'minimum_input_length' => 0,
-            'attribute' => "name_arm",
-            'label' => "Տեղազննող գործակալ",
-            'tab' => 'Լրացուցիչ',
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
+        $this->addCreateAdditionalFields();
 
 
-        CRUD::addField([
-            'name' => 'infoSource',
-            'type' => "relationship",
-            'ajax' => true,
-            'minimum_input_length' => 0,
-            'attribute' => "name_arm",
-            'label' => "Ինֆորմացիայի աղբյուր",
-            'tab' => 'Լրացուցիչ',
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
 
-        CRUD::addField([
-            'name' => 'intercom',
-            'type' => "text",
-            'label' => "Դոմոֆոն",
-            'tab' => 'Լրացուցիչ',
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
 
-        CRUD::addField([
-            'name' => 'separator77777',
-            'type' => 'custom_html',
-            'tab' => 'Լրացուցիչ',
-            'value' => '<hr/>',
-            'wrapper' => [
-                'class' => 'form-group col-md-12 separator'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'is_advertised',
-            'type' => 'switch',
-            'label' => 'Գովազդված',
-            'tab' => 'Լրացուցիչ',
-            'wrapper' => [
-                'class' => 'form-group col-md-2'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'is_urgent',
-            'type' => 'switch',
-            'label' => 'Շտապ',
-            'tab' => 'Լրացուցիչ',
-            'wrapper' => [
-                'class' => 'form-group col-md-2'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'is_hot_offer',
-            'type' => 'switch',
-            'label' => 'Թոփ առաջարկներ',
-            'tab' => 'Լրացուցիչ',
-            'wrapper' => [
-                'class' => 'form-group col-md-2'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'estate_status',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "Կարգավիճակ",
-            'tab' => 'Լրացուցիչ',
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'separator77776',
-            'type' => 'custom_html',
-            'tab' => 'Լրացուցիչ',
-            'value' => '<h4>SEO</h4>',
-            'wrapper' => [
-                'class' => 'form-group col-md-12 separator'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'meta_title_arm',
-            'type' => "textarea",
-            'label' => "Վերնագիր SEO",
-            'tab' => 'Լրացուցիչ',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'meta_description_arm',
-            'type' => "textarea",
-            'label' => "Նկարագրություն SEO",
-            'tab' => 'Լրացուցիչ',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
 
     }
 
