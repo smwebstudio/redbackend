@@ -730,6 +730,19 @@ class Estate extends Model
         return $this->belongsTo(Contact::class, 'seller_id');
     }
 
+
+    public function owner()
+    {
+        return $this->belongsTo(Contact::class, 'seller_id');
+    }
+
+
+    public function sellerRenter()
+    {
+        return $this->belongsTo(Contact::class, 'seller_id');
+    }
+
+
     public function renter()
     {
         return $this->hasManyThrough(Contact::class, EstateRentContract::class, 'id', 'estate_id', 'id', 'id');

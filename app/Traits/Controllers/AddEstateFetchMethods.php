@@ -45,6 +45,24 @@ trait AddEstateFetchMethods
         ]);
     }
 
+
+    public function fetchOwner()
+    {
+        return $this->fetch([
+            'model' => Contact::class,
+            'searchable_attributes' => [],
+            'paginate' => 30, // items to show per page
+            'query' => function ($model) {
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->where('contact_type_id', '=', 2)->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
+                } else {
+                    return $model->where('contact_type_id', '=', 2);
+                }
+            }
+        ]);
+    }
+
     public function fetchPropertyAgent()
     {
         return $this->fetch([

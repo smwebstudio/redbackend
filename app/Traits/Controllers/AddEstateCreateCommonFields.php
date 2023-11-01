@@ -86,6 +86,23 @@ trait AddEstateCreateCommonFields
         ]);
 
         CRUD::addField([
+            'name' => 'owner',
+            'entity' => 'owner',
+            'type' => "relationship",
+            'attribute' => "fullContact",
+            'placeholder' => '-Ընտրել մեկը-',
+            'ajax' => true,
+            'inline_create' => true,
+            'minimum_input_length' => 0,
+            'label' => "Վարձակալ",
+            'wrapper' => [
+                'class' => 'form-group col-md-6'
+            ],
+        ]);
+
+
+
+        CRUD::addField([
             'name' => 'location_province',
             'type' => "relationship",
             'attribute' => "name_arm",

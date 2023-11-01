@@ -37,4 +37,15 @@ crud.field('estate_status').onChange(function(field) {
     crud.field('rentContracts').show(field.value == 6).enable(field.value == 6);
 }).change();
 
+crud.field('contract_type').onChange(function(field) {
+    console.log(field.value)
+    crud.field('owner').hide(!field.value);
+    crud.field('owner').hide(field.value == 1);
+    crud.field('owner').show(field.value == 2 || field.value == 3).enable(field.value == 2 || field.value == 3);
+
+    crud.field('seller').hide(!field.value);
+    crud.field('seller').show(field.value == 1).enable(field.value == 1);
+    crud.field('seller').hide(!field.value || field.value == 2 || field.value == 3);
+}).change();
+
 

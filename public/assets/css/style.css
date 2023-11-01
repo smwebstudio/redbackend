@@ -103,7 +103,7 @@ main .header-operation h1 {
 .navbar-filters .nav-item.dropdown.divider {
     width: 100%;
     border-bottom: 1px solid #fefefe;
-    margin: 15px 0px !important;
+    margin: 5px 0px !important;
 }
 
 
@@ -192,4 +192,14 @@ main .header-operation h1 {
 .form-group .inline-create-button {
     position: relative;
     top: -10px;
+}
+
+
+.navbar-filters .navbar-nav>li>a {
+    font-size: 12px;
+}
+
+
+.navbar-filters div.form-group.backpack-filter span {
+    font-size: 12px;
 }
