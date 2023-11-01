@@ -8,13 +8,14 @@ namespace App\Models;
 
 use App\Scopes\EstateScope;
 use App\Traits\ApiMultiLanguage;
-use App\Traits\Models\CustomTimestamps;
 use App\Traits\Models\HasFilePath;
+use App\Traits\Models\LogsActivity;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Spatie\Activitylog\LogOptions;
 
 /**
  * Class EstateResource
@@ -246,6 +247,7 @@ class Estate extends Model
     use \Backpack\CRUD\app\Models\Traits\CrudTrait;
     use ApiMultiLanguage;
     use HasFilePath;
+    use LogsActivity;
 
     protected $table = 'estate';
     public $incrementing = true;
@@ -980,13 +982,14 @@ class Estate extends Model
     {
 
 
-        $fullPrice = $this->fullPrice;
+        $fullPrice = $this->getFullPriceAttribute();
 
-        if ($this->price && $this->old_price && $this->price < $this->old_price) {
+        if ($this->price_amd && $this->old_price && $this->price_amd < $this->old_price) {
             $fullPrice = $fullPrice . '<i class="las la-arrow-down" style="color: green; font-size: 28px"></i>';
-        } elseif ($this->price && $this->old_price && $this->price > $this->old_price) {
+        } elseif ($this->price_amd && $this->old_price && $this->price_amd > $this->old_price) {
             $fullPrice = $fullPrice . '<i class="las la-arrow-up" style="color: red; font-size: 28px"></i>';
         }
+
         return '<span style="background: #fff; display: inline-block; padding: 5px; border:1px solid #888; width: 100%">' . $fullPrice . '</span>';
     }
 
@@ -1106,6 +1109,11 @@ class Estate extends Model
         return $query->orWhere('estate_type_id', '=', 2);
     }
 
+    public function scopeTownhouse($query)
+    {
+        return $query->orWhere('estate_type_id', '=', 5);
+    }
+
     public function scopeCommercial($query)
     {
         return $query->orWhere('estate_type_id', '=', 3);
@@ -1142,5 +1150,15 @@ class Estate extends Model
         $name = $this->main_image_file_path;
 
         return "/estate/photos/$name";
+    }
+
+    /*Activity logs*/
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll()
+            ->logOnlyDirty()
+            ->logExcept(['temporary_photos'])
+            ->logOnly(['*', 'estate_status.name_arm']);
     }
 }

@@ -115,6 +115,7 @@ return [
 
     // JS files that are loaded in all pages, using Laravel's asset() helper
     'scripts' => [
+//        'https://cdn.jsdelivr.net/npm/sweetalert2@11',
         // 'js/example.js',
         // 'https://unpkg.com/vue@2.4.4/dist/vue.min.js',
         // 'https://unpkg.com/react@16/umd/react.production.min.js',

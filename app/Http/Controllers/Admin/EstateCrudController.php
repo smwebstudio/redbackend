@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Admin\Operations\DownloadEstateImagesOperation;
+use App\Http\Controllers\Admin\Operations\EntryActivityOperation;
 use App\Http\Controllers\Admin\Operations\RedDropZoneOperation;
 use App\Http\Requests\EstateRequest;
 use App\Models\CLocationCity;
@@ -37,8 +38,9 @@ class EstateCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CloneOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CloneOperation ;
     use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
+    use EntryActivityOperation;
     use RedDropZoneOperation;
     use FetchOperation;
     use AuthorizesRequests;
@@ -62,6 +64,7 @@ class EstateCrudController extends CrudController
 
     protected function setupShowOperation()
     {
+
         CRUD::setShowView('redg.estate.showTabs');
         $this->crud->addButton('line', 'download_estate_images', 'view', 'crud::buttons.download', 'end');
         Widget::add()->type('script')
@@ -73,7 +76,19 @@ class EstateCrudController extends CrudController
         $this->addProfessinalTabColumns();
         $this->addAdditionalTabColumns();
         $this->addSellerTabColumns();
+
         $this->crud->data['estate'] = $estate;
+        $this->crud->viewType = request()->type;
+
+        $viewType = request()->type;
+        if($viewType === 'viewOnly') {
+            unset($this->crud->data['estate']->address_building);
+            unset($this->crud->data['estate']->address_apartment);
+        }
+
+
+
+
     }
 
     /**
@@ -85,7 +100,11 @@ class EstateCrudController extends CrudController
     protected function setupListOperation()
     {
         Widget::add()->type('script')->content('assets/js/admin/lists/estate.js');
+        Widget::add()->type('script')->content('assets/js/admin/lists/sweetalert.js');
+
         $this->crud->addButton('top', 'estate_create_buttons_set', 'view', 'crud::buttons.estate_create_buttons_set');
+        $this->crud->addButton('line', 'estate_clone', 'view', 'crud::buttons.estate_clone');
+        $this->crud->removeButton('clone');
         $this->crud->removeButton('create');
 //        $this->crud->addButton('line', 'archive', 'view', 'crud::buttons.archive');
 //        $this->crud->addButton('line', 'photo', 'view', 'crud::buttons.photo');
@@ -918,6 +937,33 @@ class EstateCrudController extends CrudController
         $zipFileUrl = url($zipFileName);
         return response()->json(['zipFileUrl' => $zipFileUrl]);
 
+    }
+
+    public function clone($id)
+    {
+        CRUD::hasAccessOrFail('clone');
+        CRUD::setOperation('clone');
+
+        // whatever you want
+
+        // if you still want to call the old clone method
+        $this->crud->hasAccessOrFail('clone');
+
+        $contract_type = request()->contract_type;
+
+        $currentEntry = $this->crud->model->findOrFail($id);
+
+        $clonedEntry = $this->crud->model->findOrFail($id)->replicate();
+
+        $clonedEntry->contract_type_id = (int)$contract_type;
+        $clonedEntry->save();
+
+        $currentEntry->estateDocuments->each(function ($document) use ($clonedEntry) {
+            $clonedDocument = $document->replicate();
+            $clonedDocument->estate_id = $clonedEntry->id;
+            $clonedDocument->save();
+        });
+        return (string) $clonedEntry->push();
     }
 
 }

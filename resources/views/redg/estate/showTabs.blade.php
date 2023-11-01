@@ -7,11 +7,14 @@
       trans('backpack::crud.preview') => false,
     ];
 
+    $viewType = $crud->viewType;
+
     $estate = $entry;
 
     $images = $estate->estateDocuments;
     // if breadcrumbs aren't defined in the CrudController, use the default breadcrumbs
     $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
+
 
 @endphp
 
@@ -52,11 +55,13 @@
                     <!-- Slider main container -->
                     <div class="swiper-wrapper">
                         @foreach($images as $image)
-                            <div class="swiper-slide">
-                                <div class="swiper-zoom-container">
-                                    <img src="{{ Storage::disk('S3Public')->url('/estate/photos/'.$image->path) }}">
+                            @if ($viewType !== 'viewOnly' || $image->is_public)
+                                <div class="swiper-slide">
+                                    <div class="swiper-zoom-container">
+                                        <img src="{{ Storage::disk('S3Public')->url('/estate/photos/'.$image->path) }}">
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         @endforeach
                     </div>
                     <div class="swiper-pagination"></div>
@@ -67,9 +72,11 @@
                 <div class="swiper SwiperThumbs">
                     <div class="swiper-wrapper">
                         @foreach($images as $image)
+                            @if ($viewType !== 'viewOnly' || $image->is_public)
                             <div class="swiper-slide mr-2">
                                 <img src="{{ Storage::disk('S3Public')->url('/estate/photos/'.$image->path_thumb) }}">
                             </div>
+                            @endif
                         @endforeach
                     </div>
                 </div>
@@ -91,12 +98,14 @@
                 </p>
                 <p class="text-sm">{{ isset($estate->public_text_arm) ? $estate->public_text_arm : '' }}</p>
                 <div class="flex justify-content-left mt-10 flex-row">
+                    @if($viewType !='viewOnly')
                     <div class="p-2 bg-slate-100">
                         Շենք: {{ isset($estate->address_building) ? $estate->address_building : '' }}</div>
+                    @endif
                     <div class="p-2 ml-2 bg-slate-100">Հարկ: {{ isset($estate->floor) ? $estate->floor : '' }}
                         /{{ isset($estate->building_floor_count) ? $estate->building_floor_count : '' }}</div>
                     <div class="p-2 ml-2 bg-slate-100">
-                        Սենյակներ: {{ isset($estate->room_count) ? $estate->room_count : '' }}</div>
+                        Սենյակներ: {{ isset($estate->room_count) ? $estate->room_count : '' }} / {{ isset($estate->room_count_modified) ? ' (փոփ․) '.$estate->room_count_modified : '' }}</div>
                 </div>
                 <div class="flex justify-content-left mt-2 flex-row">
                     <div class="p-2 bg-slate-100">Առաստաղի

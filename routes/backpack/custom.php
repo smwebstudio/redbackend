@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\RedActivityLogController;
 use Illuminate\Support\Facades\Route;
 
 // --------------------------
@@ -26,6 +27,7 @@ Route::group([
     Route::crud('c-building-project-type', 'CBuildingProjectTypeCrudController');
     Route::crud('estate', 'EstateCrudController');
     Route::crud('house', 'HouseCrudController');
+    Route::crud('townhouse', 'TownhouseCrudController');
     Route::crud('commercial', 'CommercialCrudController');
     Route::crud('land', 'LandCrudController');
     Route::crud('c-location-country', 'CLocationCountryCrudController');
@@ -79,4 +81,7 @@ Route::group([
     Route::crud('professional', 'ProfessionalCrudController');
     Route::post('setCurrency', 'CurrencyController@setCurrency')->name('setCurrency');
     Route::crud('estate-rent-contract', 'EstateRentContractCrudController');
+    Route::crud('activity-log', 'RedActivityLogController');
+    Route::get('activity-log/causer', [RedActivityLogController::class, 'getCauserOptions']);
+    Route::get('activity-log/subject', [RedActivityLogController::class, 'getSubjectOptions']);
 }); // this should be the absolute last line of this file

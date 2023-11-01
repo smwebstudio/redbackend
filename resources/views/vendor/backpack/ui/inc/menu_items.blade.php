@@ -32,6 +32,7 @@
 
 
 <li class="nav-item mt-3"><a class="nav-link" href="{{ backpack_url('article') }}"><i class="nav-icon la la-pen-alt"></i> Բլոգ</a></li>
+<li class="nav-item mt-3"><a class="nav-link" href="{{ backpack_url('activity-log') }}"><i class="nav-icon la la-cog"></i> Փոփոխություններ</a></li>
 
 <li class="nav-item nav-dropdown mt-3">
     <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon las la-cogs"></i>Կարգավորումներ</a>

@@ -19,6 +19,10 @@
                 <a href="{{ url('/admin/land/'.$entry->getKey().'/edit') }}"
                    class="btn btn-sm btn-link"><i class="la la-edit"></i></a>
             @endif
+            @if($entry->estate_type_id == 5)
+                <a href="{{ url('/admin/townhouse/'.$entry->getKey().'/edit') }}"
+                   class="btn btn-sm btn-link"><i class="la la-edit"></i></a>
+            @endif
         @elseif($entry->contact_type_id)
             @if($entry->contact_type_id == 1)
                 <a href="{{ url('/admin/seller/'.$entry->getKey().'/edit') }}"

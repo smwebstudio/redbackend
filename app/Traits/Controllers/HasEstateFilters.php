@@ -34,6 +34,16 @@ trait HasEstateFilters
 
         $this->crud->addFilter([
             'type' => 'simple',
+            'name' => 'townhouse',
+            'label' => 'ԹԱՈՒՆՀԱՈՒՍ'
+        ],
+            false,
+            function () {
+                $this->crud->addClause('townhouse');
+            });
+
+        $this->crud->addFilter([
+            'type' => 'simple',
             'name' => 'Commercial',
             'label' => 'ԿՈՄԵՐՑԻՈՆ'
         ],
@@ -60,7 +70,7 @@ trait HasEstateFilters
         // select2 filter
         $this->crud->addFilter([
             'name' => 'contract_type',
-            'type' => 'select2',
+            'type' => 'select2_multiple_red',
             'label' => 'Գործարքային տիպը',
         ], function () {
             return [
@@ -68,8 +78,8 @@ trait HasEstateFilters
                 2 => 'Վարձակալություն',
                 3 => 'Օրավարձ',
             ];
-        }, function ($value) {
-            $this->crud->addClause('where', 'contract_type_id', $value);
+        }, function ($values) {
+            $this->crud->addClause('whereIn', 'contract_type_id', json_decode($values));
         });
 
         $this->crud->addFilter([

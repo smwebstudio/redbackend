@@ -229,8 +229,8 @@ class CommercialCrudController extends CrudController
         /*Basic fields*/
 
         CRUD::addField([
-            'name' => 'estate_type',
-            'type' => "relationship",
+            'name' => 'estate_type_id',
+            'type' => 'number',
             'attribute' => "name_arm",
             'label' => "Գույքի տեսակ",
             'default' => 3,

@@ -26,7 +26,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class HouseCrudController extends CrudController
+class TownhouseCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -296,7 +296,7 @@ class HouseCrudController extends CrudController
         CRUD::addFields($addAppartmentFeaturesList);
 
 
-        $this->addCreateCommonFields(2);
+        $this->addCreateCommonFields(5);
 
         $this->addCreateTranslationFields();;
 
@@ -370,7 +370,6 @@ class HouseCrudController extends CrudController
         CRUD::addField([
             'name' => 'estate_type_id',
             'type' => 'number',
-            'attribute' => "name_arm",
             'label' => "Գույքի տեսակ",
             'default' => $estateType,
             'attributes' => [

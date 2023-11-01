@@ -347,6 +347,7 @@ trait AddEstateCreateCommonFields
             'type' => "relationship",
             'attribute' => "name_arm",
             'label' => "Կարգավիճակ",
+            'default' => 1,
             'tab' => 'Լրացուցիչ',
             'placeholder' => '-Ընտրել մեկը-',
             'wrapper' => [

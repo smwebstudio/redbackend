@@ -32,7 +32,16 @@ class EstateRequest extends FormRequest
              'location_community' => 'required_if:location_province,1',
              'location_street' => 'required',
              'address_building' => 'required_if:estate_status,2,3,4,5,6,7,8',
-             'address_apartment' => 'required_if:estate_status,4',
+            'address_apartment' => [
+                function ($attribute, $value, $fail) {
+                    $estate_status = (int)$this->input('estate_status');
+                    $estate_type = (int)$this->input('estate_type_id');
+
+                    if (($estate_status === 4) && ($estate_type === 1) && empty($value)) {
+                        $fail($attribute . ' is required.');
+                    }
+                },
+            ],
              'floor' => 'required_if:estate_status,4',
              'building_floor_count' => 'required_if:estate_status,4',
              'ceiling_height_type' => 'required_if:estate_status,4',
@@ -41,6 +50,23 @@ class EstateRequest extends FormRequest
              'price_amd' => 'required_if:estate_status,4',
             'archive_till_date' => 'required_if:estate_status,8',
             'archive_comment_arm' => 'required_if:estate_status,8',
+            'building_structure_type' => 'required_if:estate_status,4',
+            'building_type' => 'required_if:estate_status,4',
+            'building_project_type' => 'required_if:estate_status,4',
+            'building_floor_type' => 'required_if:estate_status,4',
+            'exterior_design_type' => 'required_if:estate_status,4',
+            'courtyard_improvement' => 'required_if:estate_status,4',
+            'distance_public_objects' => 'required_if:estate_status,4',
+            'elevator_type' => 'required_if:estate_status,4',
+            'year' => 'required_if:estate_status,4',
+            'parking_type' => 'required_if:estate_status,4',
+            'entrance_type' => 'required_if:estate_status,4',
+            'entrance_door_position' => 'required_if:estate_status,4',
+            'entrance_door_type' => 'required_if:estate_status,4',
+            'windows_view' => 'required_if:estate_status,4',
+            'building_window_count' => 'required_if:estate_status,4',
+            'repairing_type' => 'required_if:estate_status,4',
+            'heating_system_type' => 'required_if:estate_status,4',
         ];
     }
 

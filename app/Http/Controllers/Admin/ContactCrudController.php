@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Operations\EntryActivityOperation;
 use App\Http\Requests\ContactRequest;
 use App\Models\Contact;
 use App\Traits\Controllers\AddContactListColumns;
@@ -24,6 +25,7 @@ class ContactCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
+    use EntryActivityOperation;
     use AuthorizesRequests;
     use HasContactFilters;
     use AddContactListColumns;

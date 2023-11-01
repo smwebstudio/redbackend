@@ -187,3 +187,9 @@ main .header-operation h1 {
 #inline-create-dialog .modal-dialog {
     max-width: 940px !important;
 }
+
+
+.form-group .inline-create-button {
+    position: relative;
+    top: -10px;
+}

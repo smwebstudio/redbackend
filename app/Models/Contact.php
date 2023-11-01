@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use App\Traits\ApiMultiLanguage;
+use App\Traits\Models\LogsActivity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -89,6 +90,8 @@ class Contact extends Model
 	protected $table = 'contact';
 
     use ApiMultiLanguage;
+    use LogsActivity;
+
     protected array $multi_lang = [
         'name',
     ];
