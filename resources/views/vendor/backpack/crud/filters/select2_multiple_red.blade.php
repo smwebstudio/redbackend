@@ -5,7 +5,7 @@
     filter-key="{{ $filter->key }}"
 	class="nav-item dropdown {{ Request::get($filter->name)?'active':'' }} col-{{ $filter->options['col'] ?? '' }}">
     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ $filter->label }} <span class="caret"></span></a>
-    <div class="dropdown-menu p-0">
+    <div class="dropdown-menu p-0 multiple_red">
       <div class="form-group backpack-filter mb-0">
 			<select
 				id="filter_{{ $filter->key }}"
@@ -66,6 +66,41 @@
 	  	position: relative!important;
 	  	top: 0px!important;
 	  }
+
+      .multiple_red .select2-results__option:before {
+          content: "";
+          display: inline-block;
+          position: relative;
+          height: 10px;
+          width: 10px;
+          border: 1px solid #e9e9e9;
+          border-radius: 1px;
+          background-color: #fff;
+          margin-right: 7px;
+          vertical-align: middle;
+      }
+
+      .multiple_red .select2-results__option[aria-selected=true]:before {
+          font-family:fontAwesome;
+          content: "\f00c";
+          color: #fff;
+          background-color: #f77750;
+          border: 0;
+          display: inline-block;
+          padding-left: 3px;
+      }
+
+      #bp-filters-navbar .nav-link.dropdown-toggle  {
+         max-width: 320px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+      }
+
+
+      .multiple_red .select2-container--default .select2-results__option[aria-selected=true] {
+          background-color: #fff;
+      }
     </style>
 @endpush
 
@@ -96,6 +131,8 @@
                     filter_name_value.html('<strong>'+filter_name_origin_value+': '+currentValue+'</strong>');
                 }
 
+
+
                 $(this).select2({
                 	allowClear: true,
 					closeOnSelect: false,
@@ -103,6 +140,7 @@
 					dropdownParent: $(this).parent('.form-group'),
 	        	    placeholder: $(this).attr('placeholder'),
                 }).on('change', function() {
+
                     var value = '';
                     if (Array.isArray($(this).val())) {
                         // clean array from undefined, null, "".
@@ -120,8 +158,6 @@
                         let filter_name_value = $("[filter-name="+filterName+"]").find('.nav-link.dropdown-toggle');
 
                         let selectedValues = filter_name_origin_value+': ';
-
-                        console.log($(this).select2('data'));
 
                         $(this).select2('data').forEach(function(value, index, array) {
                             if (index === array.length - 1){
@@ -144,6 +180,9 @@
                     if (URI(new_url).hasQuery(filterName, true)) {
                         $("li[filter-key="+filterKey+"]").addClass('active');
                     }
+
+
+
 
 				}).on('select2:unselecting', function(e) {
 
@@ -180,6 +219,7 @@
 					$("li[filter-key="+filterKey+"]").find('.dropdown-menu').removeClass("show");
                 });
 
+
 				// when the dropdown is opened, autofocus on the select2
 				$("li[filter-key="+filterKey+"]").on('shown.bs.dropdown', function () {
 					$('#filter_'+filterKey+'').select2('open');
@@ -192,6 +232,7 @@
 					$("li[filter-key="+filterKey+"]").removeClass('active');
 	                $('#filter_'+filterKey).val(null).trigger('change');
 				});
+
             });
 		});
 	</script>

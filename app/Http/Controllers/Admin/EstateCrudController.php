@@ -12,6 +12,7 @@ use App\Models\CLocationStreet;
 use App\Models\Contact;
 use App\Models\Estate;
 use App\Models\RealtorUser;
+use App\Traits\Controllers\AddEstateCreateCommonFields;
 use App\Traits\Controllers\AddEstateFetchMethods;
 use App\Traits\Controllers\AddEstateListColumns;
 use App\Traits\Controllers\HasEstateFilters;
@@ -42,6 +43,7 @@ class EstateCrudController extends CrudController
     use FetchOperation;
     use AuthorizesRequests;
     use HasEstateFilters;
+    use AddEstateCreateCommonFields;
     use AddEstateListColumns;
     use AddEstateFetchMethods;
     use DownloadEstateImagesOperation;
@@ -107,18 +109,10 @@ class EstateCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(EstateRequest::class);
-
-        CRUD::setOperationSetting('strippedRequest', function ($request) {
-            $input = $request->all();
-            return $input;
-        });
-
         Widget::add()->type('script')->content('assets/js/admin/forms/estate.js');
 
-        $estateType = $this->crud->getRequest()->get('estateType');
-
         $this->addApartmentFields();
-        $this->addCreateCommonFields($estateType);
+        $this->addCreateCommonFields(1);
 
     }
 
@@ -127,11 +121,7 @@ class EstateCrudController extends CrudController
         CRUD::setValidation(EstateRequest::class);
         $this->setupCreateOperation();
         $estate = $this->crud->getCurrentEntry();
-        CRUD::setOperationSetting('strippedRequest', function ($request) {
-            $input = $request->all();
-            return $input;
-        });
-        $estateType = request()->estateType;
+
         CRUD::removeField('estate_type');
         if (!empty($estate->estate_longitude) && !empty($estate->estate_latitude)) {
             CRUD::removeField('location');
@@ -154,736 +144,6 @@ class EstateCrudController extends CrudController
 
     }
 
-
-    private function addCreateCommonFields($estateType): void
-    {
-
-        /*Basic fields*/
-
-        CRUD::addField([
-            'name' => 'estate_type_id',
-            'type' => 'number',
-            'attribute' => "name_arm",
-            'label' => "Գույքի տեսակ",
-            'default' => 1,
-            'attributes' => [
-                'readonly' => 'readonly',
-            ],
-            'wrapper' => [
-                'class' => 'form-group col-md-3 d-none'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'contract_type',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "Կոնտրակտի տեսակ",
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-4'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'seller',
-            'entity' => 'seller',
-            'type' => "relationship",
-            'attribute' => "fullContact",
-            'placeholder' => '-Ընտրել մեկը-',
-            'ajax' => true,
-            'minimum_input_length' => 0,
-            'label' => "Վաճառող",
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'location_province',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "Մարզ",
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-3 '
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'location_city',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'ajax' => true,
-            'minimum_input_length' => 0,
-            'include_all_form_fields' => true,
-            'label' => "Քաղաք",
-            'dependencies' => ['location_province'],
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-3 '
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'location_community',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'ajax' => true,
-            'minimum_input_length' => 0,
-            'dependencies' => ['location_province'],
-            'label' => "Համայնք",
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'location_street',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'ajax' => true,
-            'minimum_input_length' => 0,
-            'dependencies' => ['location_province'],
-            'label' => "Փողոց",
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-6'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'address_building',
-            'type' => "text",
-            'label' => "Շենք",
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'address_apartment',
-            'type' => "text",
-            'label' => "Բնակարան",
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'floor_separator',
-            'type' => 'custom_html',
-            'value' => '<br/>',
-            'wrapper' => [
-                'class' => 'form-group col-md-12 separator'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'floor',
-            'type' => "number",
-            'label' => "Հարկ",
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'building_floor_count',
-            'type' => "number",
-            'label' => "Շենքի հարկ",
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'ceiling_height_type',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "Առաստաղի բարձրություն",
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'rooms_separator',
-            'type' => 'custom_html',
-            'value' => '<br/>',
-            'wrapper' => [
-                'class' => 'form-group col-md-12 separator'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'room_count',
-            'type' => "number",
-            'label' => "Սենյակներ",
-            'wrapper' => [
-                'class' => 'form-group col-md-2'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'room_count_modified',
-            'type' => "number",
-            'label' => "Սենյակներ (mod)",
-            'wrapper' => [
-                'class' => 'form-group col-md-2'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'area_total',
-            'type' => "number",
-            'label' => "Ընդհանուր մակերես",
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'separator123',
-            'type' => 'custom_html',
-            'value' => '<br/>',
-            'wrapper' => [
-                'class' => 'form-group col-md-12 separator'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'price_amd',
-            'type' => "number",
-            'label' => "Գին",
-            'wrapper' => [
-                'class' => 'form-group col-md-4'
-            ],
-            "suffix" => 'AMD'
-        ]);
-
-//        CRUD::addField([
-//            'name' => 'currency',
-//            'type' => "relationship",
-//            'attribute' => "name_arm",
-//            'label' => "<br/>",
-//            'allows_null' => false,
-//            'default' => 1,
-//            'placeholder' => '-Ընտրել մեկը-',
-//            'wrapper' => [
-//                'class' => 'form-group col-md-1'
-//            ],
-//        ]);
-
-
-        /*Նկարներ tab fields*/
-
-        CRUD::addField([
-            'name' => 'temporary_photos',
-            'label' => 'Նկարներ',
-            'type' => "dropzone",
-            'configuration' => [
-                'parallelUploads' => 10,
-                'uploadMultiple' => true,
-                'createImageThumbnails' => true,
-                'maxFilesize' => 1680000,
-
-            ],
-            'withFiles' => ([
-                'disk' => 'S3Public',
-                'path' => 'uploads/tmp',
-                'uploader' => 'App\Services\RedAjaxUploader',
-            ]),
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-            'tab' => 'Նկարներ',
-
-        ]);
-
-        /*Քարտեզ tab fields*/
-
-        CRUD::addField([
-            'name' => 'location',
-            'label' => 'Տեղը քարտեզի վրա',
-            'type' => 'google_map',
-            'tab' => 'Քարտեզ',
-            'value' => '{"lat":40.179674748428745,"lng":44.504069898889185}',
-            'map_options' => [
-                'default_lat' => 40.1783632,
-                'default_lng' => 44.51106509999999,
-                'locate' => true,
-                'height' => 400,
-            ]
-        ]);
-
-        /*Մասնագիտական tab fields*/
-
-        CRUD::addField([
-            'name' => 'name_arm',
-            'type' => "textarea",
-            'row' => 12,
-            'label' => "Մասնագիտական կարծիք, Վերլուծություն",
-            'tab' => 'Մասնագիտական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'additional_info_arm',
-            'type' => "textarea",
-            'row' => 12,
-            'label' => "Ինչու ես ձեռք չէի բերի այս գույքը",
-            'tab' => 'Մասնագիտական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'comment_arm',
-            'type' => "textarea",
-            'row' => 12,
-            'label' => "Այլ նոթեր",
-            'tab' => 'Մասնագիտական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'is_public_text_generation',
-            'type' => "switch",
-            'label' => "Ավտո տեքստ",
-            'tab' => 'Մասնագիտական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'public_text_arm',
-            'type' => "textarea",
-            'attributes' => [
-                'rows' => 7,
-            ],
-            'label' => "Հայտարարության տեքստ (հայերեն)",
-            'tab' => 'Մասնագիտական',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-
-        /*Լրացուցիչ tab fields*/
-
-        CRUD::addField([
-            'name' => 'propertyAgent',
-            'entity' => 'propertyAgent',
-            'type' => "relationship",
-            'ajax' => true,
-            'minimum_input_length' => 0,
-            'attribute' => "name_arm",
-            'label' => "Տեղազննող գործակալ",
-            'tab' => 'Լրացուցիչ',
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'infoSource',
-            'type' => "relationship",
-            'ajax' => true,
-            'minimum_input_length' => 0,
-            'attribute' => "contactFullName",
-            'label' => "Ինֆորմացիայի աղբյուր",
-            'tab' => 'Լրացուցիչ',
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'intercom',
-            'type' => "text",
-            'label' => "Դոմոֆոն",
-            'tab' => 'Լրացուցիչ',
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'separator77777',
-            'type' => 'custom_html',
-            'tab' => 'Լրացուցիչ',
-            'value' => '<hr/>',
-            'wrapper' => [
-                'class' => 'form-group col-md-12 separator'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'is_advertised',
-            'type' => 'switch',
-            'label' => 'Գովազդված',
-            'tab' => 'Լրացուցիչ',
-            'wrapper' => [
-                'class' => 'form-group col-md-2'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'is_urgent',
-            'type' => 'switch',
-            'label' => 'Շտապ',
-            'tab' => 'Լրացուցիչ',
-            'wrapper' => [
-                'class' => 'form-group col-md-2'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'is_hot_offer',
-            'type' => 'switch',
-            'label' => 'Թոփ առաջարկներ',
-            'tab' => 'Լրացուցիչ',
-            'wrapper' => [
-                'class' => 'form-group col-md-2'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'estate_status',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "Կարգավիճակ",
-            'tab' => 'Լրացուցիչ',
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-//
-//            CRUD::addField([
-//                    'type' => "relationship",
-//                    'name' => 'seller',
-//                    'ajax' => true,
-//                    'inline_create' => true,
-//                'tab' => 'Վարձակալություն',
-//            ]);
-
-//            CRUD::addField([
-//                'type' => "relationship",
-//                'name' => 'estateRentContracts',
-//                'label' => 'Վարձակալություն',
-//                'data_source' => backpack_url('estate/fetch/estate-rent-contract'),
-//                'ajax' => true,
-//                'inline_create' => [
-//                    'entity' => 'estateRentContract',
-//                    // OPTIONALS
-//                    'force_select' => true,
-//                    'modal_class' => 'modal-dialog modal-lg', // use modal-sm, modal-lg to change width
-//                    'modal_route' => route('estate-rent-contract-inline-create'), // InlineCreate::getInlineCreateModal()
-//                    'create_route' =>  route('estate-rent-contract-inline-create-save'), // InlineCreate::storeInlineCreate()
-//                    'add_button_label' => 'Նոր վարձակալություն', // configure the text for the `+ Add` inline button
-//                    'include_main_form_fields' => ['field1', 'field2'], // pass certain fields from the main form to the modal, get them with: request('main_form_fields')
-//                ],
-//                'tab' => 'Վարձակալություն',
-//            ]);
-
-        //            Widget::add([
-//                'type' => 'relation_table',
-//                'name' => 'rentContracts',
-//                'label' => 'Վարձակալություն',
-//                'backpack_crud' => 'estate-rent-contract',
-//                'relation_attribute' => 'estate_id',
-//                'buttons' => false,
-//                'button_create' => false,
-//                'button_delete' => false,
-//                'columns' => [
-//                    [
-//                        'label' => 'ID',
-//                        'name' => 'id',
-//                    ],
-//                    [
-//                        'label' => 'Նախնական գին',
-//                        'name' => 'initial_price',
-//                    ],
-//                    [
-//                        'label' => 'Վերջնական գին',
-//                        'name' => 'final_price',
-//                    ],
-//                    [
-//                        'label' => 'Սկիզբ',
-//                        'closure' => function($entry){
-//                            if(!empty($entry->start_date)) {
-//                                return Carbon::parse($entry->start_date)->format('d/n/Y');
-//                            }
-//                            return null;
-//                        }
-//                    ],
-//                    [
-//                        'label' => 'Ավարտ',
-//                        'closure' => function($entry){
-//                            if(!empty($entry->end_date)) {
-//                                return Carbon::parse($entry->end_date)->format('d/n/Y');
-//                            }
-//                            return null;
-//                        }
-//                    ],
-//                    [
-//                        'label' => 'Վարձակալ',
-//                        'name' => 'renter.full_name',
-//                    ],
-//                    [
-//                        'label' => 'Գործակալ',
-//                        'name' => 'agent.contactFullName',
-//                    ],
-//                    [
-//                        'label' => 'Մեկնաբանություն',
-//                        'name' => 'comment_arm',
-//                    ],
-//                ],
-//            ])->to('after_content');
-
-
-        $estate = $this->crud->getCurrentEntry();
-        if ($estate && in_array($estate->contract_type_id, [2, 3])) {
-
-                    CRUD::addField([
-            'name'          => 'rentContracts',
-            'label'          => 'Վարձակալություն',
-            'attribute'          => 'id',
-            'type'          => "renting_table",
-                        'new_item_label'  => 'Նոր Վարձակալություն',
-            'subfields'   => [
-                [
-                    'name' => 'initial_price',
-                    'label' => 'Նախնական գին',
-                    'type' => 'text',
-                    'wrapper' => [
-                        'class' => 'form-group col-md-2',
-                    ],
-                ],
-                [
-                    'name' => 'final_price',
-                    'label' => 'Վերջնական գին',
-                    'type' => 'text',
-                    'wrapper' => [
-                        'class' => 'form-group col-md-2',
-                    ],
-                ],
-                [
-                    'label' => 'Սկիզբ',
-                    'type' => 'date',
-                    'name' => 'start_date',
-                    'wrapper' => [
-                        'class' => 'form-group col-md-2',
-                    ],
-                ],
-                [
-                    'label' => 'Ավարտ',
-                    'type' => 'date',
-                    'name' => 'end_date',
-                    'wrapper' => [
-                        'class' => 'form-group col-md-2',
-                    ],
-                ],
-                [
-                    'label' => 'Վարձակալ',
-                    'type' => 'relationship',
-                    'ajax' => true,
-                    'inline_create' => true,
-                    'attribute' => 'fullContact',
-                    'minimum_input_length' => 0,
-                    'name' => 'renter',
-                    'wrapper' => [
-                        'class' => 'form-group col-md-2',
-                    ],
-                ],
-                [
-                    'label' => 'Գործակալ',
-                    'type' => 'relationship',
-                    'ajax' => true,
-                    'attribute' => 'contactFullName',
-                    'minimum_input_length' => 0,
-                    'name' => 'agent',
-                    'wrapper' => [
-                        'class' => 'form-group col-md-2',
-                    ],
-                ],
-                [
-                    'label' => 'Մեկնաբանություն',
-                    'name' => 'comment_arm',
-                    'wrapper' => [
-                        'class' => 'form-group col-md-12',
-                    ],
-                ],
-            ],
-            'tab' => 'Լրացուցիչ',
-        ]);
-
-        }
-
-        CRUD::addField([
-            'name' => 'separator_archive',
-            'type' => 'custom_html',
-            'tab' => 'Լրացուցիչ',
-            'value' => '',
-            'wrapper' => [
-                'class' => 'form-group col-md-12 separator'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'archive_till_date',
-            'type' => "date",
-            'label' => "Արխիվացնել մինչև",
-            'tab' => 'Լրացուցիչ',
-            'wrapper' => [
-                'class' => 'form-group col-md-3'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'archive_comment_arm',
-            'type' => "textarea",
-            'label' => "Արխիվացման նշումներ",
-            'tab' => 'Լրացուցիչ',
-            'wrapper' => [
-                'class' => 'form-group col-md-9'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'separator77776',
-            'type' => 'custom_html',
-            'tab' => 'Լրացուցիչ',
-            'value' => '<h4>SEO</h4>',
-            'wrapper' => [
-                'class' => 'form-group col-md-12 separator'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'meta_title_arm',
-            'type' => "textarea",
-            'label' => "Վերնագիր SEO",
-            'tab' => 'Լրացուցիչ',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'meta_description_arm',
-            'type' => "textarea",
-            'label' => "Նկարագրություն SEO",
-            'tab' => 'Լրացուցիչ',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-        /*Translations*/
-
-        CRUD::addField([
-            'name' => 'public_text_en',
-            'type' => "textarea",
-            'attributes' => [
-                'rows' => 7,
-            ],
-            'label' => "Հայտարարության տեքստ (ENG)",
-            'tab' => 'Թարգմանություն',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'public_text_ru',
-            'type' => "textarea",
-            'attributes' => [
-                'rows' => 7,
-            ],
-            'label' => "Հայտարարության տեքստ (RU)",
-            'tab' => 'Թարգմանություն',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-
-        CRUD::addField([
-            'name' => 'separator77776788',
-            'type' => 'custom_html',
-            'value' => '<h4>SEO</h4>',
-            'tab' => 'Թարգմանություն',
-            'wrapper' => [
-                'class' => 'form-group col-md-12 separator'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'meta_title_en',
-            'type' => "textarea",
-            'label' => "Վերնագիր SEO ENG",
-            'tab' => 'Թարգմանություն',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'meta_description_en',
-            'type' => "textarea",
-            'label' => "Նկարագրություն SEO ENG",
-            'tab' => 'Թարգմանություն',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'meta_title_ru',
-            'type' => "textarea",
-            'label' => "Վերնագիր SEO RU",
-            'tab' => 'Թարգմանություն',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'meta_description_ru',
-            'type' => "textarea",
-            'label' => "Նկարագրություն SEO RU",
-            'tab' => 'Թարգմանություն',
-            'wrapper' => [
-                'class' => 'form-group col-md-12'
-            ],
-        ]);
-
-    }
 
     private function addApartmentFields(): void
     {
@@ -1609,15 +869,28 @@ class EstateCrudController extends CrudController
         ]);
     }
 
+    public function fetchSeller()
+    {
+        return $this->fetch([
+            'model' => Contact::class,
+            'searchable_attributes' => [],
+            'paginate' => 100,
+            'query' => function ($model) {
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->where('contact_type_id', 1)->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`, " ",`phone_mobile_1`) LIKE "%' . $search . '%"');
+                } else {
+                    return $model->where('contact_type_id', 1);
+                }
+            }
+        ]);
+    }
+
 
     public function downloadEstateImages()
     {
-
         $estate = $this->crud->getCurrentEntry();
-        // Set the S3 directory
-        // Set the S3 directory
         $directory = $estate->id;
-
         // Create a temporary directory to store downloaded files
         $tempDir = storage_path('temp');
         if (!is_dir($tempDir)) {
@@ -1627,33 +900,24 @@ class EstateCrudController extends CrudController
         // List files in the S3 directory
         $files = Storage::disk('S3')->files('/estate/photos/'.$directory);
 
-
-
-        // Create a ZIP file
         $zipFileName = $directory . '.zip';
-        $publicDir = public_path(); // Get the path to the public directory
+        $publicDir = public_path();
 
-// List files in the S3 directory
         $files = Storage::disk('S3')->files('/estate/photos/' . $directory);
 
-// Create a ZIP file in the public directory
         $zip = new ZipArchive;
         $zip->open($publicDir . '/' . $zipFileName, ZipArchive::CREATE);
 
-// Download and add each file to the ZIP archive
         foreach ($files as $file) {
             $fileContent = Storage::disk('S3')->get($file);
             $zip->addFromString(basename($file), $fileContent);
         }
 
-// Close the ZIP archive
         $zip->close();
 
-// Return the URL of the generated ZIP file in the response
         $zipFileUrl = url($zipFileName);
         return response()->json(['zipFileUrl' => $zipFileUrl]);
 
-//        return response()->download($tempDir . '/' . $zipFileName, $zipFileName)->deleteFileAfterSend(true);
     }
 
 }

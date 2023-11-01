@@ -110,7 +110,7 @@
 @endphp
 
 @if($field['type'])
-    <div id="rentingContainer">
+    <div id="rentingContainer" class="col-md-12">
     <table
         class="bg-white table table-striped table-hover nowrap rounded shadow-xs border-xs dataTable dtr-inline"
         cellspacing="0"

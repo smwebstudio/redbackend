@@ -98,13 +98,13 @@ trait HasEstateFilters
             } else {
                 $this->crud->addFilter([
                     'name' => 'location_city',
-                    'type' => 'select2',
+                    'type' => 'select2_multiple_red',
                     'label' => 'Քաղաք',
                 ], function () {
                     $province = request('location_province');
                     return \App\Models\CLocationCity::where('parent_id', '=', json_decode($province))->pluck('name_arm', 'id')->toArray();
-                }, function ($value) {
-                    $this->crud->addClause('where', 'location_city_id', $value);
+                }, function ($values) {
+                    $this->crud->addClause('whereIn', 'location_city_id', json_decode($values));
                 });
             }
         }

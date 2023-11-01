@@ -106,9 +106,9 @@
             position: fixed;
         }
 
-        .modal-backdrop {
-            display: none !important; /* Increase the z-index value if necessary */
-        }
+        /*.modal-backdrop {*/
+        /*    display: none !important; !* Increase the z-index value if necessary *!*/
+        /*}*/
 
         /*.modal.show .modal-dialog {*/
         /*    position: fixed !important;*/
