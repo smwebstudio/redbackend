@@ -542,26 +542,16 @@ class HouseCrudController extends CrudController
 
 
         CRUD::addField([
-            'name' => 'price',
+            'name' => 'price_amd',
             'type' => "number",
             'label' => "Գին",
             'wrapper' => [
-                'class' => 'form-group col-md-2'
+                'class' => 'form-group col-md-4'
             ],
+            "suffix" => 'AMD'
         ]);
 
-        CRUD::addField([
-            'name' => 'currency',
-            'type' => "relationship",
-            'attribute' => "name_arm",
-            'label' => "<br/>",
-            'allows_null' => false,
-            'default' => 1,
-            'placeholder' => '-Ընտրել մեկը-',
-            'wrapper' => [
-                'class' => 'form-group col-md-1'
-            ],
-        ]);
+
 
 
         /*Նկարներ tab fields*/

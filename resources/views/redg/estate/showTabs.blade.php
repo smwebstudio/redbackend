@@ -51,14 +51,26 @@
         </div>
         <div class="row">
             <div class="col-md-5 main-container__main--left slider-container">
-                <div class="swiper EstatesSlider">
+                <div class="swiper EstatesSlider swiper-container">
                     <!-- Slider main container -->
                     <div class="swiper-wrapper">
                         @foreach($images as $image)
                             @if ($viewType !== 'viewOnly' || $image->is_public)
                                 <div class="swiper-slide">
                                     <div class="swiper-zoom-container">
-                                        <img src="{{ Storage::disk('S3Public')->url('/estate/photos/'.$image->path) }}" class="fullscreen-trigger">
+                                        <div class="image_info">
+                                        @if($estate->main_image_file_path === 'estate/photos/'.$image->path)
+                                        <span class="main_image"><i class="las la-star"></i></span>
+                                        @else
+                                        <span class="main_image text-danger"><i class="lar la-star"></i></span>
+                                        @endif
+                                        @if($image->is_public)
+                                                <span class="is_public"><i class="las la-eye"></i></span>
+                                        @else
+                                                <span class="is_private text-danger"><i class="las la-eye-slash"></i></span>
+                                        @endif
+                                        </div>
+                                        <img src="{{ Storage::disk('S3Public')->url('/estate/photos/'.$image->path) }}">
                                     </div>
                                 </div>
                             @endif
@@ -83,38 +95,6 @@
 
             </div>
 
-            <!-- Add a separate container for the fullscreen view -->
-            <div class="fullscreen-slider">
-                <button class="fullscreen-slider-close"> Փակել</button>
-                <div class="swiper EstatesFullSlider">
-                <div class="swiper-wrapper">
-                    @foreach($images as $image)
-                        @if ($viewType !== 'viewOnly' || $image->is_public)
-                            <div class="swiper-slide">
-                                <img src="{{ Storage::disk('S3Public')->url('/estate/photos/'.$image->path) }}">
-                            </div>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="swiper-pagination full-pagination"></div>
-                <div class="swiper-button-next full-nav bg-light"></div>
-                <div class="swiper-button-prev full-nav bg-light"></div>
-
-                </div>
-
-                <div class="swiper SwiperFullThumbs">
-                    <div class="swiper-wrapper">
-                        @foreach($images as $image)
-                            @if ($viewType !== 'viewOnly' || $image->is_public)
-                                <div class="swiper-slide mr-2">
-                                    <img src="{{ Storage::disk('S3Public')->url('/estate/photos/'.$image->path_thumb) }}">
-                                </div>
-                            @endif
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-
             <div class="col-md-5 pt-16">
                 <p class="text-xl mb-12 flex flex-row justify-between align-items-center pr-16">
                     <span>
@@ -137,7 +117,7 @@
                     <div class="p-2 ml-2 bg-slate-100">Հարկ: {{ isset($estate->floor) ? $estate->floor : '' }}
                         /{{ isset($estate->building_floor_count) ? $estate->building_floor_count : '' }}</div>
                     <div class="p-2 ml-2 bg-slate-100">
-                        Սենյակներ: {{ isset($estate->room_count) ? $estate->room_count : '' }} / {{ isset($estate->room_count_modified) ? ' (փոփ․) '.$estate->room_count_modified : '' }}</div>
+                        Սենյակներ: {{ isset($estate->room_count) ? $estate->room_count : '' }} / {{ isset($estate->room_count_modified) ? $estate->room_count_modified : '' }}</div>
                 </div>
                 <div class="flex justify-content-left mt-2 flex-row">
                     <div class="p-2 bg-slate-100">Առաստաղի
@@ -272,7 +252,7 @@
 @push('after_scripts')
     <script>
         $(document).ready(function () {
-            var swiper = new Swiper(".SwiperThumbs", {
+            var SwiperThumbs = new Swiper(".SwiperThumbs", {
                 spaceBetween: 2,
                 slidesPerView: 5,
                 freeMode: true,
@@ -283,7 +263,7 @@
                 },
             });
 
-            var SwiperThumbs = new Swiper(".EstatesSlider", {
+            var swiper = new Swiper(".EstatesSlider", {
 
                 effect: 'fade',
                 spaceBetween: 10,
@@ -291,43 +271,15 @@
                 navigation: {
                     nextEl: ".swiper-button-next",
                     prevEl: ".swiper-button-prev",
+                },
+                keyboard: {
+                    enabled: true,
                 },
                 pagination: {
                     el: ".swiper-pagination",
                 },
                 thumbs: {
-                    swiper: swiper,
-                },
-
-                zoom: {
-                    maxRatio: 5,
-                },
-            });
-
-            var fullThumbSwiper = new Swiper(".SwiperFullThumbs", {
-                spaceBetween: 2,
-                slidesPerView: 5,
-                freeMode: true,
-                watchSlidesProgress: true,
-                navigation: {
-                    nextEl: ".EstatesFullSlider .swiper-button-next.full-nav",
-                    prevEl: ".EstatesFullSlider .swiper-button-prev.full-nav",
-                },
-            });
-
-            var fullscreenSwiper = new Swiper('.EstatesFullSlider', {
-                effect: 'fade',
-                spaceBetween: 10,
-                loop: true,
-                navigation: {
-                    nextEl: ".EstatesFullSlider .swiper-button-next.full-nav",
-                    prevEl: ".EstatesFullSlider .swiper-button-prev.full-nav",
-                },
-                pagination: {
-                    el: ".swiper-pagination.full-pagination",
-                },
-                thumbs: {
-                    swiper: fullThumbSwiper,
+                    swiper: SwiperThumbs,
                 },
 
                 zoom: {
@@ -336,29 +288,60 @@
             });
 
 
-            // fullThumbSwiper.on("slideChange", () => {
-            //     fullscreenSwiper.slideTo(fullThumbSwiper.activeIndex);
-            // });
+            var swiperSlides = Array.from(swiper.slides);
 
+            console.log(swiperSlides)
 
-// Add a click event listener to each image in the main slider to trigger fullscreen
-            var images = document.querySelectorAll('.fullscreen-trigger');
-            images.forEach(function(image, index) {
-                image.addEventListener('click', function() {
-                    document.querySelector('.fullscreen-slider').style.display = 'block'; // Show the fullscreen container
+            swiperSlides.forEach(function(slide) {
+                console.log('foreach');
+                openFullscreenSliderHandler(slide);
+                closeFullscreenSliderHandler(slide);
+            });
+
+            function openFullscreenSliderHandler(slide) {
+                var slideImage = slide.querySelector('img');
+
+                slideImage.addEventListener('click', function() {
+                    var slideNumber = slide.dataset.swiperSlideIndex;
+                    openFullscreenSwiper(slideNumber);
                 });
-            });
+            }
 
-            document.querySelector('.fullscreen-slider-close').addEventListener('click', function() {
-                document.querySelector('.fullscreen-slider').style.display = 'none'; // Hide the fullscreen container
-            });
+            function openFullscreenSwiper(slideNumber) {
+                swiper.el.classList.add('fullscreen');
+                swiper.params.slidesPerView = 1;
+                swiper.update();
+                swiper.slideToLoop(parseInt(slideNumber, 10), 0);
+            }
 
-            document.addEventListener('click', function(event) {
-                if (!document.querySelector('.fullscreen-slider').contains(event.target) && !document.querySelector('.EstatesSlider').contains(event.target) ) {
-                    // Clicked outside of the fullscreen slider, so close it
-                    document.querySelector('.fullscreen-slider').style.display = 'none';
-                }
-            });
+            function closeFullscreenSliderHandler(slide) {
+                var slideNumber = slide.dataset.swiperSlideIndex;
+                var backdrop = document.createElement('div');
+                var closeButton = document.createElement('div');
+
+                slide.appendChild(backdrop);
+                slide.appendChild(closeButton);
+                backdrop.classList.add('backdrop');
+                closeButton.classList.add('close-button');
+                closeButton.innerHTML = 'x';
+
+                backdrop.addEventListener('click', function() {
+                    closeFullscreenSwiper(slideNumber);
+                });
+
+                closeButton.addEventListener('click', function() {
+                    closeFullscreenSwiper(slideNumber);
+                });
+            }
+
+            function closeFullscreenSwiper(slideNumber) {
+                swiper.el.classList.remove('fullscreen');
+                swiper.params.slidesPerView = 1;
+                swiper.update();
+                swiper.slideToLoop(parseInt(slideNumber, 10), 0);
+            }
+
+
 
         })
 
@@ -375,52 +358,6 @@
 @endsection
 @push('after_styles')
     <style>
-
-        .fullscreen-slider-close {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            z-index: 50;
-            color: #000;
-            background: #fff;
-            padding: 5px 15px;
-        }
-
-        /* Fullscreen container styles */
-        .fullscreen-slider {
-            display: none;
-            position: fixed;
-            top: 5%;
-            left: 5%;
-            width: 90%;
-            height: 90%;
-            padding: 30px;
-            background-color: rgba(20,20,20,0.7);
-            z-index: 999;
-        }
-
-        .fullscreen-slider .EstatesFullSlider .swiper-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 80%;
-            height: 80%;
-            margin: 20px auto;
-            overflow: hidden;
-        }
-
-        .fullscreen-slider .swiper-slide {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .fullscreen-slider  .EstatesFullSlider .swiper-slide img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            cursor: pointer;
-        }
 
         .slider-container {
             flex-direction: column;
@@ -439,41 +376,17 @@
             display: block;
             width: 100%;
             height: auto;
-            object-fit: cover;
         }
 
         .SwiperThumbs .swiper-slide img {
             display: block;
             width: 120px;
-            height: 70px;
-            object-fit: cover;
         }
 
-        .fullscreen-slider .EstatesFullSlider {
-            width: 100%;
-            height: 80%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .fullscreen-slider .SwiperFullThumbs {
-            width: 100%;
-            height: 120px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-
-        .fullscreen-slider .SwiperFullThumbs .swiper-slide img {
-            width: 150px;
-            height: auto;
-            margin-left: auto;
-            margin-right: auto;
-        }
 
         .swiper {
-            width: 600px;
-            height: 600px;
+            width: 100%;
+            height: 800px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -489,20 +402,104 @@
         }
 
         .EstatesSlider {
-            height: 500px;
+            height: 700px;
             box-sizing: border-box;
             padding: 10px 0;
         }
 
-        .Swiper .swiper-slide {
-            width: 25%;
-            height: 100%;
-            opacity: 0.4;
-        }
 
         .Swiper .swiper-slide-thumb-active {
             opacity: 1;
         }
+
+        .swiper-container {
+            height: 600px;
+        }
+        .swiper-container.fullscreen {
+            height: 100vh;
+            width: 80%;
+            top:0;
+            position: fixed;
+            left: 10%;
+            z-index: 14800;
+            background: #333;
+        }
+        .swiper-slide {
+            background: #555;
+            text-align: center;
+            /* Center slide text vertically */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .swiper-slide img {
+            position: absolute;
+            max-width: 100%;
+            z-index: 2;
+            cursor: pointer;
+        }
+        .swiper-slide figcaption {
+            position: absolute;
+            bottom: 15%;
+            z-index: 3;
+        }
+        .swiper-slide a {
+            background: #000;
+            color: #fff;
+        }
+        .fullscreen .swiper-slide img {
+            pointer-events: none;
+        }
+        .fullscreen .swiper-slide .backdrop {
+            background: #000;
+            opacity: .7;
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .close-button {
+            display: none;
+        }
+
+        .fullscreen .swiper-slide .close-button {
+            background: #000;
+            border: 2px solid #fff;
+            color: #fff;
+            font-size: 28px;
+            font-family: sans-serif;
+            padding: 10px 18px;
+            position: absolute;
+            display: block;
+            top: 0;
+            right: 0;
+            z-index: 4;
+            cursor: pointer;
+        }
+
+        .fullscreen .swiper-button-next, .fullscreen .swiper-button-prev {
+            width: 80px;
+            height: 80px;
+        }
+
+        .image_info {
+            position: absolute;
+            top: 0;
+            left: 15px;
+            color: green;
+            z-index: 1500;
+            font-size: 30px;
+            background: #fff;
+            display: flex;
+            flex-direction: row;
+            column-gap: 15px;
+            padding: 15px;
+        }
+
 
 
     </style>

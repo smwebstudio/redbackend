@@ -53,8 +53,11 @@ trait HasContactFilters
         ],
             false,
             function($value) {
-                $this->crud->addClause('where', 'phone_mobile_1', 'LIKE', "%$value%");
+                $searchWithSpaces = str_replace(' ', '', $value);
+                $this->crud->addClause('whereRaw', 'CONCAT(REPLACE(`phone_mobile_1`, " ", "")) LIKE ?',  "%$searchWithSpaces%");
             });
+
+
 
         $this->crud->addFilter([
             'type'  => 'text',

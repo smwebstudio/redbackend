@@ -1038,14 +1038,18 @@ class Estate extends Model
 
     private function roundPrice(?float $price, ?string $currency): ?float
     {
+
         if ($price === null) {
             return null;
         }
+
 
         if ($currency === 'AMD') {
             return round($price / 100) * 100; // Round AMD to nearest 1000
         } elseif ($currency === 'RUB') {
             return round($price / 10) * 10; // Round RUB to nearest 10
+        } elseif ($currency === 'USD') {
+            return round($price); // Round RUB to nearest 10
         }
 
         return $price; // No rounding for other currencies

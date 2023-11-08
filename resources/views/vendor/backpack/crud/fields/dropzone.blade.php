@@ -42,8 +42,6 @@
 
     }
 
-
-
     $readonly = $field['attributes']['readonly'] ?? false;
     $disabled = $field['attributes']['disabled'] ?? false;
 @endphp
@@ -270,11 +268,40 @@
                         var mainButton = Dropzone.createElement('<div class="dz-main" ><i class="lar la-star"></i></div>');
                         var _this = this;
 
+
+
+                        $currentMainFile = $('input[name="main_image_file_path"]').val();
+
+                        console.log(file)
+                        console.log($currentMainFile)
+
+                        if(file.path === $currentMainFile) {
+                            $(mainButton).addClass('text-success');
+                            $(mainButton).html('<i class="las la-star"></i>');
+                        }
+
                         removeButton.addEventListener('click', function (e) {
                             e.preventDefault();
                             e.stopPropagation();
                             if (isDropzoneActive) {
                                 _this.removeFile(file);
+                            }
+                        });
+
+                        mainButton.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            if (isDropzoneActive) {
+                                $('input[name="main_image_file_path"]').val(file.path);
+                                $('input[name="main_image_file_name"]').val(file.name);
+                                $('input[name="main_image_file_path_thumb"]').val(file.path);
+
+
+                                $('.dz-main.text-success').html('<i class="lar la-star"></i>');
+                                $('.dz-main.text-success').removeClass('text-success');
+                                $(this).addClass('text-success');
+                                $(this).html('<i class="las la-star"></i>');
+                                console.log('Updated input value to: ' + file.path);
                             }
                         });
 
@@ -415,6 +442,7 @@
             const deleteAllButton = document.getElementById("deleteAllButton");
             deleteAllButton.addEventListener("click", function () {
                 // Remove all files from Dropzone
+                console.log(89)
                 dropzone.removeAllFiles();
             });
 

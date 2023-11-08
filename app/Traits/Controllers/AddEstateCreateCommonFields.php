@@ -44,6 +44,19 @@ trait AddEstateCreateCommonFields
         /*Basic fields*/
 
         CRUD::addField([
+            'name' => 'code',
+            'type' => 'text',
+            'attribute' => "code",
+            'label' => "Գույքի կոդ",
+            'attributes' => [
+                'readonly' => 'readonly',
+            ],
+            'wrapper' => [
+                'class' => 'form-group col-md-2'
+            ],
+        ]);
+
+        CRUD::addField([
             'name' => 'estate_type_id',
             'type' => 'number',
             'attribute' => "name_arm",
@@ -702,6 +715,39 @@ trait AddEstateCreateCommonFields
                 'path' => 'uploads/tmp',
                 'uploader' => 'App\Services\RedAjaxUploader',
             ]),
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+            'tab' => 'Նկարներ',
+
+        ]);
+
+        CRUD::addField([
+            'name' => 'main_image_file_path',
+            'label' => 'Նկարներ',
+            'type' => "hidden",
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+            'tab' => 'Նկարներ',
+
+        ]);
+
+        CRUD::addField([
+            'name' => 'main_image_file_name',
+            'label' => 'Նկարներ',
+            'type' => "hidden",
+            'wrapper' => [
+                'class' => 'form-group col-md-12'
+            ],
+            'tab' => 'Նկարներ',
+
+        ]);
+
+        CRUD::addField([
+            'name' => 'main_image_file_path_thumb',
+            'label' => 'Նկարներ',
+            'type' => "hidden",
             'wrapper' => [
                 'class' => 'form-group col-md-12'
             ],

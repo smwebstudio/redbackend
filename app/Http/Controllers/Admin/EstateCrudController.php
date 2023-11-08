@@ -889,9 +889,32 @@ class EstateCrudController extends CrudController
             'query' => function ($model) {
                 $search = request()->input('q') ?? false;
                 if ($search) {
-                    return $model->where('contact_type_id', 1)->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`, " ",`phone_mobile_1`) LIKE "%' . $search . '%"');
+                    return $model->where('contact_type_id', 1)->where(function ($query) use ($search) {
+                        $searchWithSpaces = str_replace(' ', '', $search);
+                        $query->whereRaw('CONCAT(`name_eng`, " ", `last_name_eng`, " ", `name_arm`, " ", `last_name_arm`, " ", `id`, " ", REPLACE(`phone_mobile_1`, " ", "")) LIKE ?', ["%$searchWithSpaces%"]);
+                    });
                 } else {
                     return $model->where('contact_type_id', 1);
+                }
+            }
+        ]);
+    }
+
+    public function fetchOwner()
+    {
+        return $this->fetch([
+            'model' => Contact::class,
+            'searchable_attributes' => [],
+            'paginate' => 100,
+            'query' => function ($model) {
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->where('contact_type_id', 2)->where(function ($query) use ($search) {
+                        $searchWithSpaces = str_replace(' ', '', $search);
+                        $query->whereRaw('CONCAT(`name_eng`, " ", `last_name_eng`, " ", `name_arm`, " ", `last_name_arm`, " ", `id`, " ", REPLACE(`phone_mobile_1`, " ", "")) LIKE ?', ["%$searchWithSpaces%"]);
+                    });
+                } else {
+                    return $model->where('contact_type_id', 2);
                 }
             }
         ]);
@@ -917,7 +940,7 @@ class EstateCrudController extends CrudController
         $files = Storage::disk('S3')->files('/estate/photos/' . $directory);
 
         $zip = new ZipArchive;
-        $zip->open($publicDir . '/' . $zipFileName, ZipArchive::CREATE);
+        $zip->open($publicDir . '/downloads/' . $zipFileName, ZipArchive::CREATE);
 
         foreach ($files as $file) {
             $fileContent = Storage::disk('S3')->get($file);

@@ -51,7 +51,6 @@ class EstateObserver
      */
     public function updating(Estate $estate): void
     {
-
         $estate->code = $this->setEstateCode($estate);
 
 
