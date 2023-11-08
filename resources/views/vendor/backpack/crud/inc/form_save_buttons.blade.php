@@ -8,20 +8,20 @@
                 <span data-value="{{ $saveAction['active']['value'] }}">{{ $saveAction['active']['label'] }}</span>
             </button>
         @else
-{{--            <div class="btn-group" role="group">--}}
-{{--                <button type="submit" class="btn btn-success text-white">--}}
-{{--                    <span class="la la-save" role="presentation" aria-hidden="true"></span> &nbsp;--}}
-{{--                    <span data-value="{{ $saveAction['active']['value'] }}">{{ $saveAction['active']['label'] }}</span>--}}
-{{--                </button>--}}
-{{--                <button id="bpSaveButtonsGroup" type="button" class="btn btn-success text-white dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" data-bs-toggle="dropdown" aria-expanded="false">--}}
-{{--                    <span class="d-none visually-hidden">Toggle Dropdown</span>--}}
-{{--                </button>--}}
-{{--                <ul class="dropdown-menu" aria-labelledby="bpSaveButtonsGroup">--}}
-{{--                    @foreach( $saveAction['options'] as $value => $label)--}}
-{{--                        <li><button class="dropdown-item" type="button" data-value="{{ $value }}">{{ $label }}</button></li>--}}
-{{--                    @endforeach--}}
-{{--                </ul>--}}
-{{--            </div>--}}
+            <div class="btn-group" role="group" style="display:none ">
+                <button type="submit" class="btn btn-success text-white">
+                    <span class="la la-save" role="presentation" aria-hidden="true"></span> &nbsp;
+                    <span data-value="{{ $saveAction['active']['value'] }}">{{ $saveAction['active']['label'] }}</span>
+                </button>
+                <button id="bpSaveButtonsGroup" type="button" class="btn btn-success text-white dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="d-none visually-hidden">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="bpSaveButtonsGroup">
+                    @foreach( $saveAction['options'] as $value => $label)
+                        <li><button class="dropdown-item" type="button" data-value="{{ $value }}">{{ $label }}</button></li>
+                    @endforeach
+                </ul>
+            </div>
             <button type="submit" class="btn btn-success text-white">
                 <span class="la la-save" role="presentation" aria-hidden="true"></span> &nbsp;
                 <span data-value="save_and_back">Պահպանել և փակել</span>

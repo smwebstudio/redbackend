@@ -1,7 +1,18 @@
 
 
     @if (isset($entry->contract_type_id) )
-        <a href="javascript:void(0)" onclick="estateCloneEntry(this)" data-route="{{ url($crud->route.'/'.$entry->getKey().'/clone') }}" class="btn btn-sm btn-link" data-button-type="clone"><i class="la la-copy"></i> </a>
+        <a href="javascript:void(0)" onclick="estateCloneEntry(this)"
+           data-route="{{ url($crud->route.'/'.$entry->getKey().'/clone') }}"
+           data-status="{{ $entry->estate_status_id ?? '' }}"
+           data-status-name="{{ $entry->estate_status->name_arm ?? '' }}"
+           data-contract="{{ $entry->contract_type_id ?? '' }}"
+           data-contract-name="{{ $entry->contract_type->name_arm ?? '' }}"
+           class="btn btn-sm btn-link"
+           data-button-type="clone">
+
+            <i class="la la-copy"></i>
+
+        </a>
 
 
     {{-- Button Javascript --}}
@@ -13,27 +24,41 @@
         if (typeof estateCloneEntry != 'function') {
             $("[data-button-type=delete]").unbind('click');
 
-            var inputOptions = {
-                '1': 'Վաճառք',
-                '2': 'Վարձ.',
-                '3': 'Օրավարձ'
-            };
 
-            var excludedOption = '{{$entry->contract_type_id}}'; // Change this to the value you want to exclude
 
-            if (inputOptions[excludedOption]) {
-                delete inputOptions[excludedOption];
-            }
+
+
+
 
             function estateCloneEntry(button) {
                 // ask for confirmation before deleting an item
                 // e.preventDefault();
                 var route = $(button).attr('data-route');
-                var email = $(button).attr('data-email');
+                var contractType = $(button).attr('data-contract');
+                var contractName = $(button).attr('data-contract-name');
+                var estateStatus = $(button).attr('data-status');
+                var estateStatusName = $(button).attr('data-status-name');
+
+
+                var inputOptions = {
+                    '1': 'Վաճառք',
+                    '2': 'Վարձ.',
+                    '3': 'Օրավարձ'
+                };
+
+                var excludedOption = contractType;
+
+
+
+                if(estateStatus != 7 && estateStatus !=8) {
+                    if (inputOptions[excludedOption]) {
+                        delete inputOptions[excludedOption];
+                    }
+                }
 
                 Swal.fire({
                     title: "Կրկնօրինակել",
-                    html: 'Ներկա գործարքային տիպը։ {{$entry->contract_type->name_arm}}',
+                    html: 'Ներկա գործարքային տիպը։ '+contractName+'<br/>'+'Ներկա ստատուս: '+estateStatusName,
                     input: 'select',
                     inputOptions: inputOptions,
                     inputPlaceholder: 'Ընտրել նոր  գործարքային տիպ',
@@ -78,7 +103,7 @@
                                         timer: 8000,
                                         timerProgressBar: true,
                                     }).then(function(){
-                                            location.reload();
+
                                         }
                                     );
 

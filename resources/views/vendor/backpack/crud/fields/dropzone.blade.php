@@ -292,9 +292,16 @@
                             e.preventDefault();
                             e.stopPropagation();
                             if (isDropzoneActive) {
-                                $('input[name="main_image_file_path"]').val(file.path);
+
+                                var filePath = file.path;
+
+                                if (filePath.startsWith("estate/photos/")) {
+                                    filePath = filePath.slice(14);
+                                }
+
+                                $('input[name="main_image_file_path"]').val(filePath);
                                 $('input[name="main_image_file_name"]').val(file.name);
-                                $('input[name="main_image_file_path_thumb"]').val(file.path);
+                                $('input[name="main_image_file_path_thumb"]').val(filePath);
 
 
                                 $('.dz-main.text-success').html('<i class="lar la-star"></i>');

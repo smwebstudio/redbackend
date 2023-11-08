@@ -878,9 +878,6 @@ class EstateCrudController extends CrudController
         CRUD::hasAccessOrFail('clone');
         CRUD::setOperation('clone');
 
-        // whatever you want
-
-        // if you still want to call the old clone method
         $this->crud->hasAccessOrFail('clone');
 
         $contract_type = request()->contract_type;
@@ -890,6 +887,7 @@ class EstateCrudController extends CrudController
         $clonedEntry = $this->crud->model->findOrFail($id)->replicate();
 
         $clonedEntry->contract_type_id = (int)$contract_type;
+        $clonedEntry->estate_status_id = 1;
         $clonedEntry->save();
 
         $currentEntry->estateDocuments->each(function ($document) use ($clonedEntry) {
