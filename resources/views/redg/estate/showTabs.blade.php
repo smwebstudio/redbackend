@@ -323,7 +323,7 @@
                 slide.appendChild(closeButton);
                 backdrop.classList.add('backdrop');
                 closeButton.classList.add('close-button');
-                closeButton.innerHTML = 'x';
+                closeButton.innerHTML = 'Փակել';
 
                 backdrop.addEventListener('click', function() {
                     closeFullscreenSwiper(slideNumber);
@@ -416,11 +416,11 @@
             height: 600px;
         }
         .swiper-container.fullscreen {
-            height: 100vh;
-            width: 80%;
-            top:0;
+            height: 90vh;
+            width: 90%;
+            top:5vh;
             position: fixed;
-            left: 10%;
+            left: 5%;
             z-index: 14800;
             background: #333;
         }
@@ -467,10 +467,10 @@
         }
 
         .fullscreen .swiper-slide .close-button {
-            background: #000;
-            border: 2px solid #fff;
-            color: #fff;
-            font-size: 28px;
+            background: #fff;
+            border: 2px solid #000;
+            color: #000;
+            font-size: 20px;
             font-family: sans-serif;
             padding: 10px 18px;
             position: absolute;

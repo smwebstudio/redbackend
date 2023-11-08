@@ -81,6 +81,28 @@ trait AddEstateCreateCommonFields
             ],
         ]);
 
+        CRUD::addField([
+            'name' => 'separator_contract_type',
+            'type' => 'custom_html',
+            'value' => '',
+            'wrapper' => [
+                'class' => 'form-group col-md-12 separator'
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'agent',
+            'entity' => 'agent',
+            'type' => "relationship",
+            'attribute' => "contactFullName",
+            'placeholder' => '-Ընտրել մեկը-',
+            'label' => "Գործակալ",
+            'minimum_input_length' => 0,
+            'ajax' => true,
+            'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
+        ]);
 
 
         CRUD::addField([
@@ -94,7 +116,7 @@ trait AddEstateCreateCommonFields
             'minimum_input_length' => 0,
             'label' => "Վաճառող",
             'wrapper' => [
-                'class' => 'form-group col-md-6'
+                'class' => 'form-group col-md-4'
             ],
         ]);
 
@@ -109,7 +131,7 @@ trait AddEstateCreateCommonFields
             'minimum_input_length' => 0,
             'label' => "Վարձատու",
             'wrapper' => [
-                'class' => 'form-group col-md-6'
+                'class' => 'form-group col-md-4'
             ],
         ]);
 

@@ -831,94 +831,13 @@ class EstateCrudController extends CrudController
 
     }
 
-    public function fetchRenter()
-    {
-        return $this->fetch([
-            'model' => Contact::class,
-            'searchable_attributes' => [],
-            'paginate' => 100, // items to show per page
-            'query' => function ($model) {
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->whereIn('contact_type_id', [4,5])->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
-                } else {
-                    return $model->whereIn('contact_type_id', [4,5]);
-                }
-            }
-        ]);
-    }
 
-    public function fetchAgent()
-    {
-        return $this->fetch([
-            'model' => RealtorUser::class,
-            'searchable_attributes' => [],
-            'paginate' => 1500, // items to show per page
-            'query' => function ($model) {
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->whereHas('contact', function ($query) use($search) {
-                        $query->where('contact_type_id', 3)
-                            ->whereNotNull('name_arm')
-                            ->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
-                    })
-                        ->whereHas('roles', function ($query) {
-                            $query->whereIn('role_id', [4, 6, 7, 8]);
-                        })
-                        ->select('realtor_user.*');
-                } else {
-                    return $model->whereHas('contact', function ($query) {
-                        $query->where('contact_type_id', 3)
-                            ->whereNotNull('name_arm');
-                    })
-                        ->whereHas('roles', function ($query) {
-                            $query->whereIn('role_id', [4, 6, 7, 8]);
-                        })
-                        ->select('realtor_user.*');
-                }
-            }
-        ]);
-    }
 
-    public function fetchSeller()
-    {
-        return $this->fetch([
-            'model' => Contact::class,
-            'searchable_attributes' => [],
-            'paginate' => 100,
-            'query' => function ($model) {
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->where('contact_type_id', 1)->where(function ($query) use ($search) {
-                        $searchWithSpaces = str_replace(' ', '', $search);
-                        $query->whereRaw('CONCAT(`name_eng`, " ", `last_name_eng`, " ", `name_arm`, " ", `last_name_arm`, " ", `id`, " ", REPLACE(`phone_mobile_1`, " ", "")) LIKE ?', ["%$searchWithSpaces%"]);
-                    });
-                } else {
-                    return $model->where('contact_type_id', 1);
-                }
-            }
-        ]);
-    }
 
-    public function fetchOwner()
-    {
-        return $this->fetch([
-            'model' => Contact::class,
-            'searchable_attributes' => [],
-            'paginate' => 100,
-            'query' => function ($model) {
-                $search = request()->input('q') ?? false;
-                if ($search) {
-                    return $model->where('contact_type_id', 2)->where(function ($query) use ($search) {
-                        $searchWithSpaces = str_replace(' ', '', $search);
-                        $query->whereRaw('CONCAT(`name_eng`, " ", `last_name_eng`, " ", `name_arm`, " ", `last_name_arm`, " ", `id`, " ", REPLACE(`phone_mobile_1`, " ", "")) LIKE ?', ["%$searchWithSpaces%"]);
-                    });
-                } else {
-                    return $model->where('contact_type_id', 2);
-                }
-            }
-        ]);
-    }
+
+
+
+
 
 
     public function downloadEstateImages()

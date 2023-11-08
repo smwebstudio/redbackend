@@ -237,16 +237,6 @@ trait HasEstateFilters
         ]);
 
 
-//        $this->crud->addFilter([
-//            'name' => 'currency',
-//            'type' => 'select2',
-//            'label' => 'Արժույթ',
-//        ], function () {
-//            return \App\Models\CCurrency::all()->pluck('name_arm', 'id')->toArray();
-//        }, function ($value) {
-////            $this->crud->addClause('where', 'currency_id', $value);
-//        });
-
         if (!request('extended_price')) {
             $currency = session('currency') ? session('currency') : 'AMD';
             $contractType = request('contract_type');
@@ -501,15 +491,6 @@ trait HasEstateFilters
 
         });
 
-//        $this->crud->addFilter([
-//            'type'  => 'simple',
-//            'name'  => 'detailed_area',
-//            'label' => 'Ընդլայնված'
-//        ],
-//            false,
-//            function() { // if the filter is active
-//                // $this->crud->addClause('active'); // apply the "active" eloquent scope
-//            } );
 
         $this->crud->addFilter([
             'type' => 'divider',
@@ -572,6 +553,23 @@ trait HasEstateFilters
         }, function ($values) {
             $this->crud->addClause('whereIn', 'estate_status_id', json_decode($values));
         });
+
+        $this->crud->addFilter([
+            'name' => 'seller-owner',
+            'type' => 'text',
+            'label' => 'Վաճառող / Վարձատու',
+        ],   false,
+            function ($value) {
+                $searchWithSpaces = str_replace(' ', '', $value);
+
+                $this->crud->addClause('where', function ($query) use ($value, $searchWithSpaces) {
+                    $query->whereHas('seller', function ($subquery) use ($value, $searchWithSpaces) {
+                        $subquery->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`, REPLACE(`phone_mobile_1`, " ", "")) LIKE ?', '%' . $searchWithSpaces . '%');
+                    })->orWhereHas('sellerRenter', function ($subquery) use ($value, $searchWithSpaces) {
+                        $subquery->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`, REPLACE(`phone_mobile_1`, " ", "")) LIKE ?', '%' . $searchWithSpaces . '%');
+                    });
+                });
+            });
 
 
         $this->crud->addFilter([

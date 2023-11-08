@@ -14,15 +14,31 @@ trait AddEstateFetchMethods
     public function fetchAgent()
     {
         return $this->fetch([
-            'model' => Contact::class,
+            'model' => RealtorUser::class,
             'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
+            'paginate' => 1500, // items to show per page
             'query' => function ($model) {
                 $search = request()->input('q') ?? false;
                 if ($search) {
-                    return $model->where('contact_type_id', '=', 1)->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
+                    return $model->whereHas('contact', function ($query) use($search) {
+                        $query->where('contact_type_id', 3)
+                            ->whereNotNull('name_arm')
+                            ->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
+                    })
+                        ->whereHas('roles', function ($query) {
+                            $query->whereIn('role_id', [4, 6, 7, 8]);
+                        })
+                        ->select('realtor_user.*')->orderBy('contact_id');
                 } else {
-                    return $model->where('contact_type_id', '=', 1);
+                    return $model->whereHas('contact', function ($query) {
+                        $query->where('contact_type_id', 3)
+                            ->whereNotNull('name_arm');
+                    })
+                        ->whereHas('roles', function ($query) {
+                            $query->whereIn('role_id', [4, 6, 7, 8]);
+                        })
+                        ->select('realtor_user.*')
+                        ->orderBy('contact_id');
                 }
             }
         ]);
@@ -33,13 +49,16 @@ trait AddEstateFetchMethods
         return $this->fetch([
             'model' => Contact::class,
             'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
+            'paginate' => 100,
             'query' => function ($model) {
                 $search = request()->input('q') ?? false;
                 if ($search) {
-                    return $model->where('contact_type_id', '=', 1)->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
+                    return $model->where('contact_type_id', 1)->where(function ($query) use ($search) {
+                        $searchWithSpaces = str_replace(' ', '', $search);
+                        $query->whereRaw('CONCAT(`name_eng`, " ", `last_name_eng`, " ", `name_arm`, " ", `last_name_arm`, " ", `id`, " ", REPLACE(`phone_mobile_1`, " ", "")) LIKE ?', ["%$searchWithSpaces%"]);
+                    });
                 } else {
-                    return $model->where('contact_type_id', '=', 1);
+                    return $model->where('contact_type_id', 1);
                 }
             }
         ]);
@@ -51,13 +70,16 @@ trait AddEstateFetchMethods
         return $this->fetch([
             'model' => Contact::class,
             'searchable_attributes' => [],
-            'paginate' => 30, // items to show per page
+            'paginate' => 100,
             'query' => function ($model) {
                 $search = request()->input('q') ?? false;
                 if ($search) {
-                    return $model->where('contact_type_id', '=', 2)->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
+                    return $model->where('contact_type_id', 2)->where(function ($query) use ($search) {
+                        $searchWithSpaces = str_replace(' ', '', $search);
+                        $query->whereRaw('CONCAT(`name_eng`, " ", `last_name_eng`, " ", `name_arm`, " ", `last_name_arm`, " ", `id`, " ", REPLACE(`phone_mobile_1`, " ", "")) LIKE ?', ["%$searchWithSpaces%"]);
+                    });
                 } else {
-                    return $model->where('contact_type_id', '=', 2);
+                    return $model->where('contact_type_id', 2);
                 }
             }
         ]);
@@ -141,6 +163,23 @@ trait AddEstateFetchMethods
                     return $model->where('parent_id', '=', $provinceId)->whereRaw('CONCAT(`name_eng`," ",`name_arm`) LIKE "%' . $search . '%"');
                 } else {
                     return $model->where('parent_id', '=', $provinceId);
+                }
+            }
+        ]);
+    }
+
+    public function fetchRenter()
+    {
+        return $this->fetch([
+            'model' => Contact::class,
+            'searchable_attributes' => [],
+            'paginate' => 100, // items to show per page
+            'query' => function ($model) {
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->whereIn('contact_type_id', [4,5])->whereRaw('CONCAT(`name_eng`," ",`last_name_eng`," ",`name_arm`," ",`last_name_arm`," ",`id`) LIKE "%' . $search . '%"');
+                } else {
+                    return $model->whereIn('contact_type_id', [4,5]);
                 }
             }
         ]);
