@@ -28,7 +28,7 @@
                           // Create a hidden anchor tag to trigger the download
                           var downloadLink = document.createElement('a');
                           downloadLink.href = result.zipFileUrl;
-                          downloadLink.download = 'originalImages.zip'; // Specify the desired filename
+                          downloadLink.download = result.zipName; // Specify the desired filename
 
                           // Trigger a click event to start the download
                           downloadLink.click();

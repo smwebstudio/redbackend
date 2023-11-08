@@ -949,8 +949,8 @@ class EstateCrudController extends CrudController
 
         $zip->close();
 
-        $zipFileUrl = url($zipFileName);
-        return response()->json(['zipFileUrl' => $zipFileUrl]);
+        $zipFileUrl = url('downloads/'.$zipFileName);
+        return response()->json(['zipFileUrl' => $zipFileUrl, 'zipName' => $estate->code]);
 
     }
 
