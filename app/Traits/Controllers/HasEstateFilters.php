@@ -101,7 +101,7 @@ trait HasEstateFilters
                     'type' => 'select2_multiple_red',
                     'label' => 'Համայնք',
                 ], function () {
-                    return \App\Models\CLocationCommunity::all()->pluck('name_arm', 'id')->toArray();
+                    return \App\Models\CLocationCommunity::orderBy('sort_id')->pluck('name_arm', 'id')->toArray();
                 }, function ($values) {
                     $this->crud->addClause('whereIn', 'location_community_id', json_decode($values));
                 });
@@ -122,12 +122,12 @@ trait HasEstateFilters
 
         $this->crud->addFilter([
             'name' => 'location_street',
-            'type' => 'select2',
+            'type' => 'select2_multiple_red',
             'label' => 'Փողոց',
         ], function () {
             return \App\Models\CLocationStreet::all()->pluck('name_arm', 'id')->toArray();
-        }, function ($value) {
-            $this->crud->addClause('where', 'location_street_id', $value);
+        }, function ($values) {
+            $this->crud->addClause('whereIn', 'location_street_id', json_decode($values));
         });
 
         $this->crud->addFilter([

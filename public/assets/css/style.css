@@ -203,3 +203,8 @@ main .header-operation h1 {
 .navbar-filters div.form-group.backpack-filter span {
     font-size: 12px;
 }
+
+.navbar-filters div.form-group.backpack-filter span.select2-container--open {
+    min-width: 300px;
+    border: 1px solid #999 !important;
+}

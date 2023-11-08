@@ -100,6 +100,15 @@ trait AddEstateCreateCommonFields
             ],
         ]);
 
+        CRUD::addField([
+            'name' => 'separator_owner_seller',
+            'type' => 'custom_html',
+            'value' => '',
+            'wrapper' => [
+                'class' => 'form-group col-md-12 separator'
+            ],
+        ]);
+
 
 
         CRUD::addField([
