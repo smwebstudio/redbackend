@@ -275,7 +275,7 @@
                         console.log(file)
                         console.log($currentMainFile)
 
-                        if(file.path === $currentMainFile) {
+                        if(file.path.includes($currentMainFile)) {
                             $(mainButton).addClass('text-success');
                             $(mainButton).html('<i class="las la-star"></i>');
                         }

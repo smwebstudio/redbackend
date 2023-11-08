@@ -59,7 +59,7 @@
                                 <div class="swiper-slide">
                                     <div class="swiper-zoom-container">
                                         <div class="image_info">
-                                        @if($estate->main_image_file_path === 'estate/photos/'.$image->path)
+                                        @if($estate->main_image_file_path === $image->path)
                                         <span class="main_image"><i class="las la-star"></i></span>
                                         @else
                                         <span class="main_image text-danger"><i class="lar la-star"></i></span>
