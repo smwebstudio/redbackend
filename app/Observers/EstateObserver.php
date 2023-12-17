@@ -256,13 +256,13 @@ class EstateObserver
             $buildingProjectType = $estate->building_project_type_id != null ? $estate->building_project_type->name_arm : "...";
             $buildingType = $estate->building_type != null ? $estate->building_type->name_arm : "...";
             $buildingFloorCount = $estate->building_floor_count != null ? $estate->building_floor_count : "...";
-            $floor = $estate->floor === 1 ? $estate->floor : "...";
-            $entranceType = $estate->entrance_type === 1 ? $estate->entrance_type->name_arm : "...";
-            $entranceDoorType = $estate->entrance_door_type === 1 ? $estate->entrance_door_type->name_arm : "...";
-            $ceilingHeightType = $estate->ceiling_height_type === 1 ? $estate->ceiling_height_type->name_arm : "...";
-            $buildingWindowCount = $estate->building_window_count === 1 ? $estate->building_window_count->name_arm : "...";
-            $repairingType = $estate->repairing_type === 1 ? $estate->repairing_type->name_arm : "...";
-            $heatingSystemType = $estate->heating_system_type === 1 ? $estate->heating_system_type->name_arm : "...";
+            $floor = $estate->floor ? $estate->floor : "...";
+            $entranceType = $estate->entrance_type  ? $estate->entrance_type->name_arm : "...";
+            $entranceDoorType = $estate->entrance_door_type  ? $estate->entrance_door_type->name_arm : "...";
+            $ceilingHeightType = $estate->ceiling_height_type  ? $estate->ceiling_height_type->name_arm : "...";
+            $buildingWindowCount = $estate->building_window_count  ? $estate->building_window_count->name_arm : "...";
+            $repairingType = $estate->repairing_type ? $estate->repairing_type->name_arm : "...";
+            $heatingSystemType = $estate->heating_system_type ? $estate->heating_system_type->name_arm : "...";
 
 
             $sale16OneList = array();

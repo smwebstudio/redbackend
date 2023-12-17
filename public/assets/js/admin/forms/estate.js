@@ -38,7 +38,6 @@ crud.field('estate_status').onChange(function(field) {
 }).change();
 
 crud.field('contract_type').onChange(function(field) {
-    console.log(field.value)
     crud.field('owner').hide(!field.value);
     crud.field('owner').hide(field.value == 1);
     crud.field('owner').show(field.value == 2 || field.value == 3).enable(field.value == 2 || field.value == 3);
@@ -49,3 +48,36 @@ crud.field('contract_type').onChange(function(field) {
 }).change();
 
 
+function checkActionParameter(action) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('action') === action;
+}
+
+// Perform actions based on the 'action' parameter
+$(document).ready(function() {
+    if (checkActionParameter()) {
+        $statusList =  crud.field('estate_status').input;
+        $($statusList).val(3);
+        $($statusList).trigger('change');
+    }
+});
+
+$(document).ready(function() {
+    if (checkActionParameter('recover')) {
+        $statusList =  crud.field('estate_status').input;
+        $($statusList).val(1);
+        $($statusList).trigger('change');
+    }
+
+    if (checkActionParameter('archive')) {
+        $statusList =  crud.field('estate_status').input;
+        $($statusList).val(8);
+        $($statusList).trigger('change');
+    }
+
+    if (checkActionParameter('selled')) {
+        $statusList =  crud.field('estate_status').input;
+        $($statusList).val(7);
+        $($statusList).trigger('change');
+    }
+});

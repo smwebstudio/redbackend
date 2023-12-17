@@ -8,9 +8,10 @@
 {{--	<div class="dropdown-menu p-0">--}}
 {{--		<div class="form-group backpack-filter mb-0">--}}
 {{--			<div class="input-group">--}}
-    <span class="text-input-label">{{ $filter->label }}:</span> <input class="form-control pull-right"
+   <input class="form-control pull-right"
 		        		id="text-filter-{{ $filter->key }}"
 		        		type="text"
+                        placeholder="{{ $filter->label }}"
 						@if ($filter->currentValue)
 							value="{{ $filter->currentValue }}"
 						@endif

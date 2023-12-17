@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class EstateRequest extends FormRequest
 {
@@ -67,6 +68,7 @@ class EstateRequest extends FormRequest
             'building_window_count' => 'required_if:estate_status,4',
             'repairing_type' => 'required_if:estate_status,4',
             'heating_system_type' => 'required_if:estate_status,4',
+
         ];
     }
 

@@ -17,6 +17,7 @@
                     ?>
 					<div class="input-group">
 
+
                         <a href="#" class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ $filter->label }}</a>
 				        <input class="form-control range-input pull-right from"
 				        		type="number"

@@ -91,7 +91,8 @@
       }
 
       #bp-filters-navbar .nav-link.dropdown-toggle  {
-         max-width: 320px;
+         max-width: 350px;
+          width: 100%;
           white-space: nowrap;
           text-overflow: ellipsis;
           overflow: hidden;

@@ -3,7 +3,7 @@
     filter-type="{{ $filter->type }}"
     filter-key="{{ $filter->key }}"
 	class="nav-item {{ Request::get($filter->name)?'active':'' }}">
-    <a class=" btn mr-3" href=""
+    <a class=" btn text-left" href=""
 		parameter="{{ $filter->name }}"
     	><input type="checkbox" disabled /> {{ $filter->label }}</a>
   </li>
@@ -62,9 +62,7 @@
                     $("li[filter-key={{ $filter->key }}]").find('a input').prop('checked', false);
 				}
 
-                if(parameter == 'extended_price' || parameter == 'extended_area') {
                     location.reload()
-                }
 			});
 
 			// clear filter event (used here and by the Remove all filters button)

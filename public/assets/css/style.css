@@ -11,8 +11,18 @@ body {
     width: 250px;
 }
 
+h1[bp-section=page-heading] {
+    font-size: 1.5rem;
+    line-height: 1.7rem;
+}
+
 table {
     font-size:0.9rem;
+}
+
+.navbar-filters {
+    background: #fff;
+    margin-bottom: 20px !important;
 }
 
 .nav-item .la-filter {
@@ -56,7 +66,12 @@ main .header-operation h1 {
     color: #414141;
 }
 
-.navbar-filters .navbar-nav>.active>a, .navbar-filters .navbar-nav>.active>a:focus, .navbar-filters .navbar-nav>.active>a:hover, .navbar-filters .navbar-nav>.open>a, .navbar-filters .navbar-nav>.open>a:focus, .navbar-filters .navbar-nav>.open>a {
+.navbar-filters .navbar-nav>.active[filter-type="simple"]>a,
+.navbar-filters .navbar-nav>.active[filter-type="simple"]>a:focus,
+.navbar-filters .navbar-nav>.active[filter-type="simple"]>a:hover,
+.navbar-filters .navbar-nav>.open>a,
+.navbar-filters .navbar-nav>.open>a:focus,
+.navbar-filters .navbar-nav>.open>a {
     background-color: #D8002C;
     color:#fff;
     border-radius: 3px;
@@ -65,18 +80,46 @@ main .header-operation h1 {
 
 
 
+
+
 #bp-filters-navbar {
-    padding: 20px 30px;
-    margin-bottom: 50px;
-    box-shadow: 0px 3px 15px rgba(166, 166, 166, 0.15);
+    padding:15px 0px;
 }
 
 .navbar-filters li.nav-item {
-    margin: 0 15px !important;
+    margin: 0 15px 0px 0px !important;
     display: flex;
     justify-content: start;
     align-items: center;
 }
+
+.navbar-filters li.nav-item[filter-type="select2"], .navbar-filters li.nav-item[filter-type="select2_multiple_red"] {
+
+}
+
+.navbar-filters li.nav-item[filter-type="select2"] a , .navbar-filters li.nav-item[filter-type="select2_multiple_red"] a {
+background: #F6F4F1;
+    border: 1px solid #ddd
+}
+
+.navbar-filters li.nav-item[filter-type="simple"] a {
+    font-weight: 700;
+    display: flex;
+}
+
+.navbar-filters li.nav-item[filter-type="simple"] a input {
+    margin-right: 5px;
+}
+
+
+
+.navbar-filters li.nav-item[filter-type="date"] div.form-group.backpack-filter span {
+    font-size: 10px;
+}
+
+/*.navbar-filters li.nav-item[filter-type="simple"] input {*/
+/*    display: none;*/
+/*}*/
 
 .navbar-filters li {
     font-size: 14px;
@@ -91,6 +134,16 @@ main .header-operation h1 {
     max-width: 100%;
 }
 
+[filter-type="range"] .range-filter-area-clear-button , [filter-type="date"] .range-filter-area-clear-button {
+    height: 15px;
+}
+
+[filter-type="range"] .range-filter-area-clear-button  .input-group-text, [filter-type="date"] .range-filter-area-clear-button  .input-group-text {
+    font-size: 12px;
+    line-height: 1;
+    padding: 5px;
+}
+
 .select2-container {
     width:100% !important
 }
@@ -98,6 +151,7 @@ main .header-operation h1 {
 
 #bp-filters-navbar .nav-item.dropdown.show .dropdown-menu {
     width: 100% !important;
+    max-width: 400px;
 }
 
 .navbar-filters .nav-item.dropdown.divider {
@@ -132,7 +186,7 @@ main .header-operation h1 {
 }
 
 .form-group {
-    margin-bottom: 0.5rem !important;
+    margin-bottom: 0.1rem !important;
 }
 .create-crud .card  {
     background: #EEEEEE;
@@ -208,3 +262,82 @@ main .header-operation h1 {
     min-width: 300px;
     border: 1px solid #999 !important;
 }
+
+
+.swiper-pagination-bullet {
+    height: 20px;
+    width: 20px;
+    border:1px solid #fff;
+    opacity: 0.7;
+}
+
+.swiper-pagination-bullet-active {
+    background: #42ba96;
+}
+
+
+/*Estate filters UI customization */
+
+
+
+[filter-type="range"] .range-input {
+    max-width: 100px;
+    min-width: 50px;
+}
+
+.dataTables_wrapper .dataTables_filter input, .dataTables_wrapper .dataTables_length select, .form-control {
+    height: 2rem;
+}
+
+.navbar-filters input.form-control::placeholder {
+    color: #777;
+    font-size: 0.8rem;
+}
+
+[filter-name="contract_type"] { width: 20%; }
+[filter-name="location_province"] { width: 20%; }
+[filter-name="location_city"] { width: 20%; }
+[filter-name="location_community"] { width: 20%; }
+[filter-name="location_street"] { width: 20%; }
+[filter-name="address_building"] { width: 10%; }
+[filter-name="isExclusive"] { width: 20%; }
+[filter-name="isNotExclusive"] { width: 25%; }
+[filter-name="price"] { width: 20%; }
+[filter-name="area"] { width: 20%; }
+[filter-name="price_range"] { width: 20%; }
+[filter-name="extended_price"] { width: 20%; }
+[filter-name="area_range"] { width: 20%; }
+[filter-name="extended_area"] { width: 20%; }
+[filter-name="extended_price_sqm"] { width: 20%; }
+[filter-name="price_sqm"] { width: 20%; }
+[filter-name="room_count"] { width: 20%; }
+[filter-name="building_project_type"] { width: 20%; }
+[filter-name="building_type"] { width: 20%; }
+[filter-name="floor_count"] { width: 20%; }
+[filter-name="repairing_type"] { width: 20%; }
+[filter-name="is_exchangeable"] { width: 20%; }
+[filter-name="apartment_construction"] { width: 20%; }
+[filter-name="is_urgent"] { width: 20%; }
+[filter-name="is_from_public"] { width: 20%; }
+[filter-name="is_ready_from_rent"] { width: 20%; }
+[filter-name="estate_status"] { width: 20%; }
+[filter-name="seller-owner"] { width: 20%; }
+[filter-name="client_potential"] { width: 20%; }
+[filter-name="created_at_from"] { width: 10%; }
+[filter-name="created_at_to"] { width: 10%; }
+[filter-name="agents"] { width: 20%; }
+[filter-name="client_remembered"] { width: 20%; }
+[filter-name="updated_at_from"] { width: 10%; }
+[filter-name="updated_at_to"] { width: 10%; }
+[filter-name="filled_on_from"] { width: 10%; }
+[filter-name="filled_on_to"] { width: 10%; }
+[filter-name="price_down_on_from"] { width: 10%; }
+[filter-name="price_down_on_to"] { width: 10%; margin-right: 15px !important; }
+[filter-name="verified_on_from"] { width: 10%; }
+[filter-name="verified_on_to"] { width: 10%; }
+[filter-name="ready_from_archive"] { width: 20%; }
+[filter-name="info_source"] { width: 20%; }
+[filter-name="delete_remembered"] { width: 20%; }
+[filter-name="property_agent"] { width: 20%; }
+
+

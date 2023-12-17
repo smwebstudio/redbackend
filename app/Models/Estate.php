@@ -939,6 +939,11 @@ class Estate extends Model
         return $this->belongsTo(RealtorUser::class, 'agent_id');
     }
 
+    public function buyer()
+    {
+        return $this->belongsTo(Contact::class, 'buyer_id');
+    }
+
 
 
     public function propertyAgent()

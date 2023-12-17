@@ -1,14 +1,15 @@
-// $(document).ready(function() {
-//     // Select the element with filter-name="detailed_area"
-//     let detailedArea = $('li[filter-name="detailed_area"]');
-//
-//     $(document).on('click', 'li[filter-name="detailed_area"] a', function() {
-//         if ($(this).hasClass('active')) {
-//             $('li[filter-name="area"]').show();
-//         } else {
-//             $('li[filter-name="area"]').hide();
-//         }
-//     });
-// });
+$(document).ready(function() {
+    let detailedArea = $('li[filter-name="extended_area"].active');
+    if (detailedArea.length > 0) {
+        detailedArea.find('input').prop('checked', true);
+    }
+
+    let detailedPrice = $('li[filter-name="extended_price"].active');
+    if (detailedPrice.length > 0) {
+        detailedPrice.find('input').prop('checked', true);
+    }
+
+});
+
 
 

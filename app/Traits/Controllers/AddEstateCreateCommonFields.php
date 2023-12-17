@@ -403,16 +403,89 @@ trait AddEstateCreateCommonFields
             ],
         ]);
 
+        $defaultEstateStatus = 1;
+
+        if(request('action') == 'recover') {
+            $defaultEstateStatus = 1;
+        }
+
         CRUD::addField([
             'name' => 'estate_status',
             'type' => "relationship",
             'attribute' => "name_arm",
             'label' => "Կարգավիճակ",
-            'default' => 1,
+            'default' => $defaultEstateStatus,
             'tab' => 'Լրացուցիչ',
             'placeholder' => '-Ընտրել մեկը-',
             'wrapper' => [
                 'class' => 'form-group col-md-3'
+            ],
+        ]);
+
+        if(request('action') == 'selled') {
+
+            CRUD::addField([
+                'name' => 'separator_rent_selled',
+                'type' => 'custom_html',
+                'tab' => 'Լրացուցիչ',
+                'value' => '',
+                'wrapper' => [
+                    'class' => 'form-group col-md-12 separator mt-2'
+                ],
+            ]);
+            CRUD::addField([
+                'name' => 'price_amd_initial',
+                'type' => "text",
+                'default' => CRUD::getCurrentEntry()->price_amd,
+                'attributes' => [
+                'readonly'  => 'readonly',
+                'disabled'  => 'disabled',
+                ],
+                'tab' => 'Լրացուցիչ',
+                'label' => "Նախնական գին",
+                'wrapper' => [
+                    'class' => 'form-group col-md-3'
+                ],
+            ]);
+
+            CRUD::addField([
+                'name' => 'price_amd_selled',
+                'type' => "text",
+                'default' => 0,
+                'tab' => 'Լրացուցիչ',
+                'label' => "Վերջնական գին",
+                'wrapper' => [
+                    'class' => 'form-group col-md-3'
+                ],
+            ]);
+
+        CRUD::addField([
+            'name' => 'buyer',
+            'entity' => 'buyer',
+            'type' => "relationship",
+            'attribute' => "fullContact",
+            'placeholder' => '-Ընտրել մեկը-',
+            'ajax' => true,
+            'inline_create' => true,
+            'minimum_input_length' => 0,
+            'tab' => 'Լրացուցիչ',
+            'label' => "Գնորդ",
+            'wrapper' => [
+                'class' => 'form-group col-md-4'
+            ],
+        ]);
+
+
+
+        }
+
+        CRUD::addField([
+            'name' => 'separator_rent_table',
+            'type' => 'custom_html',
+            'tab' => 'Լրացուցիչ',
+            'value' => '',
+            'wrapper' => [
+                'class' => 'form-group col-md-12 separator'
             ],
         ]);
 

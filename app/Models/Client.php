@@ -245,6 +245,11 @@ class Client extends Model
         return $this->belongsTo(RealtorUser::class, 'broker_id');
     }
 
+    public function contact()
+    {
+        return $this->hasOne(Contact::class, 'id', 'contact_id');
+    }
+
     public function infoSource()
     {
         return $this->belongsTo(RealtorUser::class, 'info_source_id');

@@ -3,7 +3,6 @@ $(document).ready(function () {
     var dataTable = $('#crudTable').DataTable(); // Use your DataTable ID
 
     dataTable.on('init.dt', function () {
-        console.log(78)
         dataTable.rows().every(function () {
             var data = this.data();
             var archiveDateSpan = $(data[4]); //TODO: change logic

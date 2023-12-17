@@ -64,6 +64,26 @@ trait AddEstateFetchMethods
         ]);
     }
 
+    public function fetchBuyer()
+    {
+        return $this->fetch([
+            'model' => Contact::class,
+            'searchable_attributes' => [],
+            'paginate' => 100,
+            'query' => function ($model) {
+                $search = request()->input('q') ?? false;
+                if ($search) {
+                    return $model->where('contact_type_id', 4)->where(function ($query) use ($search) {
+                        $searchWithSpaces = str_replace(' ', '', $search);
+                        $query->whereRaw('CONCAT(`name_eng`, " ", `last_name_eng`, " ", `name_arm`, " ", `last_name_arm`, " ", `id`, " ", REPLACE(`phone_mobile_1`, " ", "")) LIKE ?', ["%$searchWithSpaces%"]);
+                    });
+                } else {
+                    return $model->where('contact_type_id', 4);
+                }
+            }
+        ]);
+    }
+
 
     public function fetchOwner()
     {

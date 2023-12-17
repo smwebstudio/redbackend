@@ -8,7 +8,6 @@
 		<div class="form-group backpack-filter mb-0">
             <span>{{ $filter->label }}</span>
 			<div class="input-group date">
-                <span class="input-group-text"><i class="la la-calendar"></i> </span>
 		        <input class="form-control pull-right"
 		        		id="datepicker-{{ $filter->key }}"
 		        		type="text"
@@ -33,7 +32,7 @@
 	<style>
 		.input-group.date {
 			width: 120px;
-			max-width: 100%;
+			max-width: 80%;
 		}
 	</style>
 @endpush
